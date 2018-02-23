@@ -1,0 +1,14 @@
+map with interconnected nodes
+paths of different length
+select destination node, time of level determined by length\
+
+nodes contain resources:
+HP - 0 = death, maximum determined by upgrades
+Ammo - used up by shooting, 0 means no shoot
+Money - can be spent in shops for specific resources
+Upgrade - some upgrade to player's ship
+Fuel - allows you to fly. 0 means screen stops scrolling till more is found
+
+enemies can drop resources mid-flight
+
+goal is to cross as many nodes as possible
