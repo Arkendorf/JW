@@ -1,36 +1,35 @@
+local ai = require "ai"
+
 local enemy = {}
 
 enemy.load = function()
   enemies = {}
+  enemy_info = {}
+  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3}
   enemy.new("crosser", 0, 100)
 end
 
 enemy.update = function(dt)
   for i, v in pairs(enemies) do
-    if v.type == "crosser" then
-      -- find direction if it's not set
-      if v.info.dir == nil then
-        if v.p.x < screen.w/2 then
-          v.info.dir = 1
-        else
-          v.info.dir = -1
-        end
-      end
+    -- move the ai
+    ai.move[enemy_info[v.type].ai[2]](i, v, dt)
 
-      -- set angle
-      v.a.x = .7 * v.info.dir
-      v.a.y = -.7
-
-      -- move
-      v.d.x = v.info.dir * dt * 60 * 2
-    end
-
-    -- do basics
+    -- adjust position and velocity
     v.p = vector.sum(v.p, v.d)
     v.d = vector.scale(.9, v.d)
 
+    -- delete enemy if it has no health
     if v.hp <= 0 then
       enemies[i] = nil
+    end
+
+    if v.atk <= 0 then
+      -- fire bullet
+      ai.attack[enemy_info[v.type].ai[3]](i, v, dt)
+      v.atk = enemy_info[v.type].atk_delay
+    else
+      -- decrease wait till next bullet
+      v.atk = v.atk - dt
     end
   end
 end
@@ -43,7 +42,10 @@ enemy.draw = function()
 end
 
 enemy.new = function(type, x, y) -- add enemy to open space in list
-  enemies[opening(enemies)] = {p = {x = x, y = y}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = 16, hp = 4, type = type, info = {}}
+  local spot = opening(enemies)
+  enemies[spot] = {p = {x = x, y = y}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = 16, hp = 4, atk = 0, type = type, info = {}}
+  -- do first-time setup for enemy
+  ai.load[enemy_info[type].ai[1]](spot, enemies[spot])
 end
 
 return enemy
