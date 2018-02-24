@@ -6,7 +6,7 @@ collision = require "collision"
 love.load = function()
   screen = {w = love.graphics.getWidth(), h = love.graphics.getHeight()}
 
-  char = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 5, atk = 0, r = 16}
+  char = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 16}
   char_info = {speed = 1, stop = 0.8, atk_delay = .1, inv_time = 1}
 
   bullet.load()
@@ -55,9 +55,20 @@ love.update = function(dt)
     char.atk = char.atk - dt
   end
 
-  -- lower invincibility
-  if char.inv > 0 then
+  if char.inv > 0 then-- lower invincibility
     char.inv = char.inv - dt
+  else -- damage char on collision with enemy
+    for i, v in pairs(enemies) do
+      if collision.overlap(char, v) then
+        char.hp = char.hp - 1
+        char.inv = char_info.inv_time
+      end
+    end
+  end
+
+  -- game over if char has no health
+  if char.hp <= 0 then
+    love.event.quit()
   end
 
   -- update bullet

@@ -14,7 +14,7 @@ bullet.update = function(dt)
     end
 
     if v.side == 1 then -- check for collision with enemies
-      for j, w in ipairs(enemies) do
+      for j, w in pairs(enemies) do
         if collision.overlap(v, w) then
           w.hp = w.hp - 1
           bullets[i] = nil
