@@ -1,18 +1,27 @@
 vector = require "vector"
+enemy = require "enemy"
+bullet = require "bullet"
+collision = require "collision"
 
 love.load = function()
   screen = {w = love.graphics.getWidth(), h = love.graphics.getHeight()}
 
-  char = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, atk = 0, r = 16}
-  char_info = {speed = 1, stop = 0.8, atk_delay = .1}
+  char = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 5, atk = 0, r = 16}
+  char_info = {speed = 1, stop = 0.8, atk_delay = .1, inv_time = 1}
 
-  proj = {}
+  bullet.load()
 
-  enemies = {}
-  new_enemy("crosser", 0, 100)
+  enemy.load()
+
+  scroll = {pos = 0, v = 0}
 end
 
 love.update = function(dt)
+  -- do scrolling thing
+  scroll.v = scroll.v + dt * 60 * 0.5
+  scroll.pos = scroll.pos + scroll.v
+  scroll.v = scroll.v * 0.9
+
   -- movement
   if love.keyboard.isDown("right") then
     char.d.x = char.d.x + dt * 60 * char_info.speed
@@ -30,7 +39,6 @@ love.update = function(dt)
   -- adjust char pos
   char.p = vector.sum(char.p, char.d)
 
-
   -- adjust char angle
   char.a.x = char.d.x * (1 - char_info.stop)
   char.a.y = - 1
@@ -41,55 +49,44 @@ love.update = function(dt)
 
   -- attack
   if love.keyboard.isDown("z") and char.atk <= 0 then
-    proj[#proj+1] = {p = char.p, d = char.a, r = 4, side = 1}
+    bullet.new("basic", char.p, char.a, 1)
     char.atk = char_info.atk_delay
   elseif char.atk > 0 then
     char.atk = char.atk - dt
   end
 
-  -- update projectiles
-  for i, v in ipairs(proj) do
-    v.p = vector.sum(v.p, vector.scale(6, v.d))
+  -- lower invincibility
+  if char.inv > 0 then
+    char.inv = char.inv - dt
   end
+
+  -- update bullet
+  bullet.update(dt)
 
   -- update enemies
-  for i, v in ipairs(enemies) do
-    if v.type == "crosser" then
-      -- find direction if it's not set
-      if v.info.dir == nil then
-        if v.p.x < screen.w/2 then
-          v.info.dir = 1
-        else
-          v.info.dir = -1
-        end
-      end
-
-      -- set angle
-      v.a.x = .7 * v.info.dir
-      v.a.y = -.7
-
-      -- move
-      v.d.x = v.info.dir * dt * 60 * 4
-    end
-
-    -- do basics
-    v.p = vector.sum(v.p, v.d)
-    v.d = vector.scale(.9, v.d)
-  end
+  enemy.update(dt)
 end
 
 love.draw = function()
+  -- flash if invincibile
+  if char.inv > 0 then
+    love.graphics.setColor(255, 255, 255, 255*math.floor(math.sin(char.inv*16)+0.5))
+  end
+
+  -- draw char
   love.graphics.circle("line", char.p.x, char.p.y, char.r, 32)
   love.graphics.line(char.p.x, char.p.y, char.p.x+char.a.x*16, char.p.y+char.a.y*16)
 
-  for i, v in ipairs(proj) do
-    love.graphics.circle("line", v.p.x, v.p.y, v.r, 8)
-  end
-  
-  for i, v in ipairs(enemies) do
-    love.graphics.circle("line", v.p.x, v.p.y, v.r, 32)
-    love.graphics.line(v.p.x, v.p.y, v.p.x+v.a.x*v.r, v.p.y+v.a.y*v.r)
-  end
+  -- reset color
+  love.graphics.setColor(255, 255, 255)
+
+  -- draw bullets
+  bullet.draw()
+
+  -- draw enemies
+  enemy.draw()
+
+  love.graphics.print(scroll.pos)
 end
 
 opening = function(a) -- find available space in list 'a'
@@ -99,8 +96,4 @@ opening = function(a) -- find available space in list 'a'
     end
   end
   return #a + 1
-end
-
-new_enemy = function(type, x, y) -- add enemy to open space in list
-  enemies[opening(enemies)] = {p = {x = x, y = y}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = 16, type = type, info = {}}
 end
