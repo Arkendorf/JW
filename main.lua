@@ -23,11 +23,6 @@ love.load = function()
 end
 
 love.update = function(dt)
-  -- do scrolling thing
-  scroll.v = scroll.v + dt * 60 * 0.5
-  scroll.pos = scroll.pos + scroll.v
-  scroll.v = scroll.v * 0.9
-
   character.update(dt)
 
   bullet.update(dt)
@@ -49,8 +44,6 @@ love.draw = function()
   drop.draw()
 
   level.draw()
-
-  love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp))
 end
 
 opening = function(a) -- find available space in list 'a'

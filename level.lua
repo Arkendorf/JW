@@ -2,11 +2,11 @@ local level = {}
 
 level.load = function()
   level_score = {max = 12, current = 0}
-  scroll = {pos = 0, v = 0}
+  scroll = {goal = 4000, pos = 0, v = 0}
 end
 
 level.update = function(dt)
-  -- recalculate level score
+  -- recalculate level difficulty score
   level_score.current = 0
   local enemy_num = 0
   for i, v in pairs(enemies) do
@@ -24,9 +24,21 @@ level.update = function(dt)
       end
     end
   end
+
+  -- do scrolling thing
+  if scroll.pos >= scroll.goal then
+    enemies = {}
+  else
+    scroll.v = scroll.v + dt * 60 * 0.2
+  end
+  scroll.pos = scroll.pos + scroll.v
+  scroll.v = scroll.v * 0.9
 end
 
 level.draw = function()
+  love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp).."\nDistance: "..tostring(scroll.pos))
+
+  love.graphics.rectangle("line", 0, scroll.pos % screen.h/2, screen.w, screen.h/2)
 end
 
 return level
