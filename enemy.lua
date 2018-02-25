@@ -20,6 +20,16 @@ enemy.update = function(dt)
 
     -- delete enemy if it has no health
     if v.hp <= 0 then
+      -- drop
+      for j = 1, math.random(1, 4) do
+        local chance = math.random(1, 100)
+        if chance > 30 then
+          drop.new("ammo", v.p, math.random(4, 16))
+        else
+          drop.new("hp", v.p, math.random(4, 16))
+        end
+      end
+
       enemies[i] = nil
     end
 
