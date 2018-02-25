@@ -3,14 +3,10 @@ local ai = {}
 ai.load = {}
 
 ai.load[1] = function(i, v) -- "crosser"
-  -- find direction
-  if v.info.dir == nil then
-    if v.p.x < screen.w/2 then
-      v.info.dir = 1
-    else
-      v.info.dir = -1
-    end
-  end
+  -- set position and direction
+  v.info.dir = math.random(0, 1)*2-1
+  v.p.x = screen.w/2-screen.w/2*v.info.dir
+  v.p.y = math.random(0, screen.h)
 
   -- set angle
   v.a.x = .7 * v.info.dir
@@ -30,7 +26,7 @@ end
 ai.attack = {}
 
 ai.attack[1] = function(i, v, dt) -- "crosser"
-  bullet.new("basic", v.p, v.a, 2)
+  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2)
 end
 
 return ai

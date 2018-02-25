@@ -4,6 +4,7 @@ enemy = require "enemy"
 bullet = require "bullet"
 collision = require "collision"
 drop = require "drop"
+level = require "level"
 
 love.load = function()
   math.randomseed(os.time())
@@ -18,7 +19,7 @@ love.load = function()
 
   drop.load()
 
-  scroll = {pos = 0, v = 0}
+  level.load()
 end
 
 love.update = function(dt)
@@ -34,6 +35,8 @@ love.update = function(dt)
   enemy.update(dt)
 
   drop.update(dt)
+
+  level.update(dt)
 end
 
 love.draw = function()
@@ -44,6 +47,8 @@ love.draw = function()
   enemy.draw()
 
   drop.draw()
+
+  level.draw()
 
   love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp))
 end
