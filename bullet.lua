@@ -41,9 +41,10 @@ end
 
 bullet.new = function(type, p, d, side)
   local spot = opening(bullets)
-  bullets[spot] = {type = type, p = p, d = d, r = bullet_info[type].r, side = side}
+  local info = bullet_info[type]
+  bullets[spot] = {type = type, p = p, d = d, r = info.r, side = side}
   -- perform first-time setup
-  ai.load[bullet_info[type].ai[1]](spot, bullets[spot])
+  ai.load[info.ai[1]](spot, bullets[spot])
 end
 
 return bullet

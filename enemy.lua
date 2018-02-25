@@ -5,7 +5,8 @@ local enemy = {}
 enemy.load = function()
   enemies = {}
   enemy_info = {}
-  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9, score = 1}
+  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9, r = 16, hp = 1, score = 1}
+  enemy_info.bigoboy = {ai = {1, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 2, score = 2}
 end
 
 enemy.update = function(dt)
@@ -20,7 +21,7 @@ enemy.update = function(dt)
     -- delete enemy if it has no health
     if v.hp <= 0 then
       -- drop
-      for j = 1, math.random(1, 4) do
+      for j = 1, math.random(1, enemy_info[v.type].score) do
         local chance = math.random(1, 100)
         if chance > 10 then
           drop.new("ammo", v.p, math.random(4, 8))
@@ -52,9 +53,10 @@ end
 
 enemy.new = function(type) -- add enemy to open space in list
   local spot = opening(enemies)
-  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = 16, hp = 4, atk = 0, type = type, info = {}}
+  local info = enemy_info[type]
+  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp, atk = 0, type = type, info = {}}
   -- do first-time setup for enemy
-  ai.load[enemy_info[type].ai[1]](spot, enemies[spot])
+  ai.load[info.ai[1]](spot, enemies[spot])
 end
 
 return enemy
