@@ -1,22 +1,23 @@
+local ai = require "bullet_ai"
+
 local bullet = {}
 
 bullet.load = function()
   bullets = {}
+  bullet_info = {}
+  bullet_info.basic = {ai = {1, 1}, speed = 6, dmg = 1, r = 4}
 end
 
 bullet.update = function(dt)
   for i, v in pairs(bullets) do
-    v.p = vector.sum(v.p, vector.scale(6 * dt * 60, v.d))
+    -- update per bullet ai
+    ai.update[bullet_info[v.type].ai[2]](i, v, dt)
 
-    -- check if bullet is off screen
-    if v.p.x < 0 or v.p.x > screen.w or v.p.y < 0 or v.p.y > screen.h then
-      bullets[i] = nil
-    end
-
+    -- do damage
     if v.side == 1 then -- check for collision with enemies
       for j, w in pairs(enemies) do
         if collision.overlap(v, w) then
-          w.hp = w.hp - 1
+          w.hp = w.hp - bullet_info[v.type].dmg
           bullets[i] = nil
         end
       end
@@ -39,7 +40,10 @@ bullet.draw = function()
 end
 
 bullet.new = function(type, p, d, side)
-  bullets[opening(bullets)] = {p = p, d = d, r = 4, side = side}
+  local spot = opening(bullets)
+  bullets[spot] = {type = type, p = p, d = d, r = bullet_info[type].r, side = side}
+  -- perform first-time setup
+  ai.load[bullet_info[type].ai[1]](spot, bullets[spot])
 end
 
 return bullet

@@ -2,7 +2,7 @@ local character = {}
 
 character.load = function()
   char = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 16, ammo = 32}
-  char_info = {speed = 1, stop = 0.8, atk_delay = .1, inv_time = 1, hp_max = 3, ammo_max = 32}
+  char_info = {speed = 1, stop = 0.8, atk_delay = .2, inv_time = 1, hp_max = 3, ammo_max = 32}
 end
 
 character.update = function(dt)

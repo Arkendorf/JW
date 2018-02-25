@@ -1,11 +1,11 @@
-local ai = require "ai"
+local ai = require "enemy_ai"
 
 local enemy = {}
 
 enemy.load = function()
   enemies = {}
   enemy_info = {}
-  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3}
+  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9}
   enemy.new("crosser", 0, 100)
 end
 
@@ -16,7 +16,7 @@ enemy.update = function(dt)
 
     -- adjust position and velocity
     v.p = vector.sum(v.p, v.d)
-    v.d = vector.scale(.9, v.d)
+    v.d = vector.scale(enemy_info[v.type].stop, v.d)
 
     -- delete enemy if it has no health
     if v.hp <= 0 then

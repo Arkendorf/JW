@@ -7,7 +7,7 @@ drop = require "drop"
 
 love.load = function()
   math.randomseed(os.time())
-  
+
   screen = {w = love.graphics.getWidth(), h = love.graphics.getHeight()}
 
   character.load()

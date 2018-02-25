@@ -20,10 +20,15 @@ end
 ai.move = {}
 
 ai.move[1] = function(i, v, dt) -- "crosser"
-  v.d.x = v.info.dir * dt * 60 * 2
+  v.d.x = v.info.dir * dt * 60 * enemy_info[v.type].speed
+
+  if (v.p.x-screen.w/2)*v.info.dir > screen.w/2 then
+    enemies[i] = nil
+  end
 end
 
 ai.attack = {}
+
 ai.attack[1] = function(i, v, dt) -- "crosser"
   bullet.new("basic", v.p, v.a, 2)
 end
