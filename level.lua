@@ -3,6 +3,8 @@ local level = {}
 level.load = function()
   level_score = {max = 12, current = 0}
   scroll = {goal = 4000, pos = 0, v = 0}
+
+  backgroundImg = love.graphics.newImage("background.png")
 end
 
 level.update = function(dt)
@@ -36,9 +38,17 @@ level.update = function(dt)
 end
 
 level.draw = function()
-  love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp).."\nDistance: "..tostring(scroll.pos))
+  -- temporary background
+  love.graphics.draw(backgroundImg, 0, scroll.pos % 400 - 400)
+  love.graphics.draw(backgroundImg, 0, scroll.pos % 400)
+  love.graphics.draw(backgroundImg, 0, scroll.pos % 400 + 400)
 
-  love.graphics.rectangle("line", 0, scroll.pos % screen.h/2, screen.w, screen.h/2)
+  love.graphics.draw(backgroundImg, 400, scroll.pos % 400 - 400)
+  love.graphics.draw(backgroundImg, 400, scroll.pos % 400)
+  love.graphics.draw(backgroundImg, 400, scroll.pos % 400 + 400)
+
+  -- info
+  love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp).."\nDistance: "..tostring(scroll.pos))
 end
 
 return level

@@ -35,6 +35,8 @@ love.update = function(dt)
 end
 
 love.draw = function()
+  level.draw()
+  
   character.draw()
 
   bullet.draw()
@@ -42,8 +44,6 @@ love.draw = function()
   enemy.draw()
 
   drop.draw()
-
-  level.draw()
 end
 
 opening = function(a) -- find available space in list 'a'
