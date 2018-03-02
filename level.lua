@@ -1,7 +1,7 @@
 local level = {}
 
 level.load = function()
-  level_score = {max = 12, current = 0}
+  level_score = {max = 2, current = 0}
   scroll = {goal = 4000, pos = 0, v = 0}
 
   backgroundImg = love.graphics.newImage("background.png")

@@ -9,7 +9,9 @@ level = require "level"
 love.load = function()
   math.randomseed(os.time())
 
-  screen = {w = love.graphics.getWidth(), h = love.graphics.getHeight()}
+  love.window.setMode(1200, 800)
+  screen = {w = 600, h = 400}
+  screen.scale = love.graphics.getWidth()/screen.w
 
   character.load()
 
@@ -20,6 +22,10 @@ love.load = function()
   drop.load()
 
   level.load()
+
+  love.graphics.setDefaultFilter("nearest", "nearest")
+
+  canvas = love.graphics.newCanvas(screen.w, screen.h)
 end
 
 love.update = function(dt)
@@ -35,8 +41,10 @@ love.update = function(dt)
 end
 
 love.draw = function()
+  love.graphics.setCanvas(canvas)
+
   level.draw()
-  
+
   character.draw()
 
   bullet.draw()
@@ -44,6 +52,10 @@ love.draw = function()
   enemy.draw()
 
   drop.draw()
+
+  love.graphics.setCanvas()
+
+  love.graphics.draw(canvas, 0, 0, 0, screen.scale, screen.scale)
 end
 
 opening = function(a) -- find available space in list 'a'
