@@ -6,6 +6,8 @@ collision = require "collision"
 drop = require "drop"
 level = require "level"
 
+love.graphics.setDefaultFilter("nearest", "nearest")
+
 love.load = function()
   math.randomseed(os.time())
 
@@ -22,10 +24,6 @@ love.load = function()
   drop.load()
 
   level.load()
-
-  love.graphics.setDefaultFilter("nearest", "nearest")
-
-  canvas = love.graphics.newCanvas(screen.w, screen.h)
 end
 
 love.update = function(dt)
@@ -41,7 +39,8 @@ love.update = function(dt)
 end
 
 love.draw = function()
-  love.graphics.setCanvas(canvas)
+  love.graphics.push()
+  love.graphics.scale(screen.scale, screen.scale)
 
   level.draw()
 
@@ -53,9 +52,7 @@ love.draw = function()
 
   drop.draw()
 
-  love.graphics.setCanvas()
-
-  love.graphics.draw(canvas, 0, 0, 0, screen.scale, screen.scale)
+  love.graphics.pop()
 end
 
 opening = function(a) -- find available space in list 'a'

@@ -9,3 +9,5 @@ Money - can be spent in shops for specific resources
 Upgrade - some upgrade to player's ship
 
 goal is to cross as many nodes as possible
+
+butt bomb
