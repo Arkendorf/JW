@@ -3,8 +3,6 @@ local character = {}
 character.load = function()
   char = {p = {x = screen.w/2, y = screen.h/2}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 16, ammo = 32}
   char_info = {speed = 1, stop = 0.8, atk_delay = .2, inv_time = 1, hp_max = 3, ammo_max = 32}
-
-  biplane_img = love.graphics.newImage("biplane.png")
 end
 
 character.update = function(dt)
@@ -68,7 +66,7 @@ character.draw = function()
   -- draw char
   love.graphics.circle("line", char.p.x, char.p.y, char.r, 32)
   love.graphics.line(char.p.x, char.p.y, char.p.x+char.a.x*16, char.p.y+char.a.y*16)
-  love.graphics.draw(biplane_img, char.p.x, char.p.y, math.atan2(char.a.y, char.a.x), 1, 1, 16, 16)
+  love.graphics.draw(img.biplane, char.p.x, char.p.y, math.atan2(char.a.y, char.a.x), 1, 1, 16, 16)
 
   -- reset color
   love.graphics.setColor(255, 255, 255)

@@ -7,8 +7,6 @@ enemy.load = function()
   enemy_info = {}
   enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9, r = 16, hp = 1, score = 1}
   enemy_info.bigboy = {ai = {1, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 2, score = 2}
-
-  fly_img = love.graphics.newImage("fly.png")
 end
 
 enemy.update = function(dt)
@@ -51,7 +49,7 @@ enemy.draw = function()
     love.graphics.circle("line", v.p.x, v.p.y, v.r, 32)
     love.graphics.line(v.p.x, v.p.y, v.p.x+v.a.x*v.r, v.p.y+v.a.y*v.r)
 
-    love.graphics.draw(fly_img, v.p.x, v.p.y, math.atan2(v.a.y, v.a.x), 1, 1, 16, 16)
+    love.graphics.draw(img.fly, v.p.x, v.p.y, math.atan2(v.a.y, v.a.x), 1, 1, 16, 16)
   end
 end
 
