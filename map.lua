@@ -1,6 +1,6 @@
 local map = {}
 
-local map_pos = {x = 0, y = 0}
+local map_pos = {x = 12, y = 40}
 local scroll = 0
 local x_pos = 0
 local grid = {w = 6, h = 4, t = 64}
@@ -11,7 +11,7 @@ local map_seed = 0
 local type_name = {"None", "Upgrade", "Health", "Ammo", "Money", "Shop"}
 
 map.load = function()
-  map_seed = 4
+  map_seed = os.time()
   math.randomseed(map_seed)
 
   path[1].y = math.random(1, 4)
@@ -146,8 +146,8 @@ map.draw = function()
     love.graphics.setColor(255, 255, 255)
   end
 
-  love.graphics.setCanvas()
-
+  love.graphics.setCanvas(canvas.window)
+  love.graphics.clear()
 
   love.graphics.draw(canvas.map, 64+map_pos.x, map_pos.y)
   love.graphics.draw(img.scrollback, map_pos.x, map_pos.y)
@@ -159,6 +159,8 @@ map.draw = function()
     local x, y = map.get_node_coords(target.x, target.y)
     love.graphics.draw(canvas.note, math.floor(x+64+8+map_pos.x)-scroll, math.floor(y-8+map_pos.y))
   end
+
+  love.graphics.setCanvas()
 end
 
 map.keypressed = function(key)

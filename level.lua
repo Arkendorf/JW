@@ -1,10 +1,9 @@
 local level = {}
 
-level.load = function()
-  level_score = {max = 2, current = 0}
-  scroll = {goal = 4000, pos = 0, v = 0}
+local level_score = {max = 0, current = 0}
+local scroll = {goal = 4000, pos = 0, v = 0}
 
-  backgroundImg = love.graphics.newImage("background.png")
+level.load = function()
 end
 
 level.update = function(dt)
@@ -29,7 +28,7 @@ level.update = function(dt)
 
   -- do scrolling thing
   if scroll.pos >= scroll.goal then
-    enemies = {}
+    state = "map"
   else
     scroll.v = scroll.v + dt * 60 * 0.2
   end
@@ -39,16 +38,25 @@ end
 
 level.draw = function()
   -- temporary background
-  love.graphics.draw(backgroundImg, 0, scroll.pos % 400 - 400)
-  love.graphics.draw(backgroundImg, 0, scroll.pos % 400)
-  love.graphics.draw(backgroundImg, 0, scroll.pos % 400 + 400)
-
-  love.graphics.draw(backgroundImg, 400, scroll.pos % 400 - 400)
-  love.graphics.draw(backgroundImg, 400, scroll.pos % 400)
-  love.graphics.draw(backgroundImg, 400, scroll.pos % 400 + 400)
+  for i = -math.ceil(screen.h/400/2), math.ceil(screen.h/400/2) do
+    love.graphics.draw(img.background, 0, math.floor(scroll.pos % 400) + i*400)
+  end
 
   -- info
   love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp).."\nDistance: "..tostring(scroll.pos))
+end
+
+level.start = function(dif, dist, reward)
+  -- set up level
+  level_score.max = dif
+  scroll = {goal = dist*100, pos = 0, v = 0}
+
+  -- reset stuff
+  enemies = {}
+  bullets = {}
+
+  -- reset seed
+  math.randomseed(os.time())
 end
 
 return level

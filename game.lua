@@ -9,11 +9,6 @@ level = require "level"
 local game = {}
 
 game.load = function()
-  math.randomseed(os.time())
-
-  love.window.setMode(1200, 800)
-  screen = {w = 600, h = 400}
-  screen.scale = love.graphics.getWidth()/screen.w
 
   character.load()
 
@@ -39,8 +34,8 @@ game.update = function(dt)
 end
 
 game.draw = function()
-  love.graphics.push()
-  love.graphics.scale(screen.scale, screen.scale)
+  love.graphics.setCanvas(canvas.window)
+  love.graphics.clear()
 
   level.draw()
 
@@ -52,7 +47,7 @@ game.draw = function()
 
   drop.draw()
 
-  love.graphics.pop()
+  love.graphics.setCanvas()
 end
 
 opening = function(a) -- find available space in list 'a'

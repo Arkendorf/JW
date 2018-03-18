@@ -2,7 +2,7 @@ local graphics = {}
 
 graphics.load = function()
   love.graphics.setDefaultFilter("nearest", "nearest")
-  
+
   font = love.graphics.newImageFont("font.png",
   " ABCDEFGHIJKLMNOPQRSTUVWXYZ" ..
   "abcdefghijklmnopqrstuvwxyz" ..
@@ -27,6 +27,8 @@ graphics.load = function()
 
   -- canvases
   canvas = {}
+
+  love.graphics.setBackgroundColor(255, 255, 255)
 end
 
 graphics.spritesheet = function(img, tw, th)
