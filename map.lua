@@ -1,9 +1,9 @@
 local map = {}
 
-local map_pos = {x = 12, y = 40}
+local map_pos = {x = 44, y = 40}
 local scroll = 0
 local x_pos = 0
-local grid = {w = 6, h = 4, t = 64}
+local grid = {w = 5, h = 4, t = 64}
 local target = {x = 1, y = 1}
 local path = {{x = 1, y = 1}}
 local options = {}
@@ -128,8 +128,9 @@ map.draw = function()
     love.graphics.draw(img.note, 0, 0) -- draw background
     local reward = 0
     local type = map.get_node_type(target.x, target.y)
+    -- draw reward
     if type > 1 then
-      love.graphics.setColor(60, 178, 36)
+      love.graphics.setColor(122, 204, 40)
       love.graphics.draw(img.noteicons, quad.noteicons[1], 2, 16)
       love.graphics.print(type_name[type], 16, 19)
       reward = 1
@@ -146,7 +147,7 @@ map.draw = function()
     love.graphics.setColor(255, 255, 255)
   end
 
-  love.graphics.setCanvas(canvas.window)
+  love.graphics.setCanvas(canvas.game)
   love.graphics.clear()
 
   love.graphics.draw(canvas.map, 64+map_pos.x, map_pos.y)

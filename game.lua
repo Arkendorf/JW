@@ -34,10 +34,8 @@ game.update = function(dt)
 end
 
 game.draw = function()
-  love.graphics.setCanvas(canvas.window)
+  love.graphics.setCanvas(canvas.game)
   love.graphics.clear()
-
-  level.draw()
 
   character.draw()
 

@@ -34,16 +34,16 @@ level.update = function(dt)
   end
   scroll.pos = scroll.pos + scroll.v
   scroll.v = scroll.v * 0.9
+
+  b_offset = scroll.pos
 end
 
 level.draw = function()
-  -- temporary background
-  for i = -math.ceil(screen.h/400/2), math.ceil(screen.h/400/2) do
-    love.graphics.draw(img.background, 0, math.floor(scroll.pos % 400) + i*400)
-  end
-
   -- info
+  love.graphics.setColor(0, 0, 0)
   love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp).."\nDistance: "..tostring(scroll.pos))
+
+  love.graphics.setColor(255, 255, 255)
 end
 
 level.start = function(dif, dist, reward)
