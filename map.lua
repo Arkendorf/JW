@@ -8,7 +8,7 @@ local target = {x = 1, y = 1}
 local path = {{x = 1, y = 1}}
 local options = {}
 local map_seed = 0
-local type_name = {"None", "Upgrade", "Health", "Ammo", "Money", "Shop"}
+local type_name = {"None", "Weapon", "Upgrade", "Health", "Ammo", "Money", "Shop"}
 
 map.load = function()
   map_seed = os.time()
@@ -105,7 +105,7 @@ map.draw = function()
       local type = map.get_node_type(x+x_pos, y)
       -- color it if selected
       if target.x == x+x_pos and target.y == y then
-        type = type + 6
+        type = type + 7
       end
 
       -- draw
@@ -206,7 +206,7 @@ end
 map.get_node_type = function(x, y)
   math.randomseed(map_seed+x*y)
   if math.random(0, 3) == 0 then
-    return math.random(2, 6)
+    return math.random(2, 7)
   else
     return 1
   end
