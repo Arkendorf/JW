@@ -54,7 +54,7 @@ map.draw = function()
 
   -- draw details
   for x = -2-math.ceil(grid.w/2), grid.w+2+math.ceil(grid.w/2) do
-    math.randomseed(map_seed+x+x_pos)
+    math.randomseed(map.seed(x+x_pos, 0))
     if (x+x_pos) % 4 == 0 then
       love.graphics.draw(img.mapdetail, quad.mapdetail[math.random(1, 12)], math.floor(x*grid.t+math.random(-grid.t, grid.t)*.33-scroll+x_pos*grid.t), math.floor(grid.t+math.random(0, (grid.h-1)*grid.t)), 0, 1, 1, 32, 32)
     end
@@ -200,12 +200,12 @@ map.node_is_option = function(x, y)
 end
 
 map.get_node_coords = function(x, y)
-  math.randomseed(map_seed+x*y)
+  math.randomseed(map.seed(x, y))
   return x*grid.t+math.random(-grid.t, grid.t)*.33, y*grid.t+math.random(-grid.t, grid.t)*.33
 end
 
 map.get_node_type = function(x, y)
-  math.randomseed(map_seed+x*y)
+  math.randomseed(map.seed(x, y))
   if math.random(0, 3) == 0 then
     return math.random(2, 7)
   else
@@ -214,7 +214,7 @@ map.get_node_type = function(x, y)
 end
 
 map.get_node_difficulty = function(x, y)
-  math.randomseed(map_seed+x*y)
+  math.randomseed(map.seed(x, y))
   local difficulty = x + math.random(-2, 2)
   if difficulty < 1 then
     difficulty = 1
@@ -251,6 +251,10 @@ map.find_options = function()
       end
     end
   end
+end
+
+map.seed = function(x, y)
+  return map_seed+x*y+x+y
 end
 
 map.dotted_line = function(x1, y1, x2, y2, gap)
