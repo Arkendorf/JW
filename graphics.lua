@@ -6,7 +6,7 @@ graphics.load = function()
   font = love.graphics.newImageFont("font.png",
   " ABCDEFGHIJKLMNOPQRSTUVWXYZ" ..
   "abcdefghijklmnopqrstuvwxyz" ..
-  "0123456789!?.:", 1)
+  "0123456789!?.,':$[]%", 1)
   love.graphics.setFont(font)
 
   love.graphics.setLineStyle("rough")
@@ -24,6 +24,8 @@ graphics.load = function()
   quad.mapdetail = graphics.spritesheet(img.mapdetail, 64, 64)
   quad.icons = graphics.spritesheet(img.icons, 16, 16)
   quad.noteicons = graphics.spritesheet(img.noteicons, 12, 12)
+  quad.cardicons = graphics.spritesheet(img.cardicons, 16, 16)
+  quad.cardimgs = graphics.spritesheet(img.cardimgs, 48, 48)
 
   -- canvases
   canvas = {}
@@ -39,6 +41,17 @@ graphics.spritesheet = function(img, tw, th)
     end
   end
   return quads
+end
+
+graphics.dotted_line = function(x1, y1, x2, y2, gap)
+  local gap = gap or 4
+
+  local r = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
+  local theta = math.atan2((y2-y1), (x2-x1))
+
+  for i = 0, math.floor(r / (gap*2)) do
+    love.graphics.line(x1 + i*gap*2*math.cos(theta), y1 + i*gap*2*math.sin(theta), x1 + (i*gap*2+gap)*math.cos(theta), y1 + (i*gap*2+gap)*math.sin(theta))
+  end
 end
 
 return graphics

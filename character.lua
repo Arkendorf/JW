@@ -1,7 +1,7 @@
 local character = {}
 
 character.load = function()
-  char = {p = {x = screen.w/2, y = screen.h/2}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 16, ammo = 32}
+  char = {p = {x = 200, y = 300}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 16, ammo = 32}
   char_info = {speed = 1, stop = 0.8, atk_delay = .2, inv_time = 1, hp_max = 3, ammo_max = 32}
 end
 
@@ -36,6 +36,7 @@ character.update = function(dt)
     bullet.new("basic", char.p, vector.sum(char.a, vector.scale(0.1, char.d)), 1) -- directin is combo of char's direction and movement
     char.ammo = char.ammo - 1 -- decrease ammo
     char.atk = char_info.atk_delay
+    stats.shots = stats.shots + 1 -- increase 'shots' stat
   elseif char.atk > 0 then
     char.atk = char.atk - dt
   end
@@ -47,6 +48,7 @@ character.update = function(dt)
       if collision.overlap(char, v) then
         char.hp = char.hp - 1
         char.inv = char_info.inv_time
+        stats.dmg = stats.dmg + 1 -- increase 'dmg' stat
       end
     end
   end

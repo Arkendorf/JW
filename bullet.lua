@@ -18,6 +18,7 @@ bullet.update = function(dt)
       for j, w in pairs(enemies) do
         if collision.overlap(v, w) then
           w.hp = w.hp - bullet_info[v.type].dmg
+          stats.hits = stats.hits + 1 -- increase 'hits' stat
           bullets[i] = nil
         end
       end
@@ -25,9 +26,10 @@ bullet.update = function(dt)
       if collision.overlap(v, char) then
         if char.inv <= 0 then
           char.hp = char.hp - 1
+          char.inv = char_info.inv_time
+          stats.dmg = stats.dmg + 1 -- increase 'dmg' stat
         end
         bullets[i] = nil
-        char.inv = char_info.inv_time
       end
     end
   end

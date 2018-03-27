@@ -2,6 +2,8 @@ local level = {}
 
 local level_score = {max = 0, current = 0}
 local scroll = {goal = 4000, pos = 0, v = 0}
+local level_reward = 0
+
 
 level.load = function()
 end
@@ -28,7 +30,8 @@ level.update = function(dt)
 
   -- do scrolling thing
   if scroll.pos >= scroll.goal then
-    state = "map"
+    state = "reward"
+    reward.start(level_reward, stats)
   else
     scroll.v = scroll.v + dt * 60 * 0.2
   end
@@ -47,6 +50,11 @@ level.draw = function()
 end
 
 level.start = function(dif, dist, reward)
+  char.x = 200
+  char.y = 300
+
+  stats = {kills = 0, shots = 0, hits = 0, dmg = 0}
+
   -- set up level
   level_score.max = dif
   scroll = {goal = dist*100, pos = 0, v = 0}
@@ -54,9 +62,12 @@ level.start = function(dif, dist, reward)
   -- reset stuff
   enemies = {}
   bullets = {}
+  drops = {}
 
   -- reset seed
   math.randomseed(os.time())
+
+  level_reward = reward
 end
 
 return level

@@ -30,6 +30,7 @@ enemy.update = function(dt)
         end
       end
 
+      stats.kills = stats.kills + 1 -- increase 'kills' stat
       enemies[i] = nil
     end
 

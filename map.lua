@@ -91,7 +91,7 @@ map.draw = function()
       love.graphics.line(x1-scroll, y1, x2-scroll, y2)
     else
       love.graphics.setColor(64, 51, 102)
-      map.dotted_line(x1-scroll, y1, x2-scroll, y2)
+      graphics.dotted_line(x1-scroll, y1, x2-scroll, y2)
     end
   end
   love.graphics.setColor(255, 255, 255)
@@ -225,9 +225,9 @@ end
 map.get_node_difficulty_text = function(x, y)
   local dif = map.get_node_difficulty(target.x, target.y)
   local dif_txt = "Light"
-  if dif > 4 then
+  if dif > x+1 then
     dif_txt = "Heavy"
-  elseif dif > 2 then
+  elseif dif > x-1 then
     dif_txt = "Medium"
   end
   return dif_txt
@@ -257,15 +257,6 @@ map.seed = function(x, y)
   return map_seed+x*y+x+y
 end
 
-map.dotted_line = function(x1, y1, x2, y2, gap)
-  local gap = gap or 4
 
-  local r = math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
-  local theta = math.atan2((y2-y1), (x2-x1))
-
-  for i = 0, math.floor(r / (gap*2)) do
-    love.graphics.line(x1 + i*gap*2*math.cos(theta), y1 + i*gap*2*math.sin(theta), x1 + (i*gap*2+gap)*math.cos(theta), y1 + (i*gap*2+gap)*math.sin(theta))
-  end
-end
 
 return map
