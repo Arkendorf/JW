@@ -8,6 +8,7 @@ local items = {}
 local item_target = 0
 local stats = {}
 local total_score = 0
+local weaponscreen = {on = false, pos = -176, target = 1, itemcanvas = {}, done = false, canvas = love.graphics.newCanvas(220, 176)}
 
 rewardscreen.load = function()
 end
@@ -37,7 +38,7 @@ rewardscreen.start = function(node, game_stats)
       total_score = 1
     end
 
-    canvas.reward = rewardscreen.draw_card(5, 0, total_score)
+    canvas.reward = rewardscreen.draw_card(5, 1, total_score)
 
     money = money + total_score
   end
@@ -53,6 +54,14 @@ rewardscreen.update = function(dt)
       end
     end
   end
+  if weaponscreen.on and weaponscreen.pos < 56 then
+    weaponscreen.pos = weaponscreen.pos + (56-weaponscreen.pos) * 0.2
+    if weaponscreen.pos > 56 then
+      weaponscreen.pos = 56
+    end
+  elseif not weaponscreen.on and weaponscreen.pos > -176 then
+    weaponscreen.pos = weaponscreen.pos + (-176-weaponscreen.pos) * 0.2
+  end
 end
 
 rewardscreen.draw = function()
@@ -66,7 +75,7 @@ rewardscreen.draw = function()
 
     -- items for sale
     for i, v in ipairs(items) do
-      if i == item_target then -- draw highlight
+      if i == item_target and weaponscreen.on == false then -- draw highlight
         love.graphics.draw(img.cardborder, 314 + i*78-#items*39+39, 134)
       end
       if v.anim > 0 then -- determine which side of card to show
@@ -75,14 +84,42 @@ rewardscreen.draw = function()
         love.graphics.draw(img.cardback, 348 + i*78-#items*39+39, 136, 0, v.anim, 1, 32, 0)
       end
     end
-    love.graphics.draw(img.infobox, 316, 248)
-
     -- draw info
+    love.graphics.draw(img.infobox, 316, 248)
     love.graphics.setColor(64, 51, 102)
     rewardscreen.draw_info(items[item_target])
   else
     report_pos = 188
   end
+
+  -- weapon screen
+  if weaponscreen.on then
+    love.graphics.setCanvas(weaponscreen.canvas)
+    love.graphics.clear()
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.draw(img.blueprint, 0, 0)
+    love.graphics.print("Weaponry", 110 - math.floor(font:getWidth("Weaponry")/2), 14)
+    love.graphics.print("z", 64 - math.floor(font:getWidth("z")/2), 154)
+    love.graphics.print("x", 156 - math.floor(font:getWidth("x")/2), 154)
+    -- player's current weapons
+    love.graphics.draw(weaponscreen.itemcanvas[1], 32, 40)
+    love.graphics.draw(weaponscreen.itemcanvas[2], 124, 40)
+    love.graphics.draw(img.cardborder, -62 + weaponscreen.target*92, 38)
+
+    love.graphics.setCanvas(canvas.game)
+
+    -- draw info
+    love.graphics.draw(img.infobox, 316, 248)
+    if char.weapons[weaponscreen.target] > 0 then
+      love.graphics.setColor(64, 51, 102)
+      rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char.weapons[weaponscreen.target]})
+    else
+      love.graphics.setColor(204, 40, 40)
+      love.graphics.print("Empty", 320, 252)
+    end
+  end
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.draw(weaponscreen.canvas, 316, math.floor(weaponscreen.pos))
 
 
 
@@ -112,7 +149,9 @@ rewardscreen.draw = function()
 
   love.graphics.setColor(255, 255, 255)
   -- draw bottom instructions
-  if reward_type == "shop" then
+  if weaponscreen.on then
+    love.graphics.print("[z] Replace   [x] Exit", 300 - math.floor(font:getWidth("[z] Replace   [x] Exit")/2), 350)
+  elseif reward_type == "shop" then
     love.graphics.print("[z] Buy   [x] Continue", 300 - math.floor(font:getWidth("[z] Buy   [x] Continue")/2), 350)
   elseif reward_type == "none" then
     love.graphics.print("[x] Continue", 300 - math.floor(font:getWidth("[x] Continue")/2), 350)
@@ -122,15 +161,38 @@ rewardscreen.draw = function()
 end
 
 rewardscreen.keypressed = function(key)
-  if key == "right" and item_target < #items then
-    item_target = item_target + 1
-  elseif key == "left" and item_target > 1 then
-    item_target = item_target - 1
-  elseif key == "z" and reward_type ~= "none" and items[item_target].price <= money then
-    items[item_target].bought = true
-    money = money - items[item_target].price
-  elseif key == "x" then
-    state = "map"
+  if weaponscreen.on then
+    if key == "right" and weaponscreen.target < 2 then
+      weaponscreen.target = 2
+    elseif key == "left" and weaponscreen.target > 1 then
+      weaponscreen.target = 1
+    elseif key == "z" and weaponscreen.done == false then
+      weaponscreen.done = true
+        items[item_target].bought = true
+        money = money - items[item_target].price
+        char.weapons[weaponscreen.target] = items[item_target].item
+        weaponscreen.itemcanvas[weaponscreen.target] = rewardscreen.draw_card(1, items[item_target].item, 1)
+    elseif key == "x" then
+      weaponscreen.on = false
+    end
+  else
+    if key == "right" and item_target < #items then
+      item_target = item_target + 1
+    elseif key == "left" and item_target > 1 then
+      item_target = item_target - 1
+    elseif key == "z" and reward_type ~= "none" and items[item_target].bought == false and items[item_target].price <= money then
+      if items[item_target].type == 1 then -- prompt and set up weapon replacement screen
+        weaponscreen.on = true
+        weaponscreen.itemcanvas[1] = rewardscreen.draw_card(1, char.weapons[1], 1)
+        weaponscreen.itemcanvas[2] = rewardscreen.draw_card(1, char.weapons[2], 1)
+        weaponscreen.pos = -176
+      else
+        items[item_target].bought = true
+        money = money - items[item_target].price
+      end
+    elseif key == "x" then
+      state = "map"
+    end
   end
 end
 
@@ -149,7 +211,7 @@ rewardscreen.get_type = function(reward)
 end
 
 rewardscreen.create = function(type)
-  local item = 0
+  local item = 1
   local amount = 1
   local price = 0
   if type < 3 then
@@ -176,15 +238,17 @@ rewardscreen.draw_card = function(type, item, amount)
   local canvas = love.graphics.newCanvas(64, 96)
   love.graphics.setCanvas(canvas)
   love.graphics.clear()
-  love.graphics.draw(img.card)
-  love.graphics.draw(img.cardicons, quad.cardicons[type], 4, 4)
-  love.graphics.draw(img.cardicons, quad.cardicons[type], 60, 92, math.pi)
-  love.graphics.draw(img.cardimgs, quad.cardimgs[type], 8, 24)
-  if amount and amount > 1 and type > 2 then
-    love.graphics.setColor(204, 40, 40)
-    love.graphics.print("x"..tostring(amount), 20, 9)
-    love.graphics.print("x"..tostring(amount), 44, 87, math.pi)
-    love.graphics.setColor(255, 255, 255)
+  if item > 0 then
+    love.graphics.draw(img.card)
+    love.graphics.draw(img.cardicons, quad.cardicons[type], 4, 4)
+    love.graphics.draw(img.cardicons, quad.cardicons[type], 60, 92, math.pi)
+    love.graphics.draw(img.cardimgs, quad.cardimgs[type], 8, 24)
+    if amount and amount > 1 and type > 2 then
+      love.graphics.setColor(204, 40, 40)
+      love.graphics.print("x"..tostring(amount), 20, 9)
+      love.graphics.print("x"..tostring(amount), 44, 87, math.pi)
+      love.graphics.setColor(255, 255, 255)
+    end
   end
   love.graphics.setCanvas()
   return canvas
