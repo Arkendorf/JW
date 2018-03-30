@@ -8,7 +8,7 @@ local items = {}
 local item_target = 0
 local stats = {}
 local total_score = 0
-local weaponscreen = {on = false, pos = -176, target = 1, itemcanvas = {}, done = false, canvas = love.graphics.newCanvas(220, 176)}
+local weaponscreen = {on = false, pos = -176, itempos = {200, 200}, target = 1, itemcanvas = {love.graphics.newCanvas(), love.graphics.newCanvas(), love.graphics.newCanvas()}, choice = 0, canvas = love.graphics.newCanvas(220, 176)}
 
 rewardscreen.load = function()
 end
@@ -34,7 +34,10 @@ rewardscreen.start = function(node, game_stats)
 
     stats = {{str = "Kills:", num = game_stats.kills}, {str = "Shots:", num = game_stats.shots}, {str = "Accuracy:", num = math.floor(game_stats.hits/game_stats.shots*100), per = true}, {str = "Damage Taken:", num = game_stats.dmg}}
     total_score = math.ceil((stats[1].num*10-stats[4].num)/stats[2].num)
-    if total_score < 1 then
+    if total_score < 1 then -- prevents negative score and bugged bonus
+      total_score = 1
+    elseif stats[2].num < 1 then -- prevents bugged bonus and NaN accuracy
+      stats[3].num = 0
       total_score = 1
     end
 
@@ -47,20 +50,31 @@ rewardscreen.update = function(dt)
   for i, v in ipairs(items) do
     if v.bought then
       if v.anim > -1 then
-        v.anim = v.anim - .3
+        v.anim = v.anim - dt * 18
         if v.anim < -1 then
           v.anim = -1
         end
       end
     end
   end
-  if weaponscreen.on and weaponscreen.pos < 56 then
-    weaponscreen.pos = weaponscreen.pos + (56-weaponscreen.pos) * 0.2
-    if weaponscreen.pos > 56 then
-      weaponscreen.pos = 56
+
+  weaponscreen.pos = rewardscreen.zoom(weaponscreen.on, weaponscreen.pos, -176, 56, dt * 12)
+
+  weaponscreen.itempos[1] = rewardscreen.zoom(not weaponscreen.on, weaponscreen.itempos[1], 348, 600, dt * 12)
+  weaponscreen.itempos[2] = rewardscreen.zoom(not weaponscreen.on, weaponscreen.itempos[2], 440, 600, dt * 12)
+end
+
+rewardscreen.zoom = function(bool, num, min, max, scalar)
+  if bool and num < max then
+    if num + (max-num) * scalar > max then
+      return max
+    else
+      return num + (max-num) * scalar
     end
-  elseif not weaponscreen.on and weaponscreen.pos > -176 then
-    weaponscreen.pos = weaponscreen.pos + (-176-weaponscreen.pos) * 0.2
+  elseif not bool and num > min then
+    return num + (min-num) * scalar
+  else
+    return num
   end
 end
 
@@ -101,9 +115,6 @@ rewardscreen.draw = function()
     love.graphics.print("Weaponry", 110 - math.floor(font:getWidth("Weaponry")/2), 14)
     love.graphics.print("z", 64 - math.floor(font:getWidth("z")/2), 154)
     love.graphics.print("x", 156 - math.floor(font:getWidth("x")/2), 154)
-    -- player's current weapons
-    love.graphics.draw(weaponscreen.itemcanvas[1], 32, 40)
-    love.graphics.draw(weaponscreen.itemcanvas[2], 124, 40)
     love.graphics.draw(img.cardborder, -62 + weaponscreen.target*92, 38)
 
     love.graphics.setCanvas(canvas.game)
@@ -120,6 +131,13 @@ rewardscreen.draw = function()
   end
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(weaponscreen.canvas, 316, math.floor(weaponscreen.pos))
+  -- weapons
+  love.graphics.draw(weaponscreen.itemcanvas[1], weaponscreen.itempos[1], 95)
+  love.graphics.draw(weaponscreen.itemcanvas[2], weaponscreen.itempos[2], 95)
+  if weaponscreen.choice > 0 then
+    love.graphics.draw(weaponscreen.itemcanvas[3], 856+weaponscreen.choice*92-weaponscreen.itempos[weaponscreen.choice], 95)
+  end
+
 
 
 
@@ -166,14 +184,17 @@ rewardscreen.keypressed = function(key)
       weaponscreen.target = 2
     elseif key == "left" and weaponscreen.target > 1 then
       weaponscreen.target = 1
-    elseif key == "z" and weaponscreen.done == false then
-      weaponscreen.done = true
-        items[item_target].bought = true
-        money = money - items[item_target].price
-        char.weapons[weaponscreen.target] = items[item_target].item
-        weaponscreen.itemcanvas[weaponscreen.target] = rewardscreen.draw_card(1, items[item_target].item, 1)
+    elseif key == "z" and weaponscreen.choice == 0 then
+      weaponscreen.choice = weaponscreen.target -- weapon has been placed
+      items[item_target].bought = true -- weapon has been purchased
+      money = money - items[item_target].price -- adjust funds
+      char.weapons[weaponscreen.target] = items[item_target].item -- correct player's inventory
+      weaponscreen.itemcanvas[3] = weaponscreen.itemcanvas[weaponscreen.target] -- set old card canvas to card being replaced
+      weaponscreen.itemcanvas[weaponscreen.target] = rewardscreen.draw_card(1, items[item_target].item, 1) -- redraw weapon card
+      weaponscreen.itempos[weaponscreen.target] = 600 -- reset animation
     elseif key == "x" then
       weaponscreen.on = false
+      weaponscreen.choice = 0
     end
   else
     if key == "right" and item_target < #items then

@@ -12,11 +12,9 @@ function love.load()
   game.load()
   reward.load()
 
-  state = "reward"
+  state = "map"
 
-  money = 12221
-
-  reward.start(2, {kills = 0, shots = 1, hits = 0, dmg = 0})
+  money = 0
 end
 
 function love.update(dt)
