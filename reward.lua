@@ -213,11 +213,30 @@ rewardscreen.keypressed = function(key)
       else
         items[item_target].bought = true
         money = money - items[item_target].price
+        rewardscreen.collect(items[item_target])
       end
     elseif key == "x" then
       -- outro animation
       on = false
     end
+  end
+end
+
+rewardscreen.collect = function(item)
+  if item.type == 2 then -- increase upgrade's stat for player
+    char_info[item_info[2][item.item].stat] = char_info[item_info[2][item.item].stat] + item_info[2][item.item].num
+  elseif item.type == 3 then -- add health
+    char.hp = char.hp + item.amount
+    if char.hp > char_info.hp_max then -- cap at hp max
+      char.hp = char_info.hp_max
+    end
+  elseif item.type == 4 then -- add ammo
+    char.ammo = char.ammo + item.amount
+    if char.ammo > char_info.ammo_max then -- cap at ammo max
+      char.ammo = char_info.ammo_max
+    end
+  else -- add money
+    money = money + item.amount
   end
 end
 
