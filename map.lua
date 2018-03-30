@@ -1,6 +1,7 @@
 local map = {}
 
-local map_pos = {x = 44, y = 40}
+local map_pos = {x = 44, y = -320}
+local on = true
 local scroll = 0
 local x_pos = 0
 local grid = {w = 5, h = 4, t = 64}
@@ -42,6 +43,18 @@ map.update = function(dt)
 
   -- make the nice scrolling effect
   scroll = math.floor(scroll + (x_pos * grid.t - scroll) * dt * 12)
+
+  -- animation map intro and outro
+  map_pos.y = graphics.zoom(on, map_pos.y, -320, 40, dt * 12)
+  if math.floor(map_pos.y) <= -320 then -- set up game
+    on = true
+    state = "game"
+    level.start(map.get_node_difficulty(target.x, target.y), map.get_node_distance(target.x, target.y, path[#path].x, path[#path].y), map.get_node_type(target.x, target.y))
+
+    -- update map
+    path[#path+1] = {x = target.x,y = target.y}
+    map.find_options()
+  end
 end
 
 map.draw = function()
@@ -179,13 +192,8 @@ map.keypressed = function(key)
     target.y = path[#path].y
   elseif key == "z" then
     if map.node_is_option(target.x, target.y) then
-      -- switch to game
-      state = "game"
-      level.start(map.get_node_difficulty(target.x, target.y), map.get_node_distance(target.x, target.y, path[#path].x, path[#path].y), map.get_node_type(target.x, target.y))
-
-      -- update map
-      path[#path+1] = {x = target.x,y = target.y}
-      map.find_options()
+      -- outro animation
+      on = false
     end
   end
 end

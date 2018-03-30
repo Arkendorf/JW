@@ -9,6 +9,11 @@ local item_target = 0
 local stats = {}
 local total_score = 0
 local weaponscreen = {on = false, pos = -176, itempos = {200, 200}, target = 1, itemcanvas = {love.graphics.newCanvas(), love.graphics.newCanvas(), love.graphics.newCanvas()}, choice = 0, canvas = love.graphics.newCanvas(220, 176)}
+local report_pos = -220
+local info_pos = 600
+local title_pos = 600
+local item_pos = {600, 600, 600}
+local on = true
 
 rewardscreen.load = function()
 end
@@ -34,10 +39,10 @@ rewardscreen.start = function(node, game_stats)
 
     stats = {{str = "Kills:", num = game_stats.kills}, {str = "Shots:", num = game_stats.shots}, {str = "Accuracy:", num = math.floor(game_stats.hits/game_stats.shots*100), per = true}, {str = "Damage Taken:", num = game_stats.dmg}}
     total_score = math.ceil((stats[1].num*10-stats[4].num)/stats[2].num)
-    if total_score < 1 then -- prevents negative score and bugged bonus
-      total_score = 1
-    elseif stats[2].num < 1 then -- prevents bugged bonus and NaN accuracy
+    if stats[2].num < 1 then -- prevents bugged bonus and NaN accuracy
       stats[3].num = 0
+      total_score = 1
+    elseif total_score < 1 then -- prevents negative score and bugged bonus
       total_score = 1
     end
 
@@ -58,52 +63,52 @@ rewardscreen.update = function(dt)
     end
   end
 
-  weaponscreen.pos = rewardscreen.zoom(weaponscreen.on, weaponscreen.pos, -176, 56, dt * 12)
-
-  weaponscreen.itempos[1] = rewardscreen.zoom(not weaponscreen.on, weaponscreen.itempos[1], 348, 600, dt * 12)
-  weaponscreen.itempos[2] = rewardscreen.zoom(not weaponscreen.on, weaponscreen.itempos[2], 440, 600, dt * 12)
-end
-
-rewardscreen.zoom = function(bool, num, min, max, scalar)
-  if bool and num < max then
-    if num + (max-num) * scalar > max then
-      return max
-    else
-      return num + (max-num) * scalar
-    end
-  elseif not bool and num > min then
-    return num + (min-num) * scalar
+  -- rewardscreen animation
+  if reward_type == "none" then
+    report_pos = graphics.zoom(on, report_pos, -220, 188, dt * 12)
   else
-    return num
+    report_pos = graphics.zoom(on, report_pos, -220, 60, dt * 12)
+  end
+  info_pos = graphics.zoom(not on, info_pos, 316, 600, dt * 12)
+  title_pos = graphics.zoom(not on, title_pos, 378, 600, dt * 12)
+  for i, v in ipairs(items) do
+    item_pos[i] = graphics.zoom(not on, item_pos[i], 348 + i*78-#items*39+39, 632, dt * 12)
+  end
+
+  -- weaponscreen animation
+  weaponscreen.pos = graphics.zoom(weaponscreen.on, weaponscreen.pos, -176, 56, dt * 12)
+  weaponscreen.itempos[1] = graphics.zoom(not weaponscreen.on, weaponscreen.itempos[1], 348, 600, dt * 12)
+  weaponscreen.itempos[2] = graphics.zoom(not weaponscreen.on, weaponscreen.itempos[2], 440, 600, dt * 12)
+
+  -- outro animation
+  if math.floor(report_pos) <= -220 then
+    on = true
+    state = "map"
   end
 end
 
 rewardscreen.draw = function()
-  local report_pos = 64
-
   -- reward side
   if reward_type ~= "none" then
     love.graphics.setColor(255, 255, 255)
-    love.graphics.draw(img.sign, 426-48, 56)
-    love.graphics.print("Reward", 426-math.floor(font:getWidth("Reward")/2), 66)
+    love.graphics.draw(img.sign, title_pos, 56)
+    love.graphics.print("Reward", title_pos+48-math.floor(font:getWidth("Reward")/2), 66)
 
     -- items for sale
     for i, v in ipairs(items) do
       if i == item_target and weaponscreen.on == false then -- draw highlight
-        love.graphics.draw(img.cardborder, 314 + i*78-#items*39+39, 134)
+        love.graphics.draw(img.cardborder, item_pos[i]-2, 134, 0, 1, 1, 32, 0)
       end
       if v.anim > 0 then -- determine which side of card to show
-        love.graphics.draw(v.canvas, 348 + i*78-#items*39+39, 136, 0, v.anim, 1, 32, 0)
+        love.graphics.draw(v.canvas, item_pos[i], 136, 0, v.anim, 1, 32, 0)
       else
-        love.graphics.draw(img.cardback, 348 + i*78-#items*39+39, 136, 0, v.anim, 1, 32, 0)
+        love.graphics.draw(img.cardback, item_pos[i], 136, 0, v.anim, 1, 32, 0)
       end
     end
     -- draw info
-    love.graphics.draw(img.infobox, 316, 248)
+    love.graphics.draw(img.infobox, info_pos, 248)
     love.graphics.setColor(64, 51, 102)
     rewardscreen.draw_info(items[item_target])
-  else
-    report_pos = 188
   end
 
   -- weapon screen
@@ -112,7 +117,7 @@ rewardscreen.draw = function()
     love.graphics.clear()
     love.graphics.setColor(255, 255, 255)
     love.graphics.draw(img.blueprint, 0, 0)
-    love.graphics.print("Weaponry", 110 - math.floor(font:getWidth("Weaponry")/2), 14)
+    love.graphics.print("Pick a weapon to replace", 110 - math.floor(font:getWidth("Pick a weapon to replace")/2), 14)
     love.graphics.print("z", 64 - math.floor(font:getWidth("z")/2), 154)
     love.graphics.print("x", 156 - math.floor(font:getWidth("x")/2), 154)
     love.graphics.draw(img.cardborder, -62 + weaponscreen.target*92, 38)
@@ -120,13 +125,13 @@ rewardscreen.draw = function()
     love.graphics.setCanvas(canvas.game)
 
     -- draw info
-    love.graphics.draw(img.infobox, 316, 248)
+    love.graphics.draw(img.infobox, info_pos, 248)
     if char.weapons[weaponscreen.target] > 0 then
       love.graphics.setColor(64, 51, 102)
       rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char.weapons[weaponscreen.target]})
     else
       love.graphics.setColor(204, 40, 40)
-      love.graphics.print("Empty", 320, 252)
+      love.graphics.print("Empty", info_pos+4, 252)
     end
   end
   love.graphics.setColor(255, 255, 255)
@@ -137,8 +142,6 @@ rewardscreen.draw = function()
   if weaponscreen.choice > 0 then
     love.graphics.draw(weaponscreen.itemcanvas[3], 856+weaponscreen.choice*92-weaponscreen.itempos[weaponscreen.choice], 95)
   end
-
-
 
 
   -- report side
@@ -212,7 +215,8 @@ rewardscreen.keypressed = function(key)
         money = money - items[item_target].price
       end
     elseif key == "x" then
-      state = "map"
+      -- outro animation
+      on = false
     end
   end
 end
@@ -284,22 +288,22 @@ rewardscreen.draw_info = function(item)
   end
   if item.bought then
     love.graphics.setColor(204, 40, 40)
-    love.graphics.print("Out of stock", 320, 252)
+    love.graphics.print("Out of stock", info_pos+4, 252)
   else
     love.graphics.setColor(64, 51, 102)
     if item.amount and item.amount > 1 and item.type > 2 then
-      love.graphics.print(info.name.." x"..item.amount, 320, 252)
+      love.graphics.print(info.name.." x"..item.amount, info_pos+4, 252)
     else
-      love.graphics.print(info.name, 320, 252)
+      love.graphics.print(info.name, info_pos+4, 252)
     end
 
-    love.graphics.printf(info.disc, 320, 268, 212)
+    love.graphics.printf(info.disc, info_pos+4, 268, 212)
 
     if item.price > 0 then
       if item.price > money then
         love.graphics.setColor(204, 40, 40)
       end
-      love.graphics.print(item.price.."$", 532-font:getWidth(item.price.."$"), 252)
+      love.graphics.print(item.price.."$", info_pos+216-font:getWidth(item.price.."$"), 252)
     end
   end
 end
