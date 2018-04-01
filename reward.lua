@@ -126,9 +126,9 @@ rewardscreen.draw = function()
 
     -- draw info
     love.graphics.draw(img.infobox, info_pos, 248)
-    if char.weapons[weaponscreen.target] > 0 then
+    if char_info.weapons[weaponscreen.target] > 0 then
       love.graphics.setColor(64, 51, 102)
-      rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char.weapons[weaponscreen.target]})
+      rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char_info.weapons[weaponscreen.target]})
     else
       love.graphics.setColor(204, 40, 40)
       love.graphics.print("Empty", info_pos+4, 252)
@@ -191,7 +191,7 @@ rewardscreen.keypressed = function(key)
       weaponscreen.choice = weaponscreen.target -- weapon has been placed
       items[item_target].bought = true -- weapon has been purchased
       money = money - items[item_target].price -- adjust funds
-      char.weapons[weaponscreen.target] = items[item_target].item -- correct player's inventory
+      char_info.weapons[weaponscreen.target] = items[item_target].item -- correct player's inventory
       weaponscreen.itemcanvas[3] = weaponscreen.itemcanvas[weaponscreen.target] -- set old card canvas to card being replaced
       weaponscreen.itemcanvas[weaponscreen.target] = rewardscreen.draw_card(1, items[item_target].item, 1) -- redraw weapon card
       weaponscreen.itempos[weaponscreen.target] = 600 -- reset animation
@@ -207,8 +207,8 @@ rewardscreen.keypressed = function(key)
     elseif key == "z" and reward_type ~= "none" and items[item_target].bought == false and items[item_target].price <= money then
       if items[item_target].type == 1 then -- prompt and set up weapon replacement screen
         weaponscreen.on = true
-        weaponscreen.itemcanvas[1] = rewardscreen.draw_card(1, char.weapons[1], 1)
-        weaponscreen.itemcanvas[2] = rewardscreen.draw_card(1, char.weapons[2], 1)
+        weaponscreen.itemcanvas[1] = rewardscreen.draw_card(1, char_info.weapons[1], 1)
+        weaponscreen.itemcanvas[2] = rewardscreen.draw_card(1, char_info.weapons[2], 1)
         weaponscreen.pos = -176
       else
         items[item_target].bought = true

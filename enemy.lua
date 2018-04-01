@@ -21,12 +21,14 @@ enemy.update = function(dt)
     -- delete enemy if it has no health
     if v.hp <= 0 then
       -- drop
-      for j = 1, math.random(1, enemy_info[v.type].score) do
+      for j = 1, math.random(0, enemy_info[v.type].score) do
         local chance = math.random(1, 100)
-        if chance > 10 then
-          drop.new("ammo", v.p, math.random(4, 8))
+        if chance <= 10 then
+          drop.new(2, v.p, math.random(4, 8)) -- ammo
+        elseif chance <= 20 then
+          drop.new(1, v.p, 1) -- hp
         else
-          drop.new("hp", v.p, 1)
+          drop.new(3, v.p, 1) -- money
         end
       end
 
@@ -47,10 +49,7 @@ end
 
 enemy.draw = function()
   for i, v in pairs(enemies) do
-    love.graphics.circle("line", v.p.x, v.p.y, v.r, 32)
-    love.graphics.line(v.p.x, v.p.y, v.p.x+v.a.x*v.r, v.p.y+v.a.y*v.r)
-
-    love.graphics.draw(img.fly, v.p.x, v.p.y, math.atan2(v.a.y, v.a.x), 1, 1, 16, 16)
+    love.graphics.draw(img.fly, math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, 16, 16)
   end
 end
 

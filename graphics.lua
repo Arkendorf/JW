@@ -26,6 +26,16 @@ graphics.load = function()
   quad.noteicons = graphics.spritesheet(img.noteicons, 12, 12)
   quad.cardicons = graphics.spritesheet(img.cardicons, 16, 16)
   quad.cardimgs = graphics.spritesheet(img.cardimgs, 48, 48)
+  quad.drops = graphics.spritesheet(img.drops, 16, 16)
+
+  -- bullet images
+  bulletimg = {}
+  bulletquad = {}
+  files = love.filesystem.getDirectoryItems("bulletimgs")
+  for i, v in ipairs(files) do
+    bulletimg[string.sub(v, 1, -5)] = love.graphics.newImage("bulletimgs/"..v)
+    bulletquad[string.sub(v, 1, -5)] = graphics.spritesheet(bulletimg[string.sub(v, 1, -5)], 32, 32)
+  end
 
   -- canvases
   canvas = {}

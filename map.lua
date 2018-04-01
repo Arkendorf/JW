@@ -214,7 +214,7 @@ end
 
 map.get_node_type = function(x, y)
   math.randomseed(map.seed(x, y))
-  if math.random(0, 3) == 0 then
+  if math.random(0, 1) == 0 then
     return math.random(2, 7)
   else
     return 1

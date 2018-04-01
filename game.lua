@@ -34,13 +34,13 @@ game.update = function(dt)
 end
 
 game.draw = function()
+  drop.draw()
+
   character.draw()
 
   bullet.draw()
 
   enemy.draw()
-
-  drop.draw()
 end
 
 opening = function(a) -- find available space in list 'a'

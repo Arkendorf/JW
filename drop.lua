@@ -8,27 +8,58 @@ drop.update = function(dt)
   for i, v in pairs(drops) do
     v.p = vector.sum(v.p, vector.scale(8 * dt * 60, v.d))
     v.d = vector.scale(0.8, v.d)
+    v.p.y = v.p.y + dt * 18
+    if v.p.y > screen.h then
+      drops[i] = nil -- remove drop
+    end
 
     -- increase variable if picked up
-    if collision.overlap(char, v) and char[v.type] < char_info[v.type.."_max"] then
-      if char[v.type]+v.num < char_info[v.type.."_max"] then -- if new quantity is under max, set quantity to new quantity
-        char[v.type] = char[v.type] + v.num
-      else -- if new quantity is over max, set it to max
-        char[v.type] = char_info[v.type.."_max"]
+    if collision.overlap(char, v, 4) then
+      if v.type == 1 and char.hp < char_info.hp_max then -- hp
+        if char.hp+v.num < char_info.hp_max then -- if new quantity is under max, set quantity to new quantity
+          char.hp = char.hp + v.num
+        else -- if new quantity is over max, set it to max
+          char.hp = char_info.hp_max
+        end
+        drops[i] = nil -- remove drop
+      elseif v.type == 2 and char.ammo < char_info.ammo_max then -- ammo
+        if char.ammo+v.num < char_info.ammo_max then -- if new quantity is under max, set quantity to new quantity
+          char.ammo = char.ammo + v.num
+        else -- if new quantity is over max, set it to max
+          char.ammo = char_info.ammo_max
+        end
+        drops[i] = nil -- remove drop
+      elseif v.type == 3 then -- money
+        money = money + v.num
+        drops[i] = nil -- remove drop
       end
-      drops[i] = nil -- remove drop
+    end
+  end
+
+  -- random drops
+  if math.random(0, 1200) == 0 then
+    if math.random(0, 1) == 0 then
+      drop.new(2, {x = math.random(32, screen.w-64), y = -8}, math.random(4, 8), false) -- ammo
+    else
+      drop.new(1, {x = math.random(32, screen.w-64), y = -8}, 1, false) -- hp
     end
   end
 end
 
 drop.draw = function()
   for i, v in pairs(drops) do
-    love.graphics.circle("line", v.p.x, v.p.y, v.r, 8)
+    love.graphics.draw(img.drops, quad.drops[v.type], math.floor(v.p.x), math.floor(v.p.y), 0, 1, 1, 8, 8)
   end
 end
 
-drop.new = function(type, p, num)
-  drops[opening(drops)] = {type = type, p = p, d = {x = math.random(-10, 10)/10, y = math.random(-10, 10)/10}, r = 4, num = num}
+drop.new = function(type, p, num, burst)
+  local d = {}
+  if burst then
+    d = {x = math.random(-10, 10)/10, y = math.random(-10, 10)/10}
+  else
+    d = {x = 0, y = 0}
+  end
+  drops[opening(drops)] = {type = type, p = p, d = d, r = 4, num = num}
 end
 
 return drop
