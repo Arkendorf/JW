@@ -1,7 +1,7 @@
 local level = {}
 
 local level_score = {max = 0, current = 0}
-local scroll = {goal = 4000, pos = 0, v = 0}
+local scroll = {goal = 0, pos = 0, v = 0}
 local level_reward = 0
 
 
@@ -39,14 +39,6 @@ level.update = function(dt)
   b_offset = b_offset + scroll.v -- background offset
 
   scroll.v = scroll.v * 0.9
-end
-
-level.draw = function()
-  -- info
-  love.graphics.setColor(0, 0, 0)
-  love.graphics.print("Ammo: "..tostring(char.ammo).."\nHealth: "..tostring(char.hp).."\nDistance: "..tostring(scroll.pos))
-
-  love.graphics.setColor(255, 255, 255)
 end
 
 level.start = function(dif, dist, reward)

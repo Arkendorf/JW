@@ -36,9 +36,9 @@ end
 game.draw = function()
   drop.draw()
 
-  character.draw()
-
   bullet.draw()
+
+  character.draw()
 
   enemy.draw()
 end

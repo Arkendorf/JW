@@ -23,6 +23,20 @@ character.update = function(dt)
   -- adjust char pos
   char.p = vector.sum(char.p, vector.scale(dt * 60, char.d))
 
+  -- collide with edges
+  if char.p.x-char.r*2 < 0 then
+    char.p.x = char.r*2
+  end
+  if char.p.x+char.r*2 > screen.w then
+    char.p.x = screen.w-char.r*2
+  end
+  if char.p.y-char.r*2 < 0 then
+    char.p.y = char.r*2
+  end
+  if char.p.y+char.r*2 > screen.h then
+    char.p.y = screen.h-char.r*2
+  end
+
   -- adjust char angle
   char.a.x = char.d.x * (1 - char_info.stop) * 0.5 -- * 1 results in +- 45 degrees, * 0 results in +- 0 degrees
   char.a.y = - 1
