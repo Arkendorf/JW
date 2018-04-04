@@ -37,6 +37,15 @@ graphics.load = function()
     bulletquad[string.sub(v, 1, -5)] = graphics.spritesheet(bulletimg[string.sub(v, 1, -5)], 32, 32)
   end
 
+  -- ship images
+  shipimg = {}
+  shipquad = {}
+  files = love.filesystem.getDirectoryItems("shipimgs")
+  for i, v in ipairs(files) do
+    shipimg[string.sub(v, 1, -5)] = love.graphics.newImage("shipimgs/"..v)
+    shipquad[string.sub(v, 1, -5)] = graphics.spritesheet(shipimg[string.sub(v, 1, -5)], 32, 32)
+  end
+
   -- canvases
   canvas = {}
 

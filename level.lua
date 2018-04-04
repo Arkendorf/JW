@@ -36,9 +36,9 @@ level.update = function(dt)
     scroll.v = scroll.v + dt * 60 * 0.2
   end
   scroll.pos = scroll.pos + scroll.v
-  scroll.v = scroll.v * 0.9
+  b_offset = b_offset + scroll.v -- background offset
 
-  b_offset = scroll.pos
+  scroll.v = scroll.v * 0.9
 end
 
 level.draw = function()

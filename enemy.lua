@@ -5,8 +5,8 @@ local enemy = {}
 enemy.load = function()
   enemies = {}
   enemy_info = {}
-  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9, r = 16, hp = 1, score = 1}
-  enemy_info.bigboy = {ai = {1, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 2, score = 2}
+  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9, r = 16, hp = 1, score = 1, img = "fly"}
+  enemy_info.bigboy = {ai = {1, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 2, score = 2, img = "fly"}
 end
 
 enemy.update = function(dt)
@@ -49,14 +49,14 @@ end
 
 enemy.draw = function()
   for i, v in pairs(enemies) do
-    love.graphics.draw(img.fly, math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, 16, 16)
+    love.graphics.draw(shipimg[enemy_info[v.type].img], shipquad[enemy_info[v.type].img][v.frame], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, 16, 16)
   end
 end
 
 enemy.new = function(type) -- add enemy to open space in list
   local spot = opening(enemies)
   local info = enemy_info[type]
-  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp, atk = 0, type = type, info = {}}
+  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp, atk = 0, type = type, info = {}, frame = 1}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])
 end

@@ -1,7 +1,7 @@
 local character = {}
 
 character.load = function()
-  char = {p = {x = 200, y = 300}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32}
+  char = {p = {x = 200, y = 300}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32, frame = 1}
   char_info = {speed = 1, stop = 0.8, inv_time = 1, hp_max = 3, ammo_max = 32, weapons = {1, 0}}
 end
 
@@ -63,6 +63,12 @@ character.update = function(dt)
   if char.hp <= 0 then
     love.event.quit()
   end
+
+  -- update animation
+  char.frame = char.frame + dt * 12
+  if char.frame > #shipquad.char then
+    char.frame = 1
+  end
 end
 
 character.draw = function()
@@ -72,7 +78,7 @@ character.draw = function()
   end
 
   -- draw char
-  love.graphics.draw(img.biplane, math.floor(char.p.x), math.floor(char.p.y), math.atan2(char.a.y, char.a.x), 1, 1, 16, 16)
+  love.graphics.draw(shipimg.char, shipquad.char[math.floor(char.frame)], math.floor(char.p.x), math.floor(char.p.y), math.atan2(char.a.y, char.a.x), 1, 1, 16, 16)
 
   -- reset color
   love.graphics.setColor(255, 255, 255)

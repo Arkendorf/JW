@@ -178,22 +178,24 @@ map.draw = function()
 end
 
 map.keypressed = function(key)
-  if key == "right" then
-    target.x = target.x + 1
-  elseif key == "left" then
-    target.x = target.x - 1
-  elseif key == "down" then
-    target.y = target.y + 1
-  elseif key == "up" then
-    target.y = target.y - 1
+  if on == true then
+    if key == "right" then
+      target.x = target.x + 1
+    elseif key == "left" then
+      target.x = target.x - 1
+    elseif key == "down" then
+      target.y = target.y + 1
+    elseif key == "up" then
+      target.y = target.y - 1
 
-  elseif key == "x" then
-    target.x = path[#path].x
-    target.y = path[#path].y
-  elseif key == "z" then
-    if map.node_is_option(target.x, target.y) then
-      -- outro animation
-      on = false
+    elseif key == "x" then
+      target.x = path[#path].x
+      target.y = path[#path].y
+    elseif key == "z" then
+      if map.node_is_option(target.x, target.y) then
+        -- outro animation
+        on = false
+      end
     end
   end
 end
