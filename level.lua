@@ -1,9 +1,9 @@
 local level = {}
 
 local level_score = {max = 0, current = 0}
-local scroll = {goal = 0, pos = 0, v = 0}
 local level_reward = 0
 
+level.scroll = {goal = 0, pos = 0, v = 0}
 
 level.load = function()
 end
@@ -29,16 +29,16 @@ level.update = function(dt)
   end
 
   -- do scrolling thing
-  if scroll.pos >= scroll.goal then
+  if level.scroll.pos >= level.scroll.goal then
     state = "reward"
     reward.start(level_reward, stats)
   else
-    scroll.v = scroll.v + dt * 60 * 0.2
+    level.scroll.v = level.scroll.v + dt * 60 * 0.002
   end
-  scroll.pos = scroll.pos + scroll.v
-  b_offset = b_offset + scroll.v -- background offset
+  level.scroll.pos = level.scroll.pos + level.scroll.v
+  b_offset = b_offset + level.scroll.v * 100 -- background offset
 
-  scroll.v = scroll.v * 0.9
+  level.scroll.v = level.scroll.v * 0.9
 end
 
 level.start = function(dif, dist, reward)
@@ -49,7 +49,7 @@ level.start = function(dif, dist, reward)
 
   -- set up level
   level_score.max = dif
-  scroll = {goal = dist*100, pos = 0, v = 0}
+  level.scroll = {goal = dist, pos = 0, v = 0}
 
   -- reset stuff
   enemies = {}

@@ -48,7 +48,7 @@ end
 
 drop.draw = function()
   for i, v in pairs(drops) do
-    love.graphics.draw(img.drops, quad.drops[v.type], math.floor(v.p.x), math.floor(v.p.y), 0, 1, 1, 8, 8)
+    love.graphics.draw(img.drops, quad.drops[v.type], math.floor(v.p.x), math.floor(v.p.y), 0, 1, 1, 16, 16)
   end
 end
 
