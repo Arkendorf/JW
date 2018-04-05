@@ -22,6 +22,10 @@ window.load = function()
   b_offset = 0
 end
 
+window.update = function(dt)
+  hud.update(dt)
+end
+
 window.draw = function()
   love.graphics.setCanvas(canvas.window)
   love.graphics.clear()

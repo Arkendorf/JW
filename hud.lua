@@ -1,14 +1,20 @@
 local hud = {}
 
+local hud_pos = -184
+
+hud.update = function(dt)
+  hud_pos = graphics.zoom(state ~= "main", hud_pos, -184, 4, dt * 12)
+end
+
 hud.draw = function()
-  love.graphics.draw(img.board, 4, 4)
-  love.graphics.print(hud.num_to_str(char.hp), 23, 11)
-  love.graphics.print(hud.num_to_str(char.ammo), 69, 11)
-  love.graphics.print(hud.num_to_str(money), 115, 11)
+  love.graphics.draw(img.board, hud_pos, 4)
+  love.graphics.print(hud.num_to_str(char.hp), hud_pos+19, 11)
+  love.graphics.print(hud.num_to_str(char.ammo), hud_pos+65, 11)
+  love.graphics.print(hud.num_to_str(money), hud_pos+111, 11)
   if state == "game" then
-    love.graphics.print(hud.num_to_str(math.ceil(level.scroll.goal-level.scroll.pos)), 161, 11)
+    love.graphics.print(hud.num_to_str(math.ceil(level.scroll.goal-level.scroll.pos)), hud_pos+157, 11)
   else
-    love.graphics.print("000", 161, 11)
+    love.graphics.print("000", hud_pos+157, 11)
   end
 end
 

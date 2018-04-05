@@ -6,24 +6,24 @@ local scroll = 0
 local x_pos = 0
 local grid = {w = 5, h = 4, t = 64}
 local target = {x = 1, y = 1}
-local path = {{x = 1, y = 1}}
+map.path = {{x = 1, y = math.random(1, 4)}}
 local options = {}
-local map_seed = 0
+map.seed = os.time()
+math.randomseed(map.seed)
 local type_name = {"None", "Weapon", "Upgrade", "Health", "Ammo", "Money", "Shop"}
 
 map.load = function()
-  map_seed = os.time()
-  math.randomseed(map_seed)
-
-  path[1].y = math.random(1, 4)
-  target.y = path[1].y
-
-  map.find_options()
 
   -- create map canvases
   canvas.map = love.graphics.newCanvas(grid.w*64+64, 320)
   canvas.scroll = love.graphics.newCanvas(64, 320)
   canvas.note = love.graphics.newCanvas(80, 64)
+end
+
+map.start = function()
+  target.x = map.path[#map.path].x
+  target.y = map.path[#map.path].y
+  map.find_options()
 end
 
 map.update = function(dt)
@@ -49,10 +49,10 @@ map.update = function(dt)
   if math.floor(map_pos.y) <= -320 then -- set up game
     on = true
     state = "game"
-    level.start(map.get_node_difficulty(target.x, target.y), map.get_node_distance(target.x, target.y, path[#path].x, path[#path].y), map.get_node_type(target.x, target.y))
+    level.start(map.get_node_difficulty(target.x, target.y), map.get_node_distance(target.x, target.y, map.path[#map.path].x, map.path[#map.path].y), map.get_node_type(target.x, target.y))
 
     -- update map
-    path[#path+1] = {x = target.x,y = target.y}
+    map.path[#map.path+1] = {x = target.x,y = target.y}
     map.find_options()
   end
 end
@@ -67,7 +67,7 @@ map.draw = function()
 
   -- draw details
   for x = -2-math.ceil(grid.w/2), grid.w+2+math.ceil(grid.w/2) do
-    math.randomseed(map.seed(x+x_pos, 0))
+    math.randomseed(map.get_seed(x+x_pos, 0))
     if (x+x_pos) % 4 == 0 then
       love.graphics.draw(img.mapdetail, quad.mapdetail[math.random(1, 12)], math.floor(x*grid.t+math.random(-grid.t, grid.t)*.33-scroll+x_pos*grid.t), math.floor(grid.t+math.random(0, (grid.h-1)*grid.t)), 0, 1, 1, 32, 32)
     end
@@ -75,12 +75,12 @@ map.draw = function()
 
   -- draw travelled path
   love.graphics.setColor(64, 51, 102)
-  for i, v in ipairs(path) do
+  for i, v in ipairs(map.path) do
     --get start coords
     local x1, y1 = map.get_node_coords(v.x, v.y)
-    if i+1 <= #path and v.x+2 > x_pos-math.ceil(grid.w/2) and v.x-2 < x_pos+grid.w+math.ceil(grid.w/2) then
+    if i+1 <= #map.path and v.x+2 > x_pos-math.ceil(grid.w/2) and v.x-2 < x_pos+grid.w+math.ceil(grid.w/2) then
       --get new coords coords
-      local x2, y2 = map.get_node_coords(path[i+1].x, path[i+1].y)
+      local x2, y2 = map.get_node_coords(map.path[i+1].x, map.path[i+1].y)
 
       -- now draw line
       love.graphics.line(x1-scroll, y1, x2-scroll, y2)
@@ -92,7 +92,7 @@ map.draw = function()
   end
 
   -- draw options
-  local x1, y1 = map.get_node_coords(path[#path].x, path[#path].y)
+  local x1, y1 = map.get_node_coords(map.path[#map.path].x, map.path[#map.path].y)
   for i, v in ipairs(options) do
     -- get coords of option
     local x2, y2 = map.get_node_coords(v.x, v.y)
@@ -156,7 +156,7 @@ map.draw = function()
     -- draw distance
     love.graphics.setColor(64, 51, 102)
     love.graphics.draw(img.noteicons, quad.noteicons[3], 2, 16 + (reward+1) * 14)
-    love.graphics.print(tostring(map.get_node_distance(target.x, target.y, path[#path].x, path[#path].y)).." mi.", 16, 19 + (reward+1) * 14)
+    love.graphics.print(tostring(map.get_node_distance(target.x, target.y, map.path[#map.path].x, map.path[#map.path].y)).." mi.", 16, 19 + (reward+1) * 14)
     love.graphics.setColor(255, 255, 255)
   end
 
@@ -189,8 +189,8 @@ map.keypressed = function(key)
       target.y = target.y - 1
 
     elseif key == "x" then
-      target.x = path[#path].x
-      target.y = path[#path].y
+      target.x = map.path[#map.path].x
+      target.y = map.path[#map.path].y
     elseif key == "z" then
       if map.node_is_option(target.x, target.y) then
         -- outro animation
@@ -210,12 +210,12 @@ map.node_is_option = function(x, y)
 end
 
 map.get_node_coords = function(x, y)
-  math.randomseed(map.seed(x, y))
+  math.randomseed(map.get_seed(x, y))
   return x*grid.t+math.random(-grid.t, grid.t)*.33, y*grid.t+math.random(-grid.t, grid.t)*.33
 end
 
 map.get_node_type = function(x, y)
-  math.randomseed(map.seed(x, y))
+  math.randomseed(map.get_seed(x, y))
   if math.random(0, 1) == 0 then
     return math.random(2, 7)
   else
@@ -224,7 +224,7 @@ map.get_node_type = function(x, y)
 end
 
 map.get_node_difficulty = function(x, y)
-  math.randomseed(map.seed(x, y))
+  math.randomseed(map.get_seed(x, y))
   local difficulty = x + math.random(-2, 2)
   if difficulty < 1 then
     difficulty = 1
@@ -251,11 +251,11 @@ end
 
 map.find_options = function()
   options = {}
-  local x, y = path[#path].x, path[#path].y
+  local x, y = map.path[#map.path].x, map.path[#map.path].y
   for oy = y-1, y+1 do
     for ox = x, x+1 do
       if ox ~= x or oy ~= y then -- make sure it isn't current point
-        if oy >= 1 and oy <= grid.h and (#path < 2 or (path[#path-1].x ~= ox or path[#path-1].y ~= oy)) then
+        if oy >= 1 and oy <= grid.h and (#map.path < 2 or (map.path[#map.path-1].x ~= ox or map.path[#map.path-1].y ~= oy)) then
           options[#options+1] = {x = ox, y = oy}
         end
       end
@@ -263,8 +263,8 @@ map.find_options = function()
   end
 end
 
-map.seed = function(x, y)
-  return map_seed+x*y+x+y
+map.get_seed = function(x, y)
+  return map.seed+x*y+x+y
 end
 
 
