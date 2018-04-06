@@ -55,7 +55,7 @@ end
 drop.new = function(type, p, num, burst)
   local d = {}
   if burst then
-    d = {x = math.random(-10, 10)/10, y = math.random(-10, 10)/10}
+    d = {x = math.random(-100, 100)/100, y = math.random(-100, 100)/100}
   else
     d = {x = 0, y = 0}
   end
