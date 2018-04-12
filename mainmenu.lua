@@ -2,27 +2,58 @@ local mainmenu = {}
 local table_to_string = require "tabletostring"
 
 local button = 1
+local buttons = {{txt = "New Game", color = {64, 51, 102}, pos = 0}, {txt = "Load Game", color = {64, 51, 102}, pos = 0}, {txt = "Quit", color = {204, 40, 40}}, pos = 0}
 
 mainmenu.load = function()
-  if love.filesystem.exists("highscore.txt") then
-    local result = love.filesystem.read("highscore.txt")
-    highscore = tonumber(result)
+  if love.filesystem.exists("highscores.txt") then
+    highscores = {}
+    for line in love.filesystem.lines("highscores.txt") do
+      table.insert(highscores, line)
+    end
   else
-    love.filesystem.write("highscore.txt", "0")
-    highscore = 0
+    love.filesystem.write("highscores.txt", "0\n0\n0\n0\n0")
+    highscores = 0
+  end
+
+  for i, v in ipairs(buttons) do
+    v.pos = 0
   end
 end
 
 mainmenu.update = function(dt)
+  for i, v in ipairs(buttons) do
+    v.pos = graphics.zoom(button == i, v.pos, 0, 32, dt * 12)
+  end
 end
 
 mainmenu.draw = function()
-  love.graphics.print("New Game", 48, 0)
-  love.graphics.print("Load Game", 48, 12)
-  love.graphics.print("Quit", 48, 24)
-  love.graphics.rectangle("fill", 34, -12 + button*12, 12, 12)
+  -- basic stuff
+  love.graphics.draw(img.notebook, 178, 51)
+  love.graphics.draw(img.title, 204, 69)
 
-  love.graphics.print(highscore, 300, 0)
+  -- buttons
+  for i, v in ipairs(buttons) do
+    if button == i then
+      love.graphics.setColor(0, 132, 204)
+    else
+      love.graphics.setColor(v.color)
+    end
+    love.graphics.draw(img.mainicons, quad.mainicons[i], 226+math.floor(v.pos), 140+i * 32)
+    love.graphics.print(v.txt, 258+math.floor(v.pos), 152+i * 32)
+  end
+
+  love.graphics.setColor(64, 51, 102)
+  love.graphics.print("Highscores", 308-math.floor(font:getWidth("Highscores")/2), 280) -- label box
+  love.graphics.rectangle("line", 226, 296, 164, 32) -- draw high score box
+
+  love.graphics.setColor(0, 132, 204) -- first high score is color differently
+  for i, v in ipairs(highscores) do -- draw highscores
+    love.graphics.print(v, 244 + (i-1)*32 - math.floor(font:getHeight(tostring(v))/2), 308)
+    love.graphics.setColor(64, 51, 102)
+  end
+
+  love.graphics.setColor(255, 255, 255) -- reset color
+
 end
 
 mainmenu.keypressed = function(key)
@@ -59,10 +90,18 @@ end
 
 mainmenu.quit = function()
   love.filesystem.remove("save.lua")
-  if #map.path-2 > highscore then -- update high score
-    love.filesystem.write("highscore.txt", tostring(#map.path-2))
+  for i, v in ipairs(highscores) do -- replace high score if new record is reached
+    if #map.path-2 > v then
+      v = #map.path-2
+      break
+    end
   end
-  love.event.quit()
+  local filestring = ""
+  for i, v in ipairs(highscores) do -- compile highscores to write into file
+    filestring = filestring .. v .. "\n"
+  end
+  love.filesystem.write("highscores.txt", filestring) -- write into file
+  love.event.quit() -- quit game
 end
 
 return mainmenu

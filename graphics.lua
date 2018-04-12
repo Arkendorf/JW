@@ -27,6 +27,7 @@ graphics.load = function()
   quad.cardicons = graphics.spritesheet(img.cardicons, 16, 16)
   quad.cardimgs = graphics.spritesheet(img.cardimgs, 48, 48)
   quad.drops = graphics.spritesheet(img.drops, 32, 32)
+  quad.mainicons = graphics.spritesheet(img.mainicons, 32, 32)
 
   -- bullet images
   bulletimg = {}
