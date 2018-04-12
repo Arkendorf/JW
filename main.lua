@@ -59,6 +59,7 @@ function love.keypressed(key)
   end
   if key == "escape" then
     mainmenu.save_game()
+    mainmenu.score()
     love.event.quit()
   end
 end

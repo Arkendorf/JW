@@ -8,7 +8,7 @@ mainmenu.load = function()
   if love.filesystem.exists("highscores.txt") then
     highscores = {}
     for line in love.filesystem.lines("highscores.txt") do
-      table.insert(highscores, line)
+      table.insert(highscores, tonumber(line))
     end
   else
     love.filesystem.write("highscores.txt", "0\n0\n0\n0\n0")
@@ -88,8 +88,7 @@ mainmenu.save_game = function()
   .."; char_info = "..table_to_string(char_info))
 end
 
-mainmenu.quit = function()
-  love.filesystem.remove("save.lua")
+mainmenu.score = function()
   for i, v in ipairs(highscores) do -- replace high score if new record is reached
     if #map.path-2 > v then
       v = #map.path-2
@@ -101,6 +100,11 @@ mainmenu.quit = function()
     filestring = filestring .. v .. "\n"
   end
   love.filesystem.write("highscores.txt", filestring) -- write into file
+end
+
+mainmenu.quit = function()
+  love.filesystem.remove("save.lua")
+  mainmenu.score()
   love.event.quit() -- quit game
 end
 
