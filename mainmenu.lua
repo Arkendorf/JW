@@ -3,6 +3,8 @@ local table_to_string = require "tabletostring"
 
 local button = 1
 local buttons = {{txt = "New Game", color = {64, 51, 102}, pos = 0}, {txt = "Load Game", color = {64, 51, 102}, pos = 0}, {txt = "Quit", color = {204, 40, 40}}, pos = 0}
+local pos = 400
+local on = true
 
 mainmenu.load = function()
   if love.filesystem.exists("highscores.txt") then
@@ -18,58 +20,77 @@ mainmenu.load = function()
   for i, v in ipairs(buttons) do
     v.pos = 0
   end
+
+  canvas.mainmenu = love.graphics.newCanvas(244, 298)
 end
 
 mainmenu.update = function(dt)
   for i, v in ipairs(buttons) do
     v.pos = graphics.zoom(button == i, v.pos, 0, 32, dt * 12)
   end
+  pos = graphics.zoom(not on, pos, 51, 400, dt * 12)
+  if pos < 51 then
+    pos = 51
+  elseif math.ceil(pos) >= 400 then
+    if button == 1 then
+      map.start()
+      state = "map"
+    elseif button == 2 then
+      mainmenu.load_file()
+      map.start()
+      state = "map"
+    end
+  end
 end
 
 mainmenu.draw = function()
+  love.graphics.setCanvas(canvas.mainmenu)
+  love.graphics.clear()
+
   -- basic stuff
-  love.graphics.draw(img.notebook, 178, 51)
-  love.graphics.draw(img.title, 204, 69)
+  love.graphics.draw(img.notebook)
+  love.graphics.draw(img.title, 26, 18)
 
   -- buttons
   for i, v in ipairs(buttons) do
     if button == i then
-      love.graphics.setColor(0, 132, 204)
+      love.graphics.setColor(0, 132, 153)
     else
       love.graphics.setColor(v.color)
     end
-    love.graphics.draw(img.mainicons, quad.mainicons[i], 226+math.floor(v.pos), 140+i * 32)
-    love.graphics.print(v.txt, 258+math.floor(v.pos), 152+i * 32)
+    love.graphics.draw(img.mainicons, quad.mainicons[i], 48+math.floor(v.pos), 89+i * 32)
+    love.graphics.print(v.txt, 80+math.floor(v.pos), 101+i * 32)
   end
 
   love.graphics.setColor(64, 51, 102)
-  love.graphics.print("Highscores", 308-math.floor(font:getWidth("Highscores")/2), 280) -- label box
-  love.graphics.rectangle("line", 226, 296, 164, 32) -- draw high score box
+  love.graphics.print("Highscores", 130-math.floor(font:getWidth("Highscores")/2), 229) -- label box
+  love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
 
   love.graphics.setColor(0, 132, 204) -- first high score is color differently
   for i, v in ipairs(highscores) do -- draw highscores
-    love.graphics.print(v, 244 + (i-1)*32 - math.floor(font:getHeight(tostring(v))/2), 308)
+    love.graphics.print(v, 66 + (i-1)*32 - math.floor(font:getHeight(tostring(v))/2), 257)
     love.graphics.setColor(64, 51, 102)
   end
 
   love.graphics.setColor(255, 255, 255) -- reset color
+  love.graphics.setCanvas(canvas.game)
+  love.graphics.draw(canvas.mainmenu, 178, pos)
 end
 
 mainmenu.keypressed = function(key)
-  if key == "up" and button > 1 then
-    button = button - 1
-  elseif key == "down" and button < 3 then
-    button = button + 1
-  elseif key == "z" then
-    if button == 1 then
-      map.start()
-      state = "map"
-    elseif button == 2 and love.filesystem.exists("save.lua") then
-      mainmenu.load_file()
-      map.start()
-      state = "map"
-    elseif button == 3 then
-      love.event.quit()
+  if on == true then
+    if key == "up" and button > 1 then
+      button = button - 1
+    elseif key == "down" and button < 3 then
+      button = button + 1
+    elseif key == "z" then
+      if button == 1 then
+        on = false
+      elseif button == 2 and love.filesystem.exists("save.lua") then
+        on = false
+      elseif button == 3 then
+        love.event.quit()
+      end
     end
   end
 end
