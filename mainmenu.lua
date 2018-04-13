@@ -74,7 +74,7 @@ mainmenu.draw = function()
 
   love.graphics.setColor(255, 255, 255) -- reset color
   love.graphics.setCanvas(canvas.game)
-  love.graphics.draw(canvas.mainmenu, 178, pos)
+  love.graphics.draw(canvas.mainmenu, 178, math.floor(pos))
 end
 
 mainmenu.keypressed = function(key)
@@ -125,9 +125,8 @@ mainmenu.score = function()
   love.filesystem.write("highscores.txt", filestring) -- write into file
 end
 
-mainmenu.quit = function()
+mainmenu.game_over = function()
   love.filesystem.remove("save.lua")
-  mainmenu.score()
   love.event.quit() -- quit game
 end
 

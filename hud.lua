@@ -3,7 +3,11 @@ local hud = {}
 local hud_pos = -184
 
 hud.update = function(dt)
-  hud_pos = graphics.zoom(state ~= "main", hud_pos, -184, 4, dt * 12)
+  if state ~= "pause" then
+    hud_pos = graphics.zoom(state ~= "main", hud_pos, -184, 4, dt * 12)
+  else
+    hud_pos = graphics.zoom(oldstate ~= "main", hud_pos, -184, 4, dt * 12)
+  end
 end
 
 hud.draw = function()

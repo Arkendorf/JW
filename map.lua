@@ -12,6 +12,8 @@ map.seed = os.time()
 math.randomseed(map.seed)
 local type_name = {"None", "Weapon", "Upgrade", "Health", "Ammo", "Money", "Shop"}
 
+money = 0
+
 map.load = function()
 
   -- create map canvases

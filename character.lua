@@ -75,7 +75,6 @@ character.update = function(dt)
 
   -- game over if char has no health
   if char.hp <= 0 then
-    love.filesystem.remove("save.lua")
     love.event.quit()
   end
 
