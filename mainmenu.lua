@@ -12,7 +12,7 @@ mainmenu.load = function()
     end
   else
     love.filesystem.write("highscores.txt", "0\n0\n0\n0\n0")
-    highscores = 0
+    highscores = {0, 0, 0, 0, 0}
   end
 
   for i, v in ipairs(buttons) do
@@ -53,7 +53,6 @@ mainmenu.draw = function()
   end
 
   love.graphics.setColor(255, 255, 255) -- reset color
-
 end
 
 mainmenu.keypressed = function(key)
@@ -90,8 +89,11 @@ end
 
 mainmenu.score = function()
   for i, v in ipairs(highscores) do -- replace high score if new record is reached
-    if #map.path-2 > v then
-      v = #map.path-2
+    if #map.path-1 > v then
+      for j = #highscores, i, -1 do
+        highscores[j] = highscores[j-1]
+      end
+      highscores[i] = #map.path-1
       break
     end
   end
