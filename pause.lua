@@ -1,22 +1,39 @@
 local pause = {}
 
 local button = 1
-local buttons = {{txt = "New Game", color = {64, 51, 102}, pos = 0}, {txt = "Load Game", color = {64, 51, 102}, pos = 0}, {txt = "Quit", color = {204, 40, 40}}, pos = 0}
+local buttons = {{txt = "Resume", color = {64, 51, 102}, pos = 0, img = 4},
+                 {txt = "Save to Menu", color = {64, 51, 102}, pos = 0, img = 5},
+                 {txt = "Save and Quit", color = {204, 40, 40}, pos = 0, img = 3}}
 local pos = -298
 local on = true
+local wait = 0
+
+pause.start = function()
+  on = true
+  pos = -298
+  button = 1
+end
 
 pause.load = function()
   canvas.pause = love.graphics.newCanvas(244, 298)
 end
 
-pause.start = function()
-  on = true
-end
-
 pause.update = function(dt)
-  pos = graphics.zoom(on, pos, -298, 51, dt * 12)
+  for i, v in ipairs(buttons) do
+    v.pos = graphics.zoom(button == i, v.pos, 0, 32, dt * 12)
+  end
+  if wait <= 0 then
+    pos = graphics.zoom(on, pos, -298, 51, dt * 12)
+  else
+    wait = wait - dt
+  end
   if math.floor(pos) <= -298 then
-    state = oldstate
+    if button == 1 then
+      state = oldstate
+    elseif button == 2 then
+      state = "main"
+      mainmenu.start()
+    end
   end
 end
 
@@ -30,26 +47,16 @@ pause.draw = function()
   love.graphics.setColor(64, 51, 102)
   love.graphics.print("Paused", 129-math.floor(font:getWidth("Paused")/2), 18)
 
-  -- -- buttons
-  -- for i, v in ipairs(buttons) do
-  --   if button == i then
-  --     love.graphics.setColor(0, 132, 153)
-  --   else
-  --     love.graphics.setColor(v.color)
-  --   end
-  --   love.graphics.draw(img.mainicons, quad.mainicons[i], 48+math.floor(v.pos), 89+i * 32)
-  --   love.graphics.print(v.txt, 80+math.floor(v.pos), 101+i * 32)
-  -- end
-  --
-  -- love.graphics.setColor(64, 51, 102)
-  -- love.graphics.print("Highscores", 130-math.floor(font:getWidth("Highscores")/2), 229) -- label box
-  -- love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
-  --
-  -- love.graphics.setColor(0, 132, 204) -- first high score is color differently
-  -- for i, v in ipairs(highscores) do -- draw highscores
-  --   love.graphics.print(v, 66 + (i-1)*32 - math.floor(font:getHeight(tostring(v))/2), 257)
-  --   love.graphics.setColor(64, 51, 102)
-  -- end
+  -- buttons
+  for i, v in ipairs(buttons) do
+    if button == i then
+      love.graphics.setColor(0, 132, 204)
+    else
+      love.graphics.setColor(v.color)
+    end
+    love.graphics.draw(img.mainicons, quad.mainicons[v.img], 48+math.floor(v.pos), 68+i * 32)
+    love.graphics.print(v.txt, 80+math.floor(v.pos), 80+i * 32)
+  end
 
   love.graphics.setColor(255, 255, 255) -- reset color
   love.graphics.setCanvas(canvas.game)
@@ -57,10 +64,28 @@ pause.draw = function()
 end
 
 pause.keypressed = function(key)
-  if key == "z" then
-    love.event.quit()
-  elseif key == "x" or key == "escape" then
-    on = false
+  if on == true then
+    if key == "up" and button > 1 then
+      button = button - 1
+    elseif key == "down" and button < 3 then
+      button = button + 1
+    elseif key == "z" then
+      if button == 1 then
+        on = false
+      elseif button == 2 then
+        on = false
+        mainmenu.save_game()
+        mainmenu.score()
+        if char.hp <= 0 then
+          mainmenu.game_over()
+        end
+        wait = .2
+      elseif button == 3 then
+        love.event.quit()
+      end
+    elseif key == "x" or key == "escape" then
+      on = false
+    end
   end
 end
 

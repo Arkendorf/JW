@@ -14,7 +14,7 @@ window.load = function()
   screen.ox = math.floor((w/screen.scale - screen.w) / 2)
   screen.oy = math.floor((h/screen.scale - screen.h) / 2)
   love.window.setFullscreen(true)
-  --love.window.setMode(w, h-12)
+  -- love.window.setMode(w, h-12)
 
   canvas.game = love.graphics.newCanvas(screen.w, screen.h)
   canvas.window = love.graphics.newCanvas(w/screen.scale, h/screen.scale)

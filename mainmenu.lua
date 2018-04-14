@@ -2,9 +2,17 @@ local mainmenu = {}
 local table_to_string = require "tabletostring"
 
 local button = 1
-local buttons = {{txt = "New Game", color = {64, 51, 102}, pos = 0}, {txt = "Load Game", color = {64, 51, 102}, pos = 0}, {txt = "Quit", color = {204, 40, 40}}, pos = 0}
+local buttons = {{txt = "New Game", color = {64, 51, 102}, pos = 0, img = 1},
+                 {txt = "Load Game", color = {64, 51, 102}, pos = 0, img = 2},
+                 {txt = "Quit", color = {204, 40, 40}, pos = 0, img = 3}}
 local pos = 400
 local on = true
+
+mainmenu.start = function()
+  on = true
+  pos = 400
+  button = 1
+end
 
 mainmenu.load = function()
   if love.filesystem.exists("highscores.txt") then
@@ -54,11 +62,11 @@ mainmenu.draw = function()
   -- buttons
   for i, v in ipairs(buttons) do
     if button == i then
-      love.graphics.setColor(0, 132, 153)
+      love.graphics.setColor(0, 132, 204)
     else
       love.graphics.setColor(v.color)
     end
-    love.graphics.draw(img.mainicons, quad.mainicons[i], 48+math.floor(v.pos), 89+i * 32)
+    love.graphics.draw(img.mainicons, quad.mainicons[v.img], 48+math.floor(v.pos), 89+i * 32)
     love.graphics.print(v.txt, 80+math.floor(v.pos), 101+i * 32)
   end
 
@@ -101,6 +109,9 @@ mainmenu.load_file = function()
 end
 
 mainmenu.save_game = function()
+  if #map.path > 1 then
+    table.remove(map.path, #map.path) -- prevent cheese
+  end
   love.filesystem.write("save.lua", "map.seed = "..tostring(map.seed)
   .."; money = "..tostring(money)
   .."; map.path = "..table_to_string(map.path)
@@ -110,11 +121,11 @@ end
 
 mainmenu.score = function()
   for i, v in ipairs(highscores) do -- replace high score if new record is reached
-    if #map.path-1 > v then
+    if #map.path-2 > v then
       for j = #highscores, i, -1 do
         highscores[j] = highscores[j-1]
       end
-      highscores[i] = #map.path-1
+      highscores[i] = #map.path-2
       break
     end
   end

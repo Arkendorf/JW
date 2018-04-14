@@ -70,7 +70,7 @@ function love.keypressed(key)
   elseif state == "pause" then
     pause.keypressed(key)
   end
-  if key == "escape" and state ~= "pause" then
+  if key == "escape" and state ~= "pause" and state ~= "main" then
     oldstate = state
     state = "pause"
     pause.start()
