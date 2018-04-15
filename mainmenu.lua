@@ -138,7 +138,6 @@ end
 
 mainmenu.game_over = function()
   love.filesystem.remove("save.lua")
-  love.event.quit() -- quit game
 end
 
 return mainmenu

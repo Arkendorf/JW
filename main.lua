@@ -4,6 +4,7 @@ game = require "game"
 reward = require "reward"
 mainmenu = require "mainmenu"
 pause = require "pause"
+over = require "over"
 local window = require "window"
 
 function love.load()
@@ -15,9 +16,11 @@ function love.load()
   reward.load()
   mainmenu.load()
   pause.load()
+  over.load()
 
   state = "main"
   oldstate = "main"
+  freeze = false
 end
 
 function love.update(dt)
@@ -31,6 +34,8 @@ function love.update(dt)
     mainmenu.update(dt)
   elseif state == "pause" then
     pause.update(dt)
+  elseif state == "over" then
+    over.update(dt)
   end
   window.update(dt)
 end
@@ -38,7 +43,7 @@ end
 function love.draw()
   love.graphics.setCanvas(canvas.game)
   love.graphics.clear()
-  if state == "pause" then
+  if freeze == true then
     draw(oldstate)
   end
   draw(state)
@@ -57,6 +62,8 @@ function draw(state)
     mainmenu.draw()
   elseif state == "pause" then
     pause.draw()
+  elseif state == "over" then
+    over.draw()
   end
 end
 
@@ -69,8 +76,10 @@ function love.keypressed(key)
     mainmenu.keypressed(key)
   elseif state == "pause" then
     pause.keypressed(key)
+  elseif state == "over" then
+    over.keypressed(key)
   end
-  if key == "escape" and state ~= "pause" and state ~= "main" then
+  if key == "escape" and state ~= "pause" and state ~= "main" and state ~= "over" then
     oldstate = state
     state = "pause"
     pause.start()

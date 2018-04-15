@@ -75,7 +75,8 @@ character.update = function(dt)
 
   -- game over if char has no health
   if char.hp <= 0 then
-    love.event.quit()
+    state = "over"
+    over.start()
   end
 
   -- update animation
