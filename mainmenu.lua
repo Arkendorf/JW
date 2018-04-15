@@ -71,7 +71,7 @@ mainmenu.draw = function()
   end
 
   love.graphics.setColor(64, 51, 102)
-  love.graphics.print("Highscores", 130-math.floor(font:getWidth("Highscores")/2), 229) -- label box
+  love.graphics.print("Highscores", 129-math.floor(font:getWidth("Highscores")/2), 229) -- label box
   love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
 
   love.graphics.setColor(0, 132, 204) -- first high score is color differently

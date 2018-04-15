@@ -55,6 +55,12 @@ over.draw = function()
   love.graphics.setColor(204, 40, 40)
   love.graphics.print("Game Over", 129-math.floor(font:getWidth("Game Over")/2), 24)
 
+  -- score
+  love.graphics.setColor(64, 51, 102)
+  love.graphics.print("Final Score", 129-math.floor(font:getWidth("Final Score")/2), 229)
+  love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
+  love.graphics.print(#map.path-2, 129-math.floor(font:getWidth(tostring(#map.path-2))/2), 257)
+
   -- buttons
   for i, v in ipairs(buttons) do
     if button == i then

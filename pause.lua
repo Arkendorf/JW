@@ -44,10 +44,19 @@ pause.draw = function()
   love.graphics.clear()
 
   -- basic stuff
-
   love.graphics.draw(img.notebook)
   love.graphics.setColor(64, 51, 102)
   love.graphics.print("Paused", 129-math.floor(font:getWidth("Paused")/2), 24)
+
+  -- score
+  love.graphics.setColor(64, 51, 102)
+  love.graphics.print("Current Score", 129-math.floor(font:getWidth("Current Score")/2), 229)
+  love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
+  if #map.path > 1 then
+    love.graphics.print(#map.path-2, 129-math.floor(font:getWidth(tostring(#map.path-2))/2), 257)
+  else
+    love.graphics.print(0, 129-math.floor(font:getWidth("0")/2), 257)
+  end
 
   -- buttons
   for i, v in ipairs(buttons) do
