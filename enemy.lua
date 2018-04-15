@@ -5,8 +5,12 @@ local enemy = {}
 enemy.load = function()
   enemies = {}
   enemy_info = {}
-  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9, r = 16, hp = 1, score = 1, img = "fly"}
-  enemy_info.bigboy = {ai = {1, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 2, score = 2, img = "fly"}
+  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 2, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane"}
+  enemy_info.fly = {ai = {1, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 12, hp = 2, score = 2, img = "fly"}
+  ship_width = {}
+  for i, v in pairs(shipimg) do
+    ship_width[i] = v:getHeight()
+  end
 end
 
 enemy.update = function(dt)
@@ -44,12 +48,19 @@ enemy.update = function(dt)
       -- decrease wait till next bullet
       v.atk = v.atk - dt
     end
+
+    -- update animation
+    v.frame = v.frame + dt * 12
+    if v.frame > #shipquad[enemy_info[v.type].img]+1 then
+      v.frame = 1
+    end
   end
 end
 
 enemy.draw = function()
   for i, v in pairs(enemies) do
-    love.graphics.draw(shipimg[enemy_info[v.type].img], shipquad[enemy_info[v.type].img][v.frame], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, 16, 16)
+    local img = enemy_info[v.type].img
+    love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
   end
 end
 

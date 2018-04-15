@@ -8,9 +8,7 @@ ai.load[1] = function(i, v) -- "crosser"
   v.p.x = screen.w/2-screen.w/2*v.info.dir
   v.p.y = math.random(0, screen.h)
 
-  -- set angle
-  v.a.x = .7 * v.info.dir
-  v.a.y = -.7
+  v.a.x = v.info.dir
 end
 
 ai.move = {}
@@ -26,6 +24,10 @@ end
 ai.attack = {}
 
 ai.attack[1] = function(i, v, dt) -- "crosser"
+  bullet.new("basic", v.p, v.a, 2)
+end
+
+ai.attack[2] = function(i, v, dt) -- "aimer"
   bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2)
 end
 

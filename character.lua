@@ -81,7 +81,7 @@ character.update = function(dt)
 
   -- update animation
   char.frame = char.frame + dt * 12
-  if char.frame > #shipquad.char then
+  if char.frame > #shipquad.char+1 then
     char.frame = 1
   end
 end
