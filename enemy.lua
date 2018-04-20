@@ -56,7 +56,7 @@ enemy.update = function(dt)
 
     -- update animation
     v.frame = v.frame + dt * 12
-    if v.frame > #shipquad[enemy_info[v.type].img]+1 then
+    if v.frame >= #shipquad[enemy_info[v.type].img]+1 then
       v.frame = 1
     end
   end

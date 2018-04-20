@@ -34,6 +34,12 @@ game.update = function(dt)
 end
 
 game.draw = function()
+  --  ending ship
+  level.draw_airship(screen.w/2, screen.h/2-level.scroll.goal*100+level.scroll.pos*100)
+
+  -- starting shio
+  level.draw_airship(screen.w/2, screen.h/2+level.scroll.pos*100)
+
   drop.draw()
 
   bullet.draw()

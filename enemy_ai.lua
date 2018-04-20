@@ -26,7 +26,7 @@ ai.move[1] = function(i, v, dt) -- "crosser"
 end
 
 ai.move[2] = function(i, v, dt) -- "fly"
-  v.info.angle = v.info.angle + math.rad(dt * 60 * 0.4) * v.info.dir * enemy_info[v.type].speed -- adjust angle
+  v.info.angle = v.info.angle + math.rad(dt * 60) * v.info.dir -- adjust angle
   if v.info.dir == 1 and v.info.angle >= -math.pi then -- change direction
     v.info.dir = -1
   elseif v.info.dir == -1 and v.info.angle <= -math.pi*2 then
@@ -37,6 +37,8 @@ ai.move[2] = function(i, v, dt) -- "fly"
   v.d.y = math.sin(v.info.angle)
 
   v.a = v.d
+
+  v.d = vector.scale(enemy_info[v.type].speed, v.d)
 end
 
 ai.attack = {}

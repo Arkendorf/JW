@@ -2,6 +2,7 @@ local level = {}
 
 local level_score = {max = 0, current = 0}
 local level_reward = 0
+local airship = {frame = 1}
 
 level.scroll = {goal = 0, pos = 0, v = 0}
 
@@ -39,11 +40,17 @@ level.update = function(dt)
   b_offset = b_offset + level.scroll.v * 100 -- background offset
 
   level.scroll.v = level.scroll.v * 0.9
+
+  -- animate airship
+  airship.frame = airship.frame + dt * 60
+  if airship.frame >= 9 then
+    airship.frame = 1
+  end
 end
 
 level.start = function(dif, dist, reward)
-  char.x = 200
-  char.y = 300
+  char.p.x = screen.w/2
+  char.p.y = screen.h/2
 
   stats = {kills = 0, shots = 0, hits = 0, dmg = 0}
 
@@ -60,6 +67,14 @@ level.start = function(dif, dist, reward)
   math.randomseed(os.time())
 
   level_reward = reward
+end
+
+level.draw_airship = function(x, y)
+  love.graphics.draw(img.airship, x-96, y-108)
+  love.graphics.draw(img.propellor, quad.propellor[math.floor(airship.frame)], x+28-17-96, y+52-17-108)
+  love.graphics.draw(img.propellor, quad.propellor[math.floor(airship.frame)], x+164-17-96, y+52-17-108)
+  love.graphics.draw(img.propellor, quad.propellor[math.floor(airship.frame)], x+25-17-96, y+159-17-108)
+  love.graphics.draw(img.propellor, quad.propellor[math.floor(airship.frame)], x+167-17-96, y+159-17-108)
 end
 
 return level
