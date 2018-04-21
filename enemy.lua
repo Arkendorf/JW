@@ -5,8 +5,8 @@ local enemy = {}
 enemy.load = function()
   enemies = {}
   enemy_info = {}
-  enemy_info.crosser = {ai = {1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane"}
-  enemy_info.fly = {ai = {2, 2, 1}, atk_delay = 2, speed = 2, stop = 0.9, r = 12, hp = 2, score = 2, img = "fly"}
+  enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane"}
+  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 2, stop = 0.9, r = 12, hp = 2, score = 2, img = "fly"}
   ship_width = {}
   for i, v in pairs(shipimg) do
     ship_width[i] = v:getHeight()
@@ -45,14 +45,7 @@ enemy.update = function(dt)
       enemies[i] = nil
     end
 
-    if v.atk <= 0 then
-      -- fire bullet
-      ai.attack[enemy_info[v.type].ai[3]](i, v, dt)
-      v.atk = enemy_info[v.type].atk_delay
-    else
-      -- decrease wait till next bullet
-      v.atk = v.atk - dt
-    end
+    ai.attack[enemy_info[v.type].ai[3]](i, v, dt) -- call attack AI
 
     -- update animation
     v.frame = v.frame + dt * 12

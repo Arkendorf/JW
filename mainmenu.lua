@@ -112,7 +112,7 @@ mainmenu.load_file = function()
 end
 
 mainmenu.save_game = function()
-  if #map.path > 1 then
+  if state == "game" or oldstate == "game" then
     table.remove(map.path, #map.path) -- prevent cheese
   end
   love.filesystem.write("save.lua", "map.seed = "..tostring(map.seed)

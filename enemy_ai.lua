@@ -43,13 +43,25 @@ end
 
 ai.attack = {}
 
-ai.attack[1] = function(i, v, dt) -- "forward"
-  bullet.new("basic", v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2) -- direction is combo of char's direction and movement
-
+ai.attack[1] = function(i, v, dt) -- fire ASAP
+  if v.atk <= 0 then
+    -- fire bullet
+    ai.bullet[enemy_info[v.type].ai[4]](i, v, dt)
+    v.atk = enemy_info[v.type].atk_delay
+  else
+    -- decrease wait till next bullet
+    v.atk = v.atk - dt
+  end
 end
 
-ai.attack[2] = function(i, v, dt) -- "aimer"
-  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2)
+ai.bullet = {}
+
+ai.bullet[1] = function(i, v, dt) -- "forward"
+  bullet.new("basic", v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2, 1) -- direction is combo of char's direction and movement
+end
+
+ai.bullet[2] = function(i, v, dt) -- "aimer"
+  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2, 1)
 end
 
 return ai

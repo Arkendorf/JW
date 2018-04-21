@@ -15,7 +15,6 @@ local type_name = {"None", "Weapon", "Upgrade", "Health", "Ammo", "Money", "Shop
 money = 0
 
 map.load = function()
-
   -- create map canvases
   canvas.map = love.graphics.newCanvas(grid.w*64+64, 320)
   canvas.scroll = love.graphics.newCanvas(64, 320)
@@ -33,7 +32,7 @@ end
 map.new = function()
   map.seed = os.time()
   math.randomseed(map.seed)
-  
+
   map.path = {{x = 1, y = math.random(1, 4)}}
 
   map.start()

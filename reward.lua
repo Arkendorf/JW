@@ -15,6 +15,9 @@ local title_pos = 600
 local item_pos = {600, 600, 600}
 local on = true
 
+local numerals = {{1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"}, {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"}, {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}}
+local tier_score = 4
+
 rewardscreen.load = function()
 end
 
@@ -130,9 +133,9 @@ rewardscreen.draw = function()
 
     -- draw info
     love.graphics.draw(img.infobox, info_pos, 248)
-    if char_info.weapons[weaponscreen.target] > 0 then
+    if char_info.weapons[weaponscreen.target].type > 0 then
       love.graphics.setColor(64, 51, 102)
-      rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char_info.weapons[weaponscreen.target]})
+      rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char_info.weapons[weaponscreen.target].type})
     else
       love.graphics.setColor(204, 40, 40)
       love.graphics.print("Empty", info_pos+4, 252)
@@ -195,9 +198,12 @@ rewardscreen.keypressed = function(key)
       weaponscreen.choice = weaponscreen.target -- weapon has been placed
       items[item_target].bought = true -- weapon has been purchased
       money = money - items[item_target].price -- adjust funds
-      char_info.weapons[weaponscreen.target] = items[item_target].item -- correct player's inventory
+
+      char_info.weapons[weaponscreen.target].type = items[item_target].item -- correct player's inventory
+      char_info.weapons[weaponscreen.target].tier = items[item_target].amount
+
       weaponscreen.itemcanvas[3] = weaponscreen.itemcanvas[weaponscreen.target] -- set old card canvas to card being replaced
-      weaponscreen.itemcanvas[weaponscreen.target] = rewardscreen.draw_card(1, items[item_target].item, 1) -- redraw weapon card
+      weaponscreen.itemcanvas[weaponscreen.target] = rewardscreen.draw_card(1, items[item_target].item, items[item_target].amount) -- redraw weapon card
       weaponscreen.itempos[weaponscreen.target] = 600 -- reset animation
     elseif key == "x" then
       weaponscreen.on = false
@@ -211,8 +217,8 @@ rewardscreen.keypressed = function(key)
     elseif key == "z" and reward_type ~= "none" and items[item_target].bought == false and items[item_target].price <= money then
       if items[item_target].type == 1 then -- prompt and set up weapon replacement screen
         weaponscreen.on = true
-        weaponscreen.itemcanvas[1] = rewardscreen.draw_card(1, char_info.weapons[1], 1)
-        weaponscreen.itemcanvas[2] = rewardscreen.draw_card(1, char_info.weapons[2], 1)
+        weaponscreen.itemcanvas[1] = rewardscreen.draw_card(1, char_info.weapons[1].type, char_info.weapons[1].tier)
+        weaponscreen.itemcanvas[2] = rewardscreen.draw_card(1, char_info.weapons[2].type, char_info.weapons[1].tier)
         weaponscreen.pos = -176
       else
         items[item_target].bought = true
@@ -264,6 +270,11 @@ rewardscreen.create = function(type)
   local price = 0
   if type < 3 then
     item = math.random(1, #item_info[type])
+    if type == 1 and #map.path-1 > tier_score then -- weapon tier
+      amount = math.random(1, math.floor(#map.path-1 / tier_score))
+    else
+      amount = 1
+    end
   elseif type == 3 then
     amount = math.random(1, 3)
   elseif type == 4 then
@@ -291,10 +302,16 @@ rewardscreen.draw_card = function(type, item, amount)
     love.graphics.draw(img.cardicons, quad.cardicons[type], 4, 4)
     love.graphics.draw(img.cardicons, quad.cardicons[type], 60, 92, math.pi)
     love.graphics.draw(img.cardimgs, quad.cardimgs[type], 8, 24)
-    if amount and amount > 1 and type > 2 then
-      love.graphics.setColor(204, 40, 40)
+    if type > 2 and amount > 1 then
+      love.graphics.setColor(64, 51, 102)
       love.graphics.print("x"..tostring(amount), 20, 9)
       love.graphics.print("x"..tostring(amount), 44, 87, math.pi)
+      love.graphics.setColor(255, 255, 255)
+    elseif type == 1 and amount > 1 then
+      local str = rewardscreen.roman(amount)
+      love.graphics.rectangle("fill", 55-font:getWidth(str), 63, font:getWidth(str)+1, 9)
+      love.graphics.setColor(204, 40, 40)
+      love.graphics.print(str, 56-font:getWidth(str), 64)
       love.graphics.setColor(255, 255, 255)
     end
   end
@@ -314,7 +331,7 @@ rewardscreen.draw_info = function(item)
     love.graphics.print("Out of stock", info_pos+4, 252)
   else
     love.graphics.setColor(64, 51, 102)
-    if item.amount and item.amount > 1 and item.type > 2 then
+    if item.type > 2 and item.amount > 1 then
       love.graphics.print(info.name.." x"..item.amount, info_pos+4, 252)
     else
       love.graphics.print(info.name, info_pos+4, 252)
@@ -329,6 +346,17 @@ rewardscreen.draw_info = function(item)
       love.graphics.print(item.price.."$", info_pos+216-font:getWidth(item.price.."$"), 252)
     end
   end
+end
+
+rewardscreen.roman = function(num)
+  local str = ""
+  for i, v in ipairs(numerals) do
+    while num >= v[1] do
+      str = str..v[2]
+      num = num - v[1]
+    end
+  end
+  return str
 end
 
 return rewardscreen

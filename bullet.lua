@@ -23,7 +23,7 @@ bullet.update = function(dt)
     if v.side == 1 then -- check for collision with enemies
       for j, w in pairs(enemies) do
         if collision.overlap(v, w) then
-          w.hp = w.hp - bullet_info[v.type].dmg
+          w.hp = w.hp - bullet_info[v.type].dmg*v.tier
           stats.hits = stats.hits + 1 -- increase 'hits' stat
           bullets[i] = nil
         end
@@ -31,7 +31,7 @@ bullet.update = function(dt)
     else -- check for collision with player
       if collision.overlap(v, char) then
         if char.inv <= 0 then
-          char.hp = char.hp - 1
+          char.hp = char.hp - bullet_info[v.type].dmg*v.tier
           char.inv = char_info.inv_time
           stats.dmg = stats.dmg + 1 -- increase 'dmg' stat
         end
@@ -47,10 +47,10 @@ bullet.draw = function()
   end
 end
 
-bullet.new = function(type, p, d, side)
+bullet.new = function(type, p, d, side, tier)
   local spot = opening(bullets)
   local info = bullet_info[type]
-  bullets[spot] = {type = type, p = p, d = d, r = info.r, side = side, angle = math.atan2(d.y, d.x), frame = 1}
+  bullets[spot] = {type = type, p = p, d = d, r = info.r, side = side, angle = math.atan2(d.y, d.x), frame = 1, tier = tier}
   -- perform first-time setup
   ai.load[info.ai[1]](spot, bullets[spot])
 end

@@ -1,4 +1,4 @@
-items = {}
+local items = {}
 items[3] = {name = "Repair", disc = "Replenishes your plane's HP by one point", price = 4}
 items[4] = {name = "Ammo", disc = "Useful when firing weapons", price = .2}
 items[5] = {name = "Money", disc = "Currency for shops", price = 0}

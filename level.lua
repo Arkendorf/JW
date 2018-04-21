@@ -31,7 +31,7 @@ level.update = function(dt)
         end
       end
     end
-  elseif #enemies > 0 then
+  else
     enemies = {}
   end
 
