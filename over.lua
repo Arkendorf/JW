@@ -35,7 +35,7 @@ over.update = function(dt)
   end
   if on == false and math.floor(pos) <= -298 then
     if button == 1 then
-      map.start()
+      map.new()
       state = "map"
     elseif button == 2 then
       state = "main"

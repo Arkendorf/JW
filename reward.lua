@@ -19,6 +19,9 @@ rewardscreen.load = function()
 end
 
 rewardscreen.start = function(node, game_stats)
+    on = true
+    weaponscreen.on = false
+
     reward = node
     reward_type = rewardscreen.get_type(reward)
 
@@ -82,12 +85,13 @@ rewardscreen.update = function(dt)
 
   -- outro animation
   if math.floor(report_pos) <= -220 then
-    on = true
     state = "map"
   end
 end
 
 rewardscreen.draw = function()
+  level.draw_background()
+
   -- reward side
   if reward_type ~= "none" then
     love.graphics.setColor(255, 255, 255)

@@ -2,25 +2,31 @@ local character = {}
 
 character.load = function()
   char = {p = {x = 200, y = 300}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32, frame = 1}
-  char_info = {speed = 1, stop = 0.8, inv_time = 1, hp_max = 3, ammo_max = 32, weapons = {1, 0}}
+  char_info = {speed = 1, stop = .8, inv_time = 1, hp_max = 3, ammo_max = 32, weapons = {1, 0}}
 end
 
 character.update = function(dt)
   -- movement
-  if love.keyboard.isDown("right") then
-    char.d.x = char.d.x + char_info.speed
-  end
-  if love.keyboard.isDown("left") then
-    char.d.x = char.d.x - char_info.speed
-  end
-  if love.keyboard.isDown("down") then
-    char.d.y = char.d.y + char_info.speed
-  end
-  if love.keyboard.isDown("up") then
-    char.d.y = char.d.y - char_info.speed
+  if level.scroll.pos > 0 and level.scroll.pos < level.scroll.goal then -- no movement in intro/outro
+    if love.keyboard.isDown("right") then
+      char.d.x = char.d.x + char_info.speed
+    end
+    if love.keyboard.isDown("left") then
+      char.d.x = char.d.x - char_info.speed
+    end
+    if love.keyboard.isDown("down") then
+      char.d.y = char.d.y + char_info.speed
+    end
+    if love.keyboard.isDown("up") then
+      char.d.y = char.d.y - char_info.speed
+    end
+  else
+    char.p.x = character.zoom(char.p.x, screen.w/2, dt * 12)
+    char.p.y = character.zoom(char.p.y, screen.h/2, dt * 12)
   end
 
   -- adjust char pos
+  --char.d = vector.norm(char.d)
   char.p = vector.sum(char.p, vector.scale(dt * 60, char.d))
 
   -- collide with edges
@@ -97,6 +103,26 @@ character.draw = function()
 
   -- reset color
   love.graphics.setColor(255, 255, 255)
+
+  love.graphics.print(math.sqrt(vector.mag_sq(char.d)), 200)
+end
+
+character.max_speed = function()
+  return char_info.speed/(1-char_info.stop)*char_info.stop
+end
+
+character.zoom = function(num, goal, scalar)
+  local dir = 1
+  if num > goal then
+    dir = -1
+  end
+  local zoom = graphics.zoom(dir == 1, num, goal, goal, scalar)
+  local max = character.max_speed()
+  if math.abs(zoom-num) > max then
+    return num + max*dir
+  else
+    return zoom
+  end
 end
 
 return character

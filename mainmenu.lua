@@ -41,7 +41,7 @@ mainmenu.update = function(dt)
     pos = 51
   elseif math.ceil(pos) >= 400 then
     if button == 1 then
-      map.start()
+      map.new()
       state = "map"
     elseif button == 2 then
       mainmenu.load_file()
@@ -82,6 +82,9 @@ mainmenu.draw = function()
 
   love.graphics.setColor(255, 255, 255) -- reset color
   love.graphics.setCanvas(canvas.game)
+
+  level.draw_background()
+
   love.graphics.draw(canvas.mainmenu, 178, math.floor(pos))
 end
 

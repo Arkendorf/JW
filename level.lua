@@ -4,6 +4,8 @@ local level_score = {max = 0, current = 0}
 local level_reward = 0
 local airship = {frame = 1}
 
+local cut_dist = 3
+
 level.scroll = {goal = 0, pos = 0, v = 0}
 
 level.load = function()
@@ -11,26 +13,30 @@ end
 
 level.update = function(dt)
   -- recalculate level difficulty score
-  level_score.current = 0
-  local enemy_num = 0
-  for i, v in pairs(enemies) do
-    level_score.current = level_score.current + enemy_info[v.type].score
-    enemy_num = enemy_num + 1
-  end
-  level_score.current = level_score.current * enemy_num -- the more enemies, the more difficult
+  if level.scroll.pos > 0 and level.scroll.pos < level.scroll.goal then -- no enemies in intro/outro
+    level_score.current = 0
+    local enemy_num = 0
+    for i, v in pairs(enemies) do
+      level_score.current = level_score.current + enemy_info[v.type].score
+      enemy_num = enemy_num + 1
+    end
+    level_score.current = level_score.current * enemy_num -- the more enemies, the more difficult
 
-  -- add new enemy if necessary
-  if level_score.current < level_score.max then
-    local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
-    for i, v in pairs(enemy_info) do -- pick an enemy
-      if v.score * enemy_num <= price and math.random(0, 60) == 0 then -- add randomness to limit massive spawn chunks
-        enemy.new(i)
+    -- add new enemy if necessary
+    if level_score.current < level_score.max then
+      local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
+      for i, v in pairs(enemy_info) do -- pick an enemy
+        if v.score * enemy_num <= price and math.random(0, 60) == 0 then -- add randomness to limit massive spawn chunks
+          enemy.new(i)
+        end
       end
     end
+  elseif #enemies > 0 then
+    enemies = {}
   end
 
   -- do scrolling thing
-  if level.scroll.pos >= level.scroll.goal then
+  if level.scroll.pos >= level.scroll.goal+cut_dist then
     state = "reward"
     reward.start(level_reward, stats)
   else
@@ -51,12 +57,14 @@ end
 level.start = function(dif, dist, reward)
   char.p.x = screen.w/2
   char.p.y = screen.h/2
+  char.a.x = 0
+  char.a.y = -1
 
   stats = {kills = 0, shots = 0, hits = 0, dmg = 0}
 
   -- set up level
   level_score.max = dif
-  level.scroll = {goal = dist, pos = 0, v = 0}
+  level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
   -- reset stuff
   enemies = {}
@@ -67,6 +75,20 @@ level.start = function(dif, dist, reward)
   math.randomseed(os.time())
 
   level_reward = reward
+end
+
+level.draw = function()
+  --  ending ship
+  level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos-level.scroll.goal-cut_dist)*100)
+
+  -- starting shio
+  level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos+cut_dist)*100)
+end
+
+level.draw_background = function()
+  -- background level stuff
+  level.draw_airship(screen.w/2, screen.h/2)
+  love.graphics.draw(shipimg.char, shipquad.char[1], screen.w/2, screen.h/2, -math.pi/2, 1, 1, 16, 16)
 end
 
 level.draw_airship = function(x, y)

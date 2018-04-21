@@ -5,8 +5,8 @@ local on = true
 local scroll = 0
 local x_pos = 0
 local grid = {w = 5, h = 4, t = 64}
-local target = {x = 1, y = 1}
 map.path = {{x = 1, y = math.random(1, 4)}}
+local target = {x = 1, y = map.path[1].y}
 local options = {}
 map.seed = os.time()
 math.randomseed(map.seed)
@@ -28,6 +28,15 @@ map.start = function()
   target.x = map.path[#map.path].x
   target.y = map.path[#map.path].y
   map.find_options()
+end
+
+map.new = function()
+  map.seed = os.time()
+  math.randomseed(map.seed)
+  
+  map.path = {{x = 1, y = math.random(1, 4)}}
+
+  map.start()
 end
 
 map.update = function(dt)
@@ -167,6 +176,9 @@ map.draw = function()
   love.graphics.setCanvas(canvas.game)
   love.graphics.clear()
 
+  level.draw_background()
+
+  -- map stuff
   love.graphics.draw(canvas.map, 64+map_pos.x, map_pos.y)
   love.graphics.draw(img.scrollback, map_pos.x, map_pos.y)
   love.graphics.draw(canvas.scroll, map_pos.x, map_pos.y)

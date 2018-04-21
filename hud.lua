@@ -15,7 +15,7 @@ hud.draw = function()
   love.graphics.print(hud.num_to_str(char.hp), hud_pos+19, 11)
   love.graphics.print(hud.num_to_str(char.ammo), hud_pos+65, 11)
   love.graphics.print(hud.num_to_str(money), hud_pos+111, 11)
-  if state == "game" then
+  if state == "game" or state == "pause" or state == "over" then
     love.graphics.print(hud.num_to_str(math.ceil(level.scroll.goal-level.scroll.pos)), hud_pos+157, 11)
   else
     love.graphics.print("000", hud_pos+157, 11)
