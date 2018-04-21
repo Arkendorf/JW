@@ -45,11 +45,11 @@ pause.draw = function()
 
   -- basic stuff
   love.graphics.draw(img.notebook)
-  love.graphics.setColor(64, 51, 102)
+  love.graphics.setColor(palette.navy)
   love.graphics.print("Paused", 129-math.floor(font:getWidth("Paused")/2), 24)
 
   -- score
-  love.graphics.setColor(64, 51, 102)
+  love.graphics.setColor(palette.navy)
   love.graphics.print("Current Score", 129-math.floor(font:getWidth("Current Score")/2), 229)
   love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
   if #map.path > 1 then
@@ -61,7 +61,7 @@ pause.draw = function()
   -- buttons
   for i, v in ipairs(buttons) do
     if button == i then
-      love.graphics.setColor(0, 132, 204)
+      love.graphics.setColor(palette.blue)
     else
       love.graphics.setColor(v.color)
     end

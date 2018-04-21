@@ -57,11 +57,11 @@ end
 ai.bullet = {}
 
 ai.bullet[1] = function(i, v, dt) -- "forward"
-  bullet.new("basic", v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2, 1) -- direction is combo of char's direction and movement
+  bullet.new("basic", v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier) -- direction is combo of char's direction and movement
 end
 
 ai.bullet[2] = function(i, v, dt) -- "aimer"
-  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2, 1)
+  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2, v.tier)
 end
 
 return ai

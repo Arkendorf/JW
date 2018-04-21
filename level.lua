@@ -3,6 +3,7 @@ local level = {}
 local level_score = {max = 0, current = 0}
 local level_reward = 0
 local airship = {frame = 1}
+local clear = false
 
 local cut_dist = 3
 
@@ -26,13 +27,20 @@ level.update = function(dt)
     if level_score.current < level_score.max then
       local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
       for i, v in pairs(enemy_info) do -- pick an enemy
-        if v.score * enemy_num <= price and math.random(0, 60) == 0 then -- add randomness to limit massive spawn chunks
-          enemy.new(i)
+        if v.score * enemy_num <= price and math.random(0, 4) == 4 then -- pick enemy type
+          local tier_price = price - v.score * enemy_num
+          for j, w in ipairs(enemy_tier) do
+            if v.score * (j-1) < tier_price and math.random(0, 4) == 4 then -- pick enemy tier
+              enemy.new(i, j)
+            end
+          end
         end
       end
     end
-  else
+  elseif clear == false then
     enemies = {}
+    bullets = {}
+    clear = true
   end
 
   -- do scrolling thing
@@ -70,6 +78,7 @@ level.start = function(dif, dist, reward)
   enemies = {}
   bullets = {}
   drops = {}
+  clear = false
 
   -- reset seed
   math.randomseed(os.time())

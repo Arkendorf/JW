@@ -62,7 +62,7 @@ mainmenu.draw = function()
   -- buttons
   for i, v in ipairs(buttons) do
     if button == i then
-      love.graphics.setColor(0, 132, 204)
+      love.graphics.setColor(palette.blue)
     else
       love.graphics.setColor(v.color)
     end
@@ -70,14 +70,14 @@ mainmenu.draw = function()
     love.graphics.print(v.txt, 80+math.floor(v.pos), 101+i * 32)
   end
 
-  love.graphics.setColor(64, 51, 102)
+  love.graphics.setColor(palette.navy)
   love.graphics.print("Highscores", 129-math.floor(font:getWidth("Highscores")/2), 229) -- label box
   love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
 
-  love.graphics.setColor(0, 132, 204) -- first high score is color differently
+  love.graphics.setColor(palette.blue) -- first high score is color differently
   for i, v in ipairs(highscores) do -- draw highscores
     love.graphics.print(v, 66 + (i-1)*32 - math.floor(font:getHeight(tostring(v))/2), 257)
-    love.graphics.setColor(64, 51, 102)
+    love.graphics.setColor(palette.navy)
   end
 
   love.graphics.setColor(255, 255, 255) -- reset color

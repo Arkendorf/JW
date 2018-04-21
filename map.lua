@@ -86,7 +86,7 @@ map.draw = function()
   end
 
   -- draw travelled path
-  love.graphics.setColor(64, 51, 102)
+  love.graphics.setColor(palette.navy)
   for i, v in ipairs(map.path) do
     --get start coords
     local x1, y1 = map.get_node_coords(v.x, v.y)
@@ -112,10 +112,10 @@ map.draw = function()
     -- now draw line
     if v.x == target.x and v.y == target.y then
       -- if target is an option
-      love.graphics.setColor(204, 40, 40)
+      love.graphics.setColor(palette.red)
       love.graphics.line(x1-scroll, y1, x2-scroll, y2)
     else
-      love.graphics.setColor(64, 51, 102)
+      love.graphics.setColor(palette.navy)
       graphics.dotted_line(x1-scroll, y1, x2-scroll, y2)
     end
   end
@@ -155,18 +155,18 @@ map.draw = function()
     local type = map.get_node_type(target.x, target.y)
     -- draw reward
     if type > 1 then
-      love.graphics.setColor(122, 204, 40)
+      love.graphics.setColor(palette.green)
       love.graphics.draw(img.noteicons, quad.noteicons[1], 2, 16)
       love.graphics.print(type_name[type], 16, 19)
       reward = 1
     end
     -- draw difficulty
-    love.graphics.setColor(204, 40, 40)
+    love.graphics.setColor(palette.red)
     love.graphics.draw(img.noteicons, quad.noteicons[2], 2, 16 + reward * 14)
     love.graphics.print(map.get_node_difficulty_text(target.x, target.y), 16, 19 + reward * 14)
 
     -- draw distance
-    love.graphics.setColor(64, 51, 102)
+    love.graphics.setColor(palette.navy)
     love.graphics.draw(img.noteicons, quad.noteicons[3], 2, 16 + (reward+1) * 14)
     love.graphics.print(tostring(map.get_node_distance(target.x, target.y, map.path[#map.path].x, map.path[#map.path].y)).." mi.", 16, 19 + (reward+1) * 14)
     love.graphics.setColor(255, 255, 255)

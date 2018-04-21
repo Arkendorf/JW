@@ -114,7 +114,7 @@ rewardscreen.draw = function()
     end
     -- draw info
     love.graphics.draw(img.infobox, info_pos, 248)
-    love.graphics.setColor(64, 51, 102)
+    love.graphics.setColor(palette.navy)
     rewardscreen.draw_info(items[item_target])
   end
 
@@ -134,10 +134,10 @@ rewardscreen.draw = function()
     -- draw info
     love.graphics.draw(img.infobox, info_pos, 248)
     if char_info.weapons[weaponscreen.target].type > 0 then
-      love.graphics.setColor(64, 51, 102)
+      love.graphics.setColor(palette.navy)
       rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char_info.weapons[weaponscreen.target].type})
     else
-      love.graphics.setColor(204, 40, 40)
+      love.graphics.setColor(palette.red)
       love.graphics.print("Empty", info_pos+4, 252)
     end
   end
@@ -157,7 +157,7 @@ rewardscreen.draw = function()
   love.graphics.draw(canvas.reward, report_pos+78, 200)
 
   -- text
-  love.graphics.setColor(64, 51, 102)
+  love.graphics.setColor(palette.navy)
   love.graphics.print("Report", report_pos+110-math.floor(font:getWidth("Report")/2), 62)
   for i, v in ipairs(stats) do
     love.graphics.print(v.str, report_pos+8, 64+i*16)
@@ -303,14 +303,14 @@ rewardscreen.draw_card = function(type, item, amount)
     love.graphics.draw(img.cardicons, quad.cardicons[type], 60, 92, math.pi)
     love.graphics.draw(img.cardimgs, quad.cardimgs[type], 8, 24)
     if type > 2 and amount > 1 then
-      love.graphics.setColor(64, 51, 102)
+      love.graphics.setColor(palette.navy)
       love.graphics.print("x"..tostring(amount), 20, 9)
       love.graphics.print("x"..tostring(amount), 44, 87, math.pi)
       love.graphics.setColor(255, 255, 255)
     elseif type == 1 and amount > 1 then
       local str = rewardscreen.roman(amount)
       love.graphics.rectangle("fill", 55-font:getWidth(str), 63, font:getWidth(str)+1, 9)
-      love.graphics.setColor(204, 40, 40)
+      love.graphics.setColor(palette.red)
       love.graphics.print(str, 56-font:getWidth(str), 64)
       love.graphics.setColor(255, 255, 255)
     end
@@ -327,10 +327,10 @@ rewardscreen.draw_info = function(item)
     info = item_info[item.type][item.item]
   end
   if item.bought then
-    love.graphics.setColor(204, 40, 40)
+    love.graphics.setColor(palette.red)
     love.graphics.print("Out of stock", info_pos+4, 252)
   else
-    love.graphics.setColor(64, 51, 102)
+    love.graphics.setColor(palette.navy)
     if item.type > 2 and item.amount > 1 then
       love.graphics.print(info.name.." x"..item.amount, info_pos+4, 252)
     else
@@ -341,7 +341,7 @@ rewardscreen.draw_info = function(item)
 
     if item.price > 0 then
       if item.price > money then
-        love.graphics.setColor(204, 40, 40)
+        love.graphics.setColor(palette.red)
       end
       love.graphics.print(item.price.."$", info_pos+216-font:getWidth(item.price.."$"), 252)
     end

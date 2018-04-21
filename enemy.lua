@@ -11,6 +11,14 @@ enemy.load = function()
   for i, v in pairs(shipimg) do
     ship_width[i] = v:getHeight()
   end
+
+  enemy_tier = {}
+  enemy_tier[1] = {color = {205, 100, 25}}
+  enemy_tier[2] = {color = {255, 50, 50}}
+  enemy_tier[3] = {color = {255, 50, 150}}
+  enemy_tier[4] = {color = {50, 185, 0}}
+  enemy_tier[5] = {color = {255, 235, 235}}
+  enemy_tier[6] = {color = {75, 75, 75}}
 end
 
 enemy.update = function(dt)
@@ -59,13 +67,16 @@ enemy.draw = function()
   for i, v in pairs(enemies) do
     local img = enemy_info[v.type].img
     love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
+    love.graphics.setColor(enemy_tier[v.tier].color)
+    love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
+    love.graphics.setColor(255, 255, 255)
   end
 end
 
-enemy.new = function(type) -- add enemy to open space in list
+enemy.new = function(type, tier) -- add enemy to open space in list
   local spot = opening(enemies)
   local info = enemy_info[type]
-  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp, atk = 0, type = type, info = {}, frame = 1}
+  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp, atk = 0, type = type, info = {}, frame = 1, tier = tier}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])
 end

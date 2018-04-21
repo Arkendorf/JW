@@ -52,11 +52,11 @@ over.draw = function()
   -- basic stuff
 
   love.graphics.draw(img.notebook)
-  love.graphics.setColor(204, 40, 40)
+  love.graphics.setColor(palette.red)
   love.graphics.print("Game Over", 129-math.floor(font:getWidth("Game Over")/2), 24)
 
   -- score
-  love.graphics.setColor(64, 51, 102)
+  love.graphics.setColor(palette.navy)
   love.graphics.print("Final Score", 129-math.floor(font:getWidth("Final Score")/2), 229)
   love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
   love.graphics.print(#map.path-2, 129-math.floor(font:getWidth(tostring(#map.path-2))/2), 257)
@@ -64,7 +64,7 @@ over.draw = function()
   -- buttons
   for i, v in ipairs(buttons) do
     if button == i then
-      love.graphics.setColor(0, 132, 204)
+      love.graphics.setColor(palette.blue)
     else
       love.graphics.setColor(v.color)
     end
