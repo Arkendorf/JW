@@ -1,7 +1,7 @@
 local character = {}
 
 character.load = function()
-  char = {p = {x = 200, y = 300}, d = {x = 0, y = -1}, a = {x = 0, y = -1}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32, frame = 1}
+  char = {p = {x = 200, y = 300}, d = {x = 0, y = -1}, a = {x = 0, y = -1}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32, frame = 1, trail = 0}
 char_info = {speed = 1, stop = .8, inv_time = 1, hp_max = 3, ammo_max = 32, weapons = {{type = 1, tier = 1}, {type = 0, tier = 1}}}
 end
 
@@ -88,6 +88,14 @@ character.update = function(dt)
   char.frame = char.frame + dt * 12
   if char.frame > #shipquad.char+1 then
     char.frame = 1
+  end
+
+  -- update trail
+  if char.trail <= 0 then
+    enemy.dmg_particle(char.p, {x = 0, y = -1}, char.hp, char_info.hp_max)
+    char.trail = .1
+  else
+    char.trail = char.trail - dt
   end
 end
 

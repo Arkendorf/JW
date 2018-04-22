@@ -37,9 +37,11 @@ level.update = function(dt)
         end
       end
     end
+    clear = false
   elseif clear == false then
     enemies = {}
     bullets = {}
+    particles = {}
     clear = true
   end
 
@@ -78,7 +80,6 @@ level.start = function(dif, dist, reward)
   enemies = {}
   bullets = {}
   drops = {}
-  clear = false
 
   -- reset seed
   math.randomseed(os.time())

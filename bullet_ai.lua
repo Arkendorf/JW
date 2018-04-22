@@ -12,6 +12,7 @@ end
 ai.update = {}
 
 ai.update[1] = function(i, v, dt) -- "basic"
+  particle.new("trail", v.p, {x = 0, y = 0}, v.d, tiers[v.tier].color) -- bullet trail
   v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
 end
 

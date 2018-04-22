@@ -51,13 +51,13 @@ game.draw = function()
 
   drop.draw()
 
-  bullet.draw()
+  particle.draw()
 
-  character.draw()
+  bullet.draw()
 
   enemy.draw()
 
-  particle.draw()
+  character.draw()
 end
 
 opening = function(a) -- find available space in list 'a'

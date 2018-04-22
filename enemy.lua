@@ -52,6 +52,15 @@ enemy.update = function(dt)
     if v.frame >= #shipquad[enemy_info[v.type].img]+1 then
       v.frame = 1
     end
+
+    -- update trail
+    if char.trail <= 0 then
+      enemy.dmg_particle(v.p, v.d, v.hp, enemy_info[v.type].hp)
+      char.trail = .1
+    else
+      char.trail = char.trail - dt
+    end
+
   end
 end
 
@@ -68,9 +77,19 @@ end
 enemy.new = function(type, tier) -- add enemy to open space in list
   local spot = opening(enemies)
   local info = enemy_info[type]
-  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp, atk = 0, type = type, info = {}, frame = 1, tier = tier}
+  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])
+end
+
+enemy.dmg_particle = function(p, d, hp, max)
+  particle.new("gas", p, vector.scale(-12+math.random(-4, 4), d), d) -- character trail
+  if hp < max then
+    particle.new("smoke", p, vector.scale(-8+math.random(-4, 4), d), d, {100, 100, 100}) -- character trail
+  end
+  if hp <= max/3 then
+    particle.new("spark", p, vector.scale(-16+math.random(-4, 4), d), vector.scale(-1, d)) -- character trail
+  end
 end
 
 return enemy
