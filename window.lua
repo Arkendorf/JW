@@ -35,7 +35,7 @@ window.update = function(dt)
       local y = math.random(0, screen.h)
       clouds[opening(clouds)] = {x = screen.w/2-(screen.w/2+96)*dir, y = y, oy = y, v = dir*math.random(0, 2), img = math.random(1, 4), start = level.scroll.pos}
     else
-      clouds[opening(clouds)] = {x = math.random(0, screen.h), y = -48, oy = -48, v = (math.random(0, 1)-.5)*math.random(0, 2), img = math.random(1, 4), start = level.scroll.pos}
+      clouds[opening(clouds)] = {x = math.random(0, screen.h), y = -48, oy = -screen.h-48, v = (math.random(0, 1)-.5)*math.random(0, 2), img = math.random(1, 4), start = level.scroll.pos}
     end
   end
 
@@ -68,13 +68,13 @@ window.draw = function()
   end
 
   -- draw cloud shadows
-  -- love.graphics.setShader(shader.shadow)
-  -- for i, v in pairs(clouds) do
-  --   love.graphics.setColor(0, 127, 33)
-  --   love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x), (level.scroll.pos-v.start)*25+v.oy+64, 0, .2, .2, 128, 48)
-  -- end
-  -- love.graphics.setColor(255, 255, 255)
-  -- love.graphics.setShader()
+  love.graphics.setShader(shader.shadow)
+  for i, v in pairs(clouds) do
+    love.graphics.setColor(0, 127, 33)
+    love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x)+48, (level.scroll.pos-v.start)*25, 0, .2, .2, 128, 48)
+  end
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.setShader()
 
   love.graphics.draw(canvas.clouds, screen.ox, screen.oy)
 
