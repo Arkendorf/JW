@@ -71,7 +71,7 @@ window.draw = function()
   love.graphics.setShader(shader.shadow)
   for i, v in pairs(clouds) do
     love.graphics.setColor(0, 127, 33)
-    love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x)+48, (level.scroll.pos-v.start)*25, 0, .2, .2, 128, 48)
+    love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x)+screen.ox, (level.scroll.pos-v.start)*25, 0, .2, .2, 128, 48)
   end
   love.graphics.setColor(255, 255, 255)
   love.graphics.setShader()
