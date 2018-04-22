@@ -5,6 +5,7 @@ bullet = require "bullet"
 collision = require "collision"
 drop = require "drop"
 level = require "level"
+particle = require "particle"
 
 local game = {}
 
@@ -27,6 +28,8 @@ game.load = function()
   drop.load()
 
   level.load()
+
+  particle.load()
 end
 
 game.update = function(dt)
@@ -39,6 +42,8 @@ game.update = function(dt)
   drop.update(dt)
 
   level.update(dt)
+
+  particle.update(dt)
 end
 
 game.draw = function()
@@ -51,6 +56,8 @@ game.draw = function()
   character.draw()
 
   enemy.draw()
+
+  particle.draw()
 end
 
 opening = function(a) -- find available space in list 'a'

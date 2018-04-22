@@ -38,6 +38,10 @@ bullet.update = function(dt)
         bullets[i] = nil
       end
     end
+    -- check if bullet is off screen
+    if v.p.x < 0 or v.p.x > screen.w or v.p.y < 0 or v.p.y > screen.h then
+      bullets[i] = nil
+    end
   end
 end
 

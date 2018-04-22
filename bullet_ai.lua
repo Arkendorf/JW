@@ -13,11 +13,6 @@ ai.update = {}
 
 ai.update[1] = function(i, v, dt) -- "basic"
   v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
-
-  -- check if bullet is off screen
-  if v.p.x < 0 or v.p.x > screen.w or v.p.y < 0 or v.p.y > screen.h then
-    bullets[i] = nil
-  end
 end
 
 ai.update[2] = function(i, v, dt) -- "gas"
@@ -25,11 +20,6 @@ ai.update[2] = function(i, v, dt) -- "gas"
   v.r = v.r + dt * 16
   v.frame = math.floor(v.r/4)
   if v.r > 20 then -- delete after radius reaches point
-    bullets[i] = nil
-  end
-
-  -- check if bullet is off screen
-  if v.p.x < 0 or v.p.x > screen.w or v.p.y < 0 or v.p.y > screen.h then
     bullets[i] = nil
   end
 end
