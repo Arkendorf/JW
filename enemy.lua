@@ -86,7 +86,7 @@ enemy.dmg_particle = function(p, d, a, hp, max)
   if hp < max then
     particle.new("smoke", p, vector.scale(-6+math.random(-4, 4), d), {x = math.random(-1, 1), y = math.random(-1, 1)}, {100, 100, 100}) -- character trail
   end
-  if hp <= max/2 then
+  if hp < max/2 then
     particle.new("spark", p, vector.scale(-12+math.random(-4, 4), a), vector.scale(-1, a)) -- character trail
   end
 end

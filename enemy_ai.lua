@@ -6,7 +6,7 @@ ai.load[1] = function(i, v) -- "crosser"
   -- set position and direction
   v.info.dir = math.random(0, 1)*2-1
   v.p.x = screen.w/2-screen.w/2*v.info.dir
-  v.p.y = math.random(0, screen.h)
+  v.p.y = math.random(v.r, screen.h-v.r)
 
   v.a.x = v.info.dir
 end
