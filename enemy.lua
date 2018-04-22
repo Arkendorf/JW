@@ -54,13 +54,12 @@ enemy.update = function(dt)
     end
 
     -- update trail
-    if char.trail <= 0 then
-      enemy.dmg_particle(v.p, v.d, v.hp, enemy_info[v.type].hp)
-      char.trail = .1
+    if v.trail <= 0 then
+      enemy.dmg_particle(v.p, {x = 0, y = 0}, v.d, v.hp, enemy_info[v.type].hp)
+      v.trail = .5/enemy_info[v.type].speed
     else
-      char.trail = char.trail - dt
+      v.trail = v.trail - dt
     end
-
   end
 end
 
@@ -82,13 +81,13 @@ enemy.new = function(type, tier) -- add enemy to open space in list
   ai.load[info.ai[1]](spot, enemies[spot])
 end
 
-enemy.dmg_particle = function(p, d, hp, max)
-  particle.new("gas", p, vector.scale(-12+math.random(-4, 4), d), d) -- character trail
+enemy.dmg_particle = function(p, d, a, hp, max)
+  particle.new("gas", p, vector.scale(-8+math.random(-4, 4), d), {x = math.random(-1, 1), y = math.random(-1, 1)}) -- character trail
   if hp < max then
-    particle.new("smoke", p, vector.scale(-8+math.random(-4, 4), d), d, {100, 100, 100}) -- character trail
+    particle.new("smoke", p, vector.scale(-6+math.random(-4, 4), d), {x = math.random(-1, 1), y = math.random(-1, 1)}, {100, 100, 100}) -- character trail
   end
-  if hp <= max/3 then
-    particle.new("spark", p, vector.scale(-16+math.random(-4, 4), d), vector.scale(-1, d)) -- character trail
+  if hp <= max/2 then
+    particle.new("spark", p, vector.scale(-12+math.random(-4, 4), a), vector.scale(-1, a)) -- character trail
   end
 end
 

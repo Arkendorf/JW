@@ -39,10 +39,7 @@ level.update = function(dt)
     end
     clear = false
   elseif clear == false then
-    enemies = {}
-    bullets = {}
-    particles = {}
-    clear = true
+    level.clear()
   end
 
   -- do scrolling thing
@@ -77,9 +74,7 @@ level.start = function(dif, dist, reward)
   level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
   -- reset stuff
-  enemies = {}
-  bullets = {}
-  drops = {}
+  level.clear()
 
   -- reset seed
   math.randomseed(os.time())
@@ -93,6 +88,14 @@ level.draw = function()
 
   -- starting shio
   level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos+cut_dist)*100)
+end
+
+level.clear = function()
+  enemies = {}
+  bullets = {}
+  particles = {}
+  drops = {}
+  clear = true
 end
 
 level.draw_background = function()

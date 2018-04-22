@@ -92,8 +92,8 @@ character.update = function(dt)
 
   -- update trail
   if char.trail <= 0 then
-    enemy.dmg_particle(char.p, {x = 0, y = -1}, char.hp, char_info.hp_max)
-    char.trail = .1
+    enemy.dmg_particle(char.p, {x = 0, y = -1}, {x = 0, y = -1}, char.hp, char_info.hp_max)
+    char.trail = .2
   else
     char.trail = char.trail - dt
   end
