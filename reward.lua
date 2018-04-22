@@ -135,7 +135,7 @@ rewardscreen.draw = function()
     love.graphics.draw(img.infobox, info_pos, 248)
     if char_info.weapons[weaponscreen.target].type > 0 then
       love.graphics.setColor(palette.navy)
-      rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char_info.weapons[weaponscreen.target].type})
+      rewardscreen.draw_info({price = 0, bought = false, type = 1, item = char_info.weapons[weaponscreen.target].type, amount = char_info.weapons[weaponscreen.target].tier})
     else
       love.graphics.setColor(palette.red)
       love.graphics.print("Empty", info_pos+4, 252)
@@ -270,10 +270,14 @@ rewardscreen.create = function(type)
   local price = 0
   if type < 3 then
     item = math.random(1, #item_info[type])
-    if type == 1 and #map.path-1 > tier_score then -- weapon tier
-      amount = math.random(1, math.floor(#map.path-1 / tier_score))
-    else
-      amount = 1
+    if type == 1 then -- weapon tier
+      local max = math.floor(#map.path-1 / tier_score)
+      if max < 1 then
+        max = 1
+      elseif max > #tiers then
+        max = #tiers
+      end
+      amount = math.random(1, max)
     end
   elseif type == 3 then
     amount = math.random(1, 3)
@@ -285,6 +289,8 @@ rewardscreen.create = function(type)
   if reward_type == "shop" then
     if type > 2 then
       price = math.ceil(amount * item_info[type].price)
+    elseif type == 1 then -- higher weapon tiers cost more
+      price = item_info[type][item].price*amount
     else
       price = item_info[type][item].price
     end
@@ -307,10 +313,10 @@ rewardscreen.draw_card = function(type, item, amount)
       love.graphics.print("x"..tostring(amount), 20, 9)
       love.graphics.print("x"..tostring(amount), 44, 87, math.pi)
       love.graphics.setColor(255, 255, 255)
-    elseif type == 1 and amount > 1 then
+    elseif type == 1 then
       local str = rewardscreen.roman(amount)
       love.graphics.rectangle("fill", 55-font:getWidth(str), 63, font:getWidth(str)+1, 9)
-      love.graphics.setColor(palette.red)
+      love.graphics.setColor(graphics.mix_colors({palette.colorbase, tiers[amount].color}))
       love.graphics.print(str, 56-font:getWidth(str), 64)
       love.graphics.setColor(255, 255, 255)
     end
@@ -336,8 +342,14 @@ rewardscreen.draw_info = function(item)
     else
       love.graphics.print(info.name, info_pos+4, 252)
     end
-
     love.graphics.printf(info.disc, info_pos+4, 268, 212)
+
+    if item.type == 1 then -- show tier / tier info
+      local w, l = font:getWrap(info.disc, 212)
+      love.graphics.setColor(graphics.mix_colors({palette.colorbase, tiers[item.amount].color}))
+      love.graphics.print("Tier "..rewardscreen.roman(item.amount).." x"..item.amount.." damage", info_pos+4, 268 + font:getHeight(info.disc)*#l)
+      love.graphics.setColor(palette.navy)
+    end
 
     if item.price > 0 then
       if item.price > money then

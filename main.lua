@@ -22,7 +22,7 @@ function love.load()
   oldstate = "main"
   freeze = false
 
-  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}}
+  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}}
 end
 
 function love.update(dt)

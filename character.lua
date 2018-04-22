@@ -1,7 +1,7 @@
 local character = {}
 
 character.load = function()
-  char = {p = {x = 200, y = 300}, d = {x = 0, y = 0}, a = {x = 0, y = 0}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32, frame = 1}
+  char = {p = {x = 200, y = 300}, d = {x = 0, y = -1}, a = {x = 0, y = -1}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32, frame = 1}
 char_info = {speed = 1, stop = .8, inv_time = 1, hp_max = 3, ammo_max = 32, weapons = {{type = 1, tier = 1}, {type = 0, tier = 1}}}
 end
 
@@ -26,7 +26,6 @@ character.update = function(dt)
   end
 
   -- adjust char pos
-  --char.d = vector.norm(char.d)
   char.p = vector.sum(char.p, vector.scale(dt * 60, char.d))
 
   -- collide with edges

@@ -8,6 +8,14 @@ level = require "level"
 
 local game = {}
 
+tiers = {}
+tiers[1] = {color = {205, 100, 25}}
+tiers[2] = {color = {255, 50, 50}}
+tiers[3] = {color = {255, 50, 150}}
+tiers[4] = {color = {50, 185, 0}}
+tiers[5] = {color = {255, 235, 235}}
+tiers[6] = {color = {75, 75, 75}}
+
 game.load = function()
 
   character.load()

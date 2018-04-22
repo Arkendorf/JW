@@ -18,7 +18,7 @@ level.update = function(dt)
     level_score.current = 0
     local enemy_num = 0
     for i, v in pairs(enemies) do
-      level_score.current = level_score.current + enemy_info[v.type].score
+      level_score.current = level_score.current + enemy_info[v.type].score * v.tier
       enemy_num = enemy_num + 1
     end
     level_score.current = level_score.current * enemy_num -- the more enemies, the more difficult
@@ -29,7 +29,7 @@ level.update = function(dt)
       for i, v in pairs(enemy_info) do -- pick an enemy
         if v.score * enemy_num <= price and math.random(0, 4) == 4 then -- pick enemy type
           local tier_price = price - v.score * enemy_num
-          for j, w in ipairs(enemy_tier) do
+          for j, w in ipairs(tiers) do
             if v.score * (j-1) < tier_price and math.random(0, 4) == 4 then -- pick enemy tier
               enemy.new(i, j)
             end

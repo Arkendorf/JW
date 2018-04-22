@@ -44,6 +44,9 @@ end
 bullet.draw = function()
   for i, v in pairs(bullets) do
     love.graphics.draw(bulletimg[bullet_info[v.type].img], bulletquad[bullet_info[v.type].img][v.frame], math.floor(v.p.x), math.floor(v.p.y), v.angle, 1, 1, 16, 16)
+    love.graphics.setColor(tiers[v.tier].color)
+    love.graphics.draw(bulletimg[bullet_info[v.type].img.."_overlay"], bulletquad[bullet_info[v.type].img.."_overlay"][v.frame], math.floor(v.p.x), math.floor(v.p.y), v.angle, 1, 1, 16, 16)
+    love.graphics.setColor(255, 255, 255)
   end
 end
 

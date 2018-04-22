@@ -31,28 +31,33 @@ graphics.load = function()
   quad.propellor = graphics.spritesheet(img.propellor, 34, 34)
 
   -- bullet images
-  bulletimg = {}
-  bulletquad = {}
-  files = love.filesystem.getDirectoryItems("bulletimgs")
-  for i, v in ipairs(files) do
-    bulletimg[string.sub(v, 1, -5)] = love.graphics.newImage("bulletimgs/"..v)
-    bulletquad[string.sub(v, 1, -5)] = graphics.spritesheet(bulletimg[string.sub(v, 1, -5)], 32, 32)
-  end
+  bulletimg, bulletquad = graphics.load_folder("bulletimgs")
 
   -- ship images
-  shipimg = {}
-  shipquad = {}
-  files = love.filesystem.getDirectoryItems("shipimgs")
-  for i, v in ipairs(files) do
-    shipimg[string.sub(v, 1, -5)] = love.graphics.newImage("shipimgs/"..v)
-    shipquad[string.sub(v, 1, -5)] = graphics.spritesheet(shipimg[string.sub(v, 1, -5)], 32, 32)
-  end
+  shipimg, shipquad = graphics.load_folder("shipimgs")
+
+  -- particle
+  particleimg, particlequad = graphics.load_folder("particleimgs")
 
   -- canvases
   canvas = {}
 
   love.graphics.setBackgroundColor(255, 255, 255)
 end
+
+graphics.load_folder = function(str)
+  local img = {}
+  local quad = {}
+  local files = love.filesystem.getDirectoryItems(str)
+  for i, v in ipairs(files) do
+    local name = string.sub(v, 1, -5)
+    img[name] = love.graphics.newImage(str.."/"..v)
+    local tile_size = img[name]:getHeight()
+    quad[name] = graphics.spritesheet(img[name], tile_size, tile_size)
+  end
+  return img, quad
+end
+
 
 graphics.spritesheet = function(img, tw, th)
   local quads = {}
@@ -87,6 +92,19 @@ graphics.zoom = function(bool, num, min, max, scalar)
   else
     return num
   end
+end
+
+graphics.mix_colors = function(colortable)
+  local newcolor = {1, 1, 1}
+  for i, v in ipairs(colortable) do
+    for j = 1, 3 do
+      newcolor[j] = newcolor[j] * v[j]
+    end
+  end
+  for i = 1, 3 do
+    newcolor[i] = newcolor[i] / (255 * (#colortable-1))
+  end
+  return newcolor
 end
 
 return graphics
