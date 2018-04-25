@@ -172,7 +172,7 @@ map.draw = function()
     love.graphics.setColor(255, 255, 255)
   end
 
-  love.graphics.setCanvas(canvas.game)
+  love.graphics.setCanvas(canvas.menu)
   love.graphics.clear()
 
   level.draw_background()

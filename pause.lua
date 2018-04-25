@@ -40,7 +40,7 @@ pause.update = function(dt)
 end
 
 pause.draw = function()
-  love.graphics.setCanvas(canvas.mainmenu)
+  love.graphics.setCanvas(canvas.pause)
   love.graphics.clear()
 
   -- basic stuff
@@ -70,8 +70,10 @@ pause.draw = function()
   end
 
   love.graphics.setColor(255, 255, 255) -- reset color
-  love.graphics.setCanvas(canvas.game)
-  love.graphics.draw(canvas.mainmenu, 178, math.floor(pos))
+  love.graphics.setCanvas(canvas.menu)
+  love.graphics.clear()
+  love.graphics.draw(canvas.pause, 178, math.floor(pos))
+  love.graphics.setCanvas()
 end
 
 pause.keypressed = function(key)

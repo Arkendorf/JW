@@ -81,11 +81,14 @@ mainmenu.draw = function()
   end
 
   love.graphics.setColor(255, 255, 255) -- reset color
-  love.graphics.setCanvas(canvas.game)
+  love.graphics.setCanvas(canvas.menu)
+  love.graphics.clear()
 
   level.draw_background()
 
   love.graphics.draw(canvas.mainmenu, 178, math.floor(pos))
+
+  love.graphics.setCanvas()
 end
 
 mainmenu.keypressed = function(key)

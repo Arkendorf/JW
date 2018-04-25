@@ -20,6 +20,7 @@ window.load = function()
   -- love.window.setMode(w, h-12)
 
   canvas.game = love.graphics.newCanvas(screen.w, screen.h)
+  canvas.menu = love.graphics.newCanvas(screen.w, screen.h)
   canvas.window = love.graphics.newCanvas(w/screen.scale, h/screen.scale)
   canvas.clouds = love.graphics.newCanvas(screen.w, screen.h)
 
@@ -75,22 +76,23 @@ window.draw = function()
   love.graphics.setColor(255, 255, 255)
   love.graphics.setShader()
 
+  -- draw clouds
+  shader.cloud_shadow:send("game", canvas.game)
+  love.graphics.setShader(shader.cloud_shadow)
+  love.graphics.setColor(152, 219, 255)
   love.graphics.draw(canvas.clouds, screen.ox, screen.oy)
-
-  -- draw shadows
-  if state == "game" or oldstate == "game" then
-    shader.cloud_shadow:send("clouds", canvas.clouds)
-    love.graphics.setShader(shader.cloud_shadow)
-    love.graphics.setColor(152, 219, 255)
-    love.graphics.draw(canvas.game, screen.ox, screen.oy)
-    love.graphics.setShader()
-    love.graphics.setColor(255, 255, 255)
-  end
+  love.graphics.setShader()
+  love.graphics.setColor(255, 255, 255)
 
   -- draw game
   love.graphics.draw(canvas.game, screen.ox, screen.oy)
 
-  -- draw borders
+  -- draw menus
+  if state ~= "game" then
+    love.graphics.draw(canvas.menu, screen.ox, screen.oy)
+  end
+
+  -- draw verticle borders
   for i = -math.ceil(screen.h/400/2), math.ceil(screen.h/400/2) do
     love.graphics.draw(img.border, math.floor(screen.ox-600), math.floor(b_offset*100 % 400) + i*400)
     love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor((b_offset-2)*100 % 400) + i*400, 0, -1, 1)

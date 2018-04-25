@@ -21,7 +21,7 @@ over.start = function()
 end
 
 over.load = function()
-  canvas.pause = love.graphics.newCanvas(244, 298)
+  canvas.over = love.graphics.newCanvas(244, 298)
 end
 
 over.update = function(dt)
@@ -46,7 +46,7 @@ over.update = function(dt)
 end
 
 over.draw = function()
-  love.graphics.setCanvas(canvas.mainmenu)
+  love.graphics.setCanvas(canvas.over)
   love.graphics.clear()
 
   -- basic stuff
@@ -73,8 +73,10 @@ over.draw = function()
   end
 
   love.graphics.setColor(255, 255, 255) -- reset color
-  love.graphics.setCanvas(canvas.game)
-  love.graphics.draw(canvas.mainmenu, 178, math.floor(pos))
+  love.graphics.setCanvas(canvas.menu)
+  love.graphics.clear()
+  love.graphics.draw(canvas.over, 178, math.floor(pos))
+  love.graphics.setCanvas()
 end
 
 over.keypressed = function(key)

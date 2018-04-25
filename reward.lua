@@ -129,7 +129,7 @@ rewardscreen.draw = function()
     love.graphics.print("x", 156 - math.floor(font:getWidth("x")/2), 154)
     love.graphics.draw(img.cardborder, -62 + weaponscreen.target*92, 38)
 
-    love.graphics.setCanvas(canvas.game)
+    love.graphics.setCanvas(canvas.menu)
 
     -- draw info
     love.graphics.draw(img.infobox, info_pos, 248)
