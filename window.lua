@@ -30,19 +30,18 @@ window.update = function(dt)
   hud.update(dt)
 
   if #clouds < 6 and math.random(0, 60) == 0 then -- create new clouds
-   if math.random(0, 1) == 0 then
-      local dir = (math.random(0, 1)-.5)*2
-      local y = math.random(0, screen.h)
-      clouds[opening(clouds)] = {x = screen.w/2-(screen.w/2+96)*dir, y = y, oy = y, v = dir*math.random(0, 2), img = math.random(1, 4), start = level.scroll.pos}
+   if level.scroll.v > 0 and math.random(0, 1) == 0 then
+     clouds[opening(clouds)] = {x = math.random(0, screen.h), y = 0, oy = -screen.h-48, v = (math.random(0, 1)-.5)*math.random(0, 2), img = math.random(1, 4), start = b_offset}
     else
-      clouds[opening(clouds)] = {x = math.random(0, screen.h), y = -48, oy = -screen.h-48, v = (math.random(0, 1)-.5)*math.random(0, 2), img = math.random(1, 4), start = level.scroll.pos}
+      local dir = (math.random(0, 1)-.5)*2
+      clouds[opening(clouds)] = {x = screen.w/2-(screen.w/2+96)*dir, y = 0, oy = math.random(0, screen.h), v = dir*math.random(0, 2), img = math.random(1, 4), start = b_offset}
     end
   end
 
   for i, v in pairs(clouds) do -- update clouds
     if freeze == false then
       v.x = v.x + dt * 12 * v.v
-      v.y = (level.scroll.pos-v.start)*50 + v.oy
+      v.y = (b_offset-v.start)*50 + v.oy
       if v.x < -128 or v.x > screen.w+128 or v.y > screen.h+48 then
         clouds[i] = nil
       end
@@ -64,14 +63,14 @@ window.draw = function()
 
   -- draw background
   for i = -math.ceil(screen.h/600/2), math.ceil(screen.h/600/2) do
-    love.graphics.draw(img.background, screen.ox, math.floor((b_offset/4) % 600) + i*600)
+    love.graphics.draw(img.background, screen.ox, math.floor((b_offset*25) % 600) + i*600)
   end
 
   -- draw cloud shadows
   love.graphics.setShader(shader.shadow)
   for i, v in pairs(clouds) do
     love.graphics.setColor(0, 127, 33)
-    love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x)+screen.ox, (level.scroll.pos-v.start)*25, 0, .2, .2, 128, 48)
+    love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x)+screen.ox, (v.y+screen.h)/2+screen.oy, 0, .2, .2, 128, 48)
   end
   love.graphics.setColor(255, 255, 255)
   love.graphics.setShader()
@@ -93,8 +92,8 @@ window.draw = function()
 
   -- draw borders
   for i = -math.ceil(screen.h/400/2), math.ceil(screen.h/400/2) do
-    love.graphics.draw(img.border, math.floor(screen.ox-600), math.floor(b_offset % 400) + i*400)
-    love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor((b_offset-200) % 400) + i*400, 0, -1, 1)
+    love.graphics.draw(img.border, math.floor(screen.ox-600), math.floor(b_offset*100 % 400) + i*400)
+    love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor((b_offset-2)*100 % 400) + i*400, 0, -1, 1)
   end
 
   hud.draw()

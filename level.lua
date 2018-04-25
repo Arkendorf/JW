@@ -50,7 +50,7 @@ level.update = function(dt)
     level.scroll.v = level.scroll.v + dt * 60 * 0.002
   end
   level.scroll.pos = level.scroll.pos + level.scroll.v
-  b_offset = b_offset + level.scroll.v * 100 -- background offset
+  b_offset = b_offset + level.scroll.v -- background offset
 
   level.scroll.v = level.scroll.v * 0.9
 
