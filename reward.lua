@@ -16,7 +16,7 @@ local item_pos = {600, 600, 600}
 local on = true
 
 local numerals = {{1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"}, {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"}, {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}}
-local tier_score = 4
+tier_score = 4
 
 rewardscreen.load = function()
 end
@@ -130,6 +130,7 @@ rewardscreen.draw = function()
     love.graphics.draw(img.cardborder, -62 + weaponscreen.target*92, 38)
 
     love.graphics.setCanvas(canvas.menu)
+    love.graphics.clear()
 
     -- draw info
     love.graphics.draw(img.infobox, info_pos, 248)
