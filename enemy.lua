@@ -7,6 +7,7 @@ enemy.load = function()
   enemy_info = {}
   enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane"}
   enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 2, stop = 0.9, r = 12, hp = 2, score = 2, img = "fly"}
+  enemy_info.bigcrosser = {ai = {1, 1, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 3, img = "bigplane"}
   ship_width = {}
   for i, v in pairs(shipimg) do
     ship_width[i] = v:getHeight()

@@ -81,7 +81,7 @@ level.start = function(dif, dist, reward)
   stats = {kills = 0, shots = 0, hits = 0, dmg = 0}
 
   -- set up level
-  level_score.max = dif
+  level_score.max = dif * 10
   level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
   -- reset stuff
