@@ -40,7 +40,7 @@ level.update = function(dt)
       elseif max > #tiers then
         max = #tiers
       end
-      for tier = 6, 1, -1 do -- find maximum tier that still fits difficulty score
+      for tier = max, 1, -1 do -- find maximum tier that still fits difficulty score
         if enemy_info[choice].score * tier <= price then
           enemy.new(choice, tier) -- spawn enemy
           break
