@@ -43,14 +43,15 @@ function love.update(dt)
 end
 
 function love.draw()
-  love.graphics.setCanvas(canvas.game)
-  love.graphics.clear()
   if freeze == true then
     draw(oldstate)
   end
   draw(state)
-  love.graphics.setCanvas()
   window.draw()
+
+  love.graphics.setCanvas(canvas.game, canvas.menu)
+  love.graphics.clear()
+  love.graphics.setCanvas()
 end
 
 function draw(state)

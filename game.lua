@@ -47,6 +47,7 @@ game.update = function(dt)
 end
 
 game.draw = function()
+  love.graphics.setCanvas(canvas.game)
   level.draw()
 
   drop.draw()
@@ -58,6 +59,7 @@ game.draw = function()
   enemy.draw()
 
   character.draw()
+  love.graphics.setCanvas()
 end
 
 opening = function(a) -- find available space in list 'a'

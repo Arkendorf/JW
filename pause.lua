@@ -71,7 +71,6 @@ pause.draw = function()
 
   love.graphics.setColor(255, 255, 255) -- reset color
   love.graphics.setCanvas(canvas.menu)
-  love.graphics.clear()
   love.graphics.draw(canvas.pause, 178, math.floor(pos))
   love.graphics.setCanvas()
 end
