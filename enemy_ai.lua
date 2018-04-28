@@ -19,6 +19,16 @@ ai.load[2] = function(i, v) -- "fly"
   v.info.dir = math.random(0, 1)*2-1
 end
 
+ai.load[3] = function(i, v) -- "siner"
+  -- set position and direction
+  v.info.dir = math.random(0, 1)*2-1
+  v.p.x = screen.w/2-screen.w/2*v.info.dir
+  v.info.t = 0
+  v.info.y = math.random(v.r, screen.h-v.r)
+
+  v.a.x = v.info.dir
+end
+
 ai.move = {}
 
 ai.move[1] = function(i, v, dt) -- "crosser"
@@ -40,6 +50,13 @@ ai.move[2] = function(i, v, dt) -- "fly"
 
   v.d = vector.scale(enemy_info[v.type].speed, v.d)
 end
+
+ai.move[3] = function(i, v, dt) -- "siner"
+  v.info.t = v.info.t + dt
+  v.d.x = v.info.dir * dt * 60 * enemy_info[v.type].speed
+  v.p.y = v.info.y + math.sin(v.info.t * 2) * 32
+end
+
 
 ai.attack = {}
 

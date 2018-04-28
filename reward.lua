@@ -93,6 +93,8 @@ rewardscreen.update = function(dt)
 end
 
 rewardscreen.draw = function()
+  love.graphics.setCanvas(canvas.menu)
+  
   level.draw_background()
 
   -- reward side

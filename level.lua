@@ -29,21 +29,23 @@ level.update = function(dt)
       local choices = {} -- list of enemies that can be added
       for i, v in pairs(enemy_info) do -- pick an enemy
         if v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
-          choices[#choices + 1] = i
+          choices[#choices + 1] = i -- add to list of options
         end
       end
-      local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
 
-      local max = math.floor(#map.path-1 / tier_score) -- find maximum enemy tier
-      if max < 1 then
-        max = 1
-      elseif max > #tiers then
-        max = #tiers
-      end
-      for tier = max, 1, -1 do -- find maximum tier that still fits difficulty score
-        if enemy_info[choice].score * tier <= price then
-          enemy.new(choice, tier) -- spawn enemy
-          break
+      if #choices > 0 then -- make sure an enemy can be spawned
+        local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
+        local max = math.floor(#map.path-1 / tier_score) -- find maximum enemy tier
+        if max < 1 then
+          max = 1
+        elseif max > #tiers then
+          max = #tiers
+        end
+        for tier = max, 1, -1 do -- find maximum tier that still fits difficulty score
+          if enemy_info[choice].score * tier <= price then
+            enemy.new(choice, tier) -- spawn enemy
+            break
+          end
         end
       end
     end
