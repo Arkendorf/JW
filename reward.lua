@@ -94,7 +94,7 @@ end
 
 rewardscreen.draw = function()
   love.graphics.setCanvas(canvas.menu)
-  
+
   level.draw_background()
 
   -- reward side
@@ -273,7 +273,7 @@ rewardscreen.create = function(type)
   if type < 3 then
     item = math.random(1, #item_info[type])
     if type == 1 then -- weapon tier
-      local max = math.floor(#map.path-1 / tier_score)
+      local max = math.floor((#map.path-1) / tier_score)
       if max < 1 then
         max = 1
       elseif max > #tiers then

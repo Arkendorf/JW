@@ -35,7 +35,7 @@ level.update = function(dt)
 
       if #choices > 0 then -- make sure an enemy can be spawned
         local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
-        local max = math.floor(#map.path-1 / tier_score) -- find maximum enemy tier
+        local max = math.floor((#map.path-1) / tier_score) -- find maximum enemy tier
         if max < 1 then
           max = 1
         elseif max > #tiers then
@@ -83,7 +83,7 @@ level.start = function(dif, dist, reward)
   stats = {kills = 0, shots = 0, hits = 0, dmg = 0}
 
   -- set up level
-  level_score.max = dif * 10
+  level_score.max = dif
   level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
   -- reset stuff
