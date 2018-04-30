@@ -174,8 +174,6 @@ map.draw = function()
 
   love.graphics.setCanvas(canvas.menu)
 
-  level.draw_background()
-
   -- map stuff
   love.graphics.draw(canvas.map, 64+map_pos.x, map_pos.y)
   love.graphics.draw(img.scrollback, map_pos.x, map_pos.y)

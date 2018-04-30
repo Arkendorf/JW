@@ -23,8 +23,12 @@ window.load = function()
   canvas.menu = love.graphics.newCanvas(screen.w, screen.h)
   canvas.window = love.graphics.newCanvas(w/screen.scale, h/screen.scale)
   canvas.clouds = love.graphics.newCanvas(screen.w, screen.h)
+  canvas.background = love.graphics.newCanvas(screen.w, screen.h)
 
   b_offset = 0
+
+  shader.shadow:send("x_offset", screen.ox)
+  shader.shadow:send("screen", {screen.w, screen.h})
 end
 
 window.update = function(dt)
@@ -51,6 +55,14 @@ window.update = function(dt)
 end
 
 window.draw = function()
+  love.graphics.setCanvas(canvas.background)
+  love.graphics.clear()
+
+  -- draw background
+  for i = -math.ceil(screen.h/600/2), math.ceil(screen.h/600/2) do
+    love.graphics.draw(img.background, 0, math.floor((b_offset*25) % 600) + i*600)
+  end
+
   love.graphics.setCanvas(canvas.clouds) -- seperate canvas for game shadow purposes
   love.graphics.clear()
 
@@ -59,22 +71,23 @@ window.draw = function()
     love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x), math.floor(v.y), 0, 1, 1, 128, 48)
   end
 
+  if state ~= "game" and oldstate ~= "game" then -- basic background if not game
+    love.graphics.setCanvas(canvas.game)
+    love.graphics.clear()
+    level.draw_background()
+  end
+
   love.graphics.setCanvas(canvas.window)
   love.graphics.clear()
 
-  -- draw background
-  for i = -math.ceil(screen.h/600/2), math.ceil(screen.h/600/2) do
-    love.graphics.draw(img.background, screen.ox, math.floor((b_offset*25) % 600) + i*600)
-  end
+  love.graphics.draw(canvas.background, screen.ox, screen.oy)
 
   -- draw cloud shadows
+  shader.shadow:send("background", canvas.background)
   love.graphics.setShader(shader.shadow)
   for i, v in pairs(clouds) do
-    love.graphics.setColor(0, 127, 33)
-    love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x)+screen.ox, (v.y+screen.h)/2+screen.oy, 0, .2, .2, 128, 48)
+    love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x)+screen.ox, math.floor((v.y+screen.h)/2)+screen.oy, 0, .2, .2, 128, 48)
   end
-  love.graphics.setColor(255, 255, 255)
-  love.graphics.setShader()
 
   -- draw clouds
   shader.cloud_shadow:send("game", canvas.game)

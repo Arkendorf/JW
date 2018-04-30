@@ -12,7 +12,11 @@ end
 
 hud.draw = function()
   love.graphics.draw(img.board, hud_pos, 4)
-  love.graphics.print(hud.num_to_str(char.hp), hud_pos+19, 11)
+  if char.hp > 0 then
+    love.graphics.print(hud.num_to_str(char.hp), hud_pos+19, 11)
+  else
+    love.graphics.print("000", hud_pos+19, 11)
+  end
   love.graphics.print(hud.num_to_str(char.ammo), hud_pos+65, 11)
   love.graphics.print(hud.num_to_str(money), hud_pos+111, 11)
   if state == "game" or state == "pause" or state == "over" then

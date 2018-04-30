@@ -31,6 +31,7 @@ pause.update = function(dt)
   if on == false and math.floor(pos) <= -298 then
     if button == 1 then
       state = oldstate
+      oldstate = ""
     elseif button == 2 then
       state = "main"
       mainmenu.start()

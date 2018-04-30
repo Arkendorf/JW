@@ -83,8 +83,6 @@ mainmenu.draw = function()
   love.graphics.setColor(255, 255, 255) -- reset color
   love.graphics.setCanvas(canvas.menu)
 
-  level.draw_background()
-
   love.graphics.draw(canvas.mainmenu, 178, math.floor(pos))
 
   love.graphics.setCanvas()

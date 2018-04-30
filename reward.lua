@@ -95,8 +95,6 @@ end
 rewardscreen.draw = function()
   love.graphics.setCanvas(canvas.menu)
 
-  level.draw_background()
-
   -- reward side
   if reward_type ~= "none" then
     love.graphics.setColor(255, 255, 255)

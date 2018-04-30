@@ -1,5 +1,7 @@
 local character = {}
 
+local shader = require "shader"
+
 character.load = function()
   char = {p = {x = 200, y = 300}, d = {x = 0, y = -1}, a = {x = 0, y = -1}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 32, frame = 1, trail = 0}
 char_info = {speed = 1, stop = .8, inv_time = 1, hp_max = 3, ammo_max = 32, weapons = {{type = 1, tier = 1}, {type = 0, tier = 1}}}
@@ -101,15 +103,14 @@ end
 
 character.draw = function()
   -- flash if invincibile
-  if char.inv > 0 then
-    love.graphics.setColor(255, 255, 255, 255*math.floor(math.sin(char.inv*16)+0.5))
+  if char.inv > 0 and math.floor(math.sin(char.inv*8)+0.5) == 0 then
+    love.graphics.setShader(shader.fill)
   end
-
   -- draw char
   love.graphics.draw(shipimg.char, shipquad.char[math.floor(char.frame)], math.floor(char.p.x), math.floor(char.p.y), math.atan2(char.a.y, char.a.x), 1, 1, 16, 16)
 
-  -- reset color
-  love.graphics.setColor(255, 255, 255)
+  -- reset shader
+  love.graphics.setShader()
 end
 
 character.max_speed = function()
