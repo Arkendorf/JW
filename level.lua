@@ -35,7 +35,7 @@ level.update = function(dt)
 
       if #choices > 0 then -- make sure an enemy can be spawned
         local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
-        local max = math.floor((#map.path-1) / tier_score) -- find maximum enemy tier
+        local max = 1+math.floor((#map.path-1) / tier_score) -- find maximum enemy tier
         if max < 1 then
           max = 1
         elseif max > #tiers then
