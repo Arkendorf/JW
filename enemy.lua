@@ -37,6 +37,13 @@ enemy.update = function(dt)
         end
       end
 
+      local num = math.ceil(ship_width[enemy_info[v.type].img]/16)/2
+      for h = 1-num, num do
+        for w = 1-num, num do
+          particle.new("explosion", {x = v.p.x+w*16+math.random(-800, 800)/100, y = v.p.y+h*16+math.random(-800, 800)/100}, {x = 0, y = 0}, {x = 0, y = 0}, {255, 100, 0})
+        end
+      end
+
       stats.kills = stats.kills + 1 -- increase 'kills' stat
       enemies[i] = nil
     end
