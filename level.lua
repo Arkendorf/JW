@@ -58,6 +58,9 @@ level.update = function(dt)
     end
     clear = false
   elseif clear == false then
+    for i, v in pairs(enemies) do
+      enemy.explosion(v)
+    end
     level.clear()
   end
 
@@ -89,11 +92,12 @@ level.start = function(dif, dist, reward)
   stats = {kills = 0, shots = 0, hits = 0, dmg = 0}
 
   -- set up level
-  level_score.max = dif
+  level_score.max = dif * 10
   level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
   -- reset stuff
   level.clear()
+  particles = {}
 
   -- reset seed
   math.randomseed(os.time())
@@ -112,7 +116,6 @@ end
 level.clear = function()
   enemies = {}
   bullets = {}
-  particles = {}
   drops = {}
   clear = true
 end
