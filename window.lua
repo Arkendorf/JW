@@ -111,6 +111,9 @@ window.draw = function()
     love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor((b_offset-2)*100 % 400) + i*400, 0, -1, 1)
   end
 
+  -- draw id
+  love.graphics.print("Flioneer Critique Release", 34+screen.ox, screen.h-font:getHeight()-2+screen.oy)
+
   hud.draw()
 
   love.graphics.setCanvas()
