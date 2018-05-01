@@ -6,6 +6,8 @@ local airship = {frame = 1}
 local clear = false
 
 local cut_dist = 3
+local spawn_delay = 0
+local spawn_time = 4
 
 level.scroll = {goal = 0, pos = 0, v = 0}
 
@@ -15,41 +17,45 @@ end
 level.update = function(dt)
   -- recalculate level difficulty score
   if level.scroll.pos > 0 and level.scroll.pos < level.scroll.goal then -- no enemies in intro/outro
-    level_score.current = 0
-    local enemy_num = 0
-    for i, v in pairs(enemies) do
-      level_score.current = level_score.current + enemy_info[v.type].score * v.tier
-      enemy_num = enemy_num + 1
-    end
-    level_score.current = level_score.current * enemy_num -- the more enemies, the more difficult
-
-    -- add new enemy if necessary
-    if level_score.current < level_score.max then
-      local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
-      local choices = {} -- list of enemies that can be added
-      for i, v in pairs(enemy_info) do -- pick an enemy
-        if v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
-          choices[#choices + 1] = i -- add to list of options
-        end
+    if spawn_delay <= 0 then -- pause between spawns
+      level_score.current = 0
+      local enemy_num = 0
+      for i, v in pairs(enemies) do
+        level_score.current = level_score.current + enemy_info[v.type].score * v.tier
+        enemy_num = enemy_num + 1
       end
+      level_score.current = level_score.current * enemy_num -- the more enemies, the more difficult
 
-      if #choices > 0 then -- make sure an enemy can be spawned
-        local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
-        local max = math.floor((#map.path-1) / tier_score) -- find maximum enemy tier
-        if max < 1 then
-          max = 1
-        elseif max > #tiers then
-          max = #tiers
+      -- add new enemy if necessary
+      if level_score.current < level_score.max then
+        local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
+        local choices = {} -- list of enemies that can be added
+        for i, v in pairs(enemy_info) do -- pick an enemy
+          if v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
+            choices[#choices + 1] = i -- add to list of options
+          end
         end
-        for tier = max, 1, -1 do -- find maximum tier that still fits difficulty score
-          if enemy_info[choice].score * tier <= price then
-            enemy.new(choice, tier) -- spawn enemy
-            break
+
+        if #choices > 0 then -- make sure an enemy can be spawned
+          local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
+          local max = math.floor((#map.path-1) / tier_score) -- find maximum enemy tier
+          if max < 1 then
+            max = 1
+          elseif max > #tiers then
+            max = #tiers
+          end
+          for tier = max, 1, -1 do -- find maximum tier that still fits difficulty score
+            if enemy_info[choice].score * tier <= price then
+              enemy.new(choice, tier) -- spawn enemy
+              spawn_delay = spawn_time
+              break
+            end
           end
         end
       end
+    else
+      spawn_delay = spawn_delay - dt
     end
-
     clear = false
   elseif clear == false then
     level.clear()

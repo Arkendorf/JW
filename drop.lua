@@ -15,22 +15,27 @@ drop.update = function(dt)
 
     -- increase variable if picked up
     if collision.overlap(char, v, 4) then
+      local pickup = false
       if v.type == 1 and char.hp < char_info.hp_max then -- hp
         if char.hp+v.num < char_info.hp_max then -- if new quantity is under max, set quantity to new quantity
           char.hp = char.hp + v.num
         else -- if new quantity is over max, set it to max
           char.hp = char_info.hp_max
         end
-        drops[i] = nil -- remove drop
+        pickup = true
       elseif v.type == 2 and char.ammo < char_info.ammo_max then -- ammo
         if char.ammo+v.num < char_info.ammo_max then -- if new quantity is under max, set quantity to new quantity
           char.ammo = char.ammo + v.num
         else -- if new quantity is over max, set it to max
           char.ammo = char_info.ammo_max
         end
-        drops[i] = nil -- remove drop
+        pickup = true
       elseif v.type == 3 then -- money
         money = money + v.num
+        pickup = true
+      end
+      if pickup then
+        particle.new("pop", v.p, {x = 0, y = 0}, {x = 0, y = 0})
         drops[i] = nil -- remove drop
       end
     end

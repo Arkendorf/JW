@@ -9,6 +9,7 @@ particle.load = function()
   particle_info.gas = {img = "gas", ai = {1, 1}, speed = 12}
   particle_info.smoke = {img = "smoke", ai = {1, 1}, speed = 12}
   particle_info.spark = {img = "spark", ai = {2, 1}, speed = 16}
+  particle_info.pop = {img = "pop", ai = {1, 1}, speed = 16}
 end
 
 particle.update = function(dt)
