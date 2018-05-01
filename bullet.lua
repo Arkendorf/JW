@@ -6,12 +6,13 @@ bullet.load = function()
   bullets = {}
   bullet_info = {}
   bullet_info.basic = {ai = {1, 1}, speed = 6, dmg = 1, r = 4, img = "bullet"}
-  bullet_info.gas = {ai = {2, 2}, speed = 1, dmg = 1, r = 4, img = "gas"}
+  bullet_info.weak = {ai = {1, 1}, speed = 4, dmg = .5, r = 3, img = "bullet"}
+  bullet_info.beef = {ai = {1, 1}, speed = 8, dmg = 2, r = 5, img = "bullet"}
 
   weapon_info = {}
   weapon_info[1] = {bullet = "basic", ammo = 1, delay = .2}
-  weapon_info[2] = {bullet = "basic", ammo = 1, delay = .2}
-  weapon_info[3] = {bullet = "gas", ammo = 1, delay = .1}
+  weapon_info[2] = {bullet = "weak", ammo = 1, delay = .1}
+  weapon_info[3] = {bullet = "beef", ammo = 1, delay = .4}
 end
 
 bullet.update = function(dt)
