@@ -82,6 +82,14 @@ ai.move[4] = function(i, v, dt) -- "follower"
   v.d = vector.scale(enemy_info[v.type].speed, v.d)
 end
 
+ai.move[5] = function(i, v, dt) -- "back and forth"
+  if v.p.x < screen.w*.1 and v.info.dir == -1 then
+    v.info.dir = 1
+  elseif v.p.x > screen.w*.9 and v.info.dir == 1 then
+    v.info.dir = -1
+  end
+  v.d.x = v.d.x + v.info.dir * dt * 6 * enemy_info[v.type].speed
+end
 
 ai.attack = {}
 
@@ -94,6 +102,10 @@ ai.attack[1] = function(i, v, dt) -- fire ASAP
     -- decrease wait till next bullet
     v.atk = v.atk - dt
   end
+end
+
+ai.attack[2] = function(i, v, dt) -- don't attack
+  v.atk = 1
 end
 
 ai.bullet = {}
@@ -113,6 +125,20 @@ ai.bullet[3] = function(i, v, dt) -- "double forward"
   bullet_d[2] = {x = 8*math.cos(angle-math.pi/2), y = 8*math.sin(angle-math.pi/2)}
   for j, w in ipairs(bullet_d) do
     bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier) -- direction is combo of char's direction and movement
+  end
+end
+
+ai.bullet[4] = function(i, v, dt) -- "side cannons"
+  local angle = math.atan2(v.a.y, v.p.y)
+  local bullet_a = {}
+  bullet_a[1] = {x = math.cos(angle+math.pi/2), y = math.sin(angle+math.pi/2)}
+  bullet_a[2] = {x = math.cos(angle-math.pi/2), y = math.sin(angle-math.pi/2)}
+  local bullet_d = {}
+  bullet_d[1] = {x = v.a.x*6, y = v.a.y*6}
+  bullet_d[2] = {x = v.a.x*-6, y = v.a.y*-6}
+  for j, w in ipairs(bullet_d) do
+    bullet.new("basic", vector.sum(v.p, w), bullet_a[1], 2, v.tier)
+    bullet.new("basic", vector.sum(v.p, w), bullet_a[2], 2, v.tier)
   end
 end
 

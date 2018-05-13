@@ -27,11 +27,15 @@ hud.draw = function()
 end
 
 hud.num_to_str = function(num)
-  local str = tostring(num)
-  for i = 1, 3-string.len(str) do
-    str = "0"..str
+  if num > 999 then
+    return "999"
+  else
+    local str = tostring(num)
+    for i = 1, 3-string.len(str) do
+      str = "0"..str
+    end
+    return str
   end
-  return str
 end
 
 return hud
