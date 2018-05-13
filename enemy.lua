@@ -6,8 +6,9 @@ enemy.load = function()
   enemies = {}
   enemy_info = {}
   enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane"}
-  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 2, stop = 0.9, r = 12, hp = 2, score = 2, img = "fly"}
-  enemy_info.bigcrosser = {ai = {3, 3, 1, 1}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 3, img = "bigplane"}
+  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "fly"}
+  enemy_info.bigcrosser = {ai = {3, 3, 1, 3}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 3, img = "bigplane"}
+  enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 2, img = "glider"}
   ship_width = {}
   for i, v in pairs(shipimg) do
     ship_width[i] = v:getHeight()
@@ -88,7 +89,7 @@ enemy.explosion = function(v)
   local num = math.ceil(ship_width[enemy_info[v.type].img]/16)/2
   for h = 1-num, num do
     for w = 1-num, num do
-      particle.new("explosion", {x = v.p.x+w*16+math.random(-800, 800)/100, y = v.p.y+h*16+math.random(-800, 800)/100}, {x = 0, y = 0}, {x = 0, y = 0}, {255, 100, 0})
+      particle.new("explosion", {x = v.p.x+w*16+math.random(-800, 800)/100, y = v.p.y+h*16+math.random(-800, 800)/100}, {x = 0, y = 0}, {x = math.random(-1, 1), y = math.random(-1, 1)})
     end
   end
 end

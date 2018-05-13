@@ -277,7 +277,7 @@ rewardscreen.create = function(type)
       elseif max > #tiers then
         max = #tiers
       end
-      amount = math.random(1, max)
+      amount = max
     end
   elseif type == 3 then
     amount = math.random(1, 3)
