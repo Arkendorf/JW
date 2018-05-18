@@ -26,12 +26,12 @@ shader.fill = love.graphics.newShader[[
 
 shader.shadow = love.graphics.newShader[[
     extern Image background;
-    extern number x_offset;
+    extern vec2 offset;
     extern vec2 screen;
     vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
       vec4 pixel = Texel(texture, texture_coords);
       if(pixel.a == 1.0){
-        vec4 back_pixel = Texel(background, vec2((screen_coords.x-x_offset)/screen.x, screen_coords.y/screen.y));
+        vec4 back_pixel = Texel(background, vec2((screen_coords.x-offset.x)/screen.x, (screen_coords.y-offset.y)/screen.y));
         if(back_pixel.g > back_pixel.b && back_pixel.g > 0.7){
           return vec4(62.0/255.0, 153.0/255.0, 29.0/255.0, 1.0);
         }

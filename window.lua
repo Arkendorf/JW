@@ -17,7 +17,6 @@ window.load = function()
   screen.ox = math.floor((w/screen.scale - screen.w) / 2)
   screen.oy = math.floor((h/screen.scale - screen.h) / 2)
   love.window.setFullscreen(true)
-  -- love.window.setMode(w, h-12)
 
   canvas.game = love.graphics.newCanvas(screen.w, screen.h)
   canvas.menu = love.graphics.newCanvas(screen.w, screen.h)
@@ -27,7 +26,7 @@ window.load = function()
 
   b_offset = 0
 
-  shader.shadow:send("x_offset", screen.ox)
+  shader.shadow:send("offset", {screen.ox, screen.oy})
   shader.shadow:send("screen", {screen.w, screen.h})
 end
 
@@ -110,6 +109,12 @@ window.draw = function()
     love.graphics.draw(img.border, math.floor(screen.ox-600), math.floor(b_offset*100 % 400) + i*400)
     love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor((b_offset-2)*100 % 400) + i*400, 0, -1, 1)
   end
+
+  -- draw horizontal borders
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.rectangle("fill", 0, 0, screen.w, screen.oy)
+  love.graphics.rectangle("fill", 0, screen.h+screen.oy, screen.w, screen.oy)
+  love.graphics.setColor(255, 255, 255)
 
   -- draw id
   love.graphics.print("Flioneer Pre-Alpha Release", 34+screen.ox, screen.h-font:getHeight()-2+screen.oy)

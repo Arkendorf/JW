@@ -31,7 +31,7 @@ level.update = function(dt)
         local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
         local choices = {} -- list of enemies that can be added
         for i, v in pairs(enemy_info) do -- pick an enemy
-          if v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
+          if v.score <= level_score.each and v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
             choices[#choices + 1] = i -- add to list of options
           end
         end
@@ -93,6 +93,7 @@ level.start = function(dif, dist, reward)
 
   -- set up level
   level_score.max = dif * 10
+  level_score.each = 2+math.floor((#map.path-1) / 2)
   level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
   -- reset stuff
