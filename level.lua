@@ -9,6 +9,8 @@ local cut_dist = 3
 local spawn_delay = 0
 local spawn_time = 4
 
+local bossfight = {active = false, boss = 0}
+
 level.scroll = {goal = 0, pos = 0, v = 0}
 
 level.load = function()
@@ -56,18 +58,21 @@ level.update = function(dt)
     else
       spawn_delay = spawn_delay - dt
     end
-    clear = false
-  elseif clear == false then
-    for i, v in pairs(enemies) do
-      enemy.explosion(v)
-    end
-    level.clear()
   end
 
   -- do scrolling thing
   if level.scroll.pos >= level.scroll.goal+cut_dist then
     state = "reward"
     reward.start(level_reward, stats)
+  elseif level.scroll.pos >= level.scroll.goal and clear == false then
+    for i, v in pairs(enemies) do
+      enemy.explosion(v)
+    end
+    level.clear()
+    if bossfight.active == false then
+      bossfight.active = true
+      enemy.new(1, 1, true)
+    end
   else
     level.scroll.v = level.scroll.v + dt * 60 * 0.002
   end
@@ -99,6 +104,8 @@ level.start = function(dif, dist, reward)
   -- reset stuff
   level.clear()
   particles = {}
+
+  clear = false
 
   -- reset seed
   math.randomseed(os.time())

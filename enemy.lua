@@ -11,6 +11,11 @@ enemy.load = function()
   enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider"}
   enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout"}
   enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 24, hp = 4, score = 5, img = "galleon"}
+
+  boss_info = {}
+  boss_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane"}
+
+
   ship_width = {}
   for i, v in pairs(shipimg) do
     ship_width[i] = v:getHeight()
@@ -79,9 +84,14 @@ enemy.draw = function()
   end
 end
 
-enemy.new = function(type, tier) -- add enemy to open space in list
+enemy.new = function(type, tier, boss) -- add enemy to open space in list
   local spot = opening(enemies)
-  local info = enemy_info[type]
+  local info = nil
+  if boss then
+    info = boss_info[type]
+  else
+    info = enemy_info[type]
+  end
   enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp*tier, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])

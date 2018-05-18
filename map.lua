@@ -32,7 +32,7 @@ end
 map.new = function()
   map.seed = os.time()
   math.randomseed(map.seed)
-  
+
   money = 0
 
   map.path = {{x = 1, y = math.random(1, 4)}}
