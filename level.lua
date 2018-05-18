@@ -9,7 +9,7 @@ local cut_dist = 3
 local spawn_delay = 0
 local spawn_time = 4
 
-local bossfight = {active = false, boss = 0}
+bossfight = {active = false, boss = 0}
 
 level.scroll = {goal = 0, pos = 0, v = 0}
 
@@ -69,11 +69,18 @@ level.update = function(dt)
       enemy.explosion(v)
     end
     level.clear()
-    if bossfight.active == false then
+    if math.random(1, 4) == 1 then
       bossfight.active = true
-      enemy.new(1, 1, true)
+      local boss_options = {}
+      for i, v in pairs(enemy_info) do
+        if v.boss then
+          boss_options[#boss_options+1] = i
+        end
+      end
+      bossfight.boss = boss_options[math.random(1, #boss_options)]
+      enemy.new(bossfight.boss, 1+math.floor((#map.path-1)/tier_score))
     end
-  else
+  elseif not bossfight.active then
     level.scroll.v = level.scroll.v + dt * 60 * 0.002
   end
   level.scroll.pos = level.scroll.pos + level.scroll.v
@@ -106,6 +113,7 @@ level.start = function(dif, dist, reward)
   particles = {}
 
   clear = false
+  bossfight.active = false
 
   -- reset seed
   math.randomseed(os.time())
@@ -117,7 +125,7 @@ level.draw = function()
   --  ending ship
   level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos-level.scroll.goal-cut_dist)*100)
 
-  -- starting shio
+  -- starting ship
   level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos+cut_dist)*100)
 end
 

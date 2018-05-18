@@ -11,9 +11,7 @@ enemy.load = function()
   enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider"}
   enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout"}
   enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 24, hp = 4, score = 5, img = "galleon"}
-
-  boss_info = {}
-  boss_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane"}
+  enemy_info.boss_crosser = {boss = true, ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane"}
 
 
   ship_width = {}
@@ -34,26 +32,28 @@ enemy.update = function(dt)
     -- delete enemy if it has no health
     if v.hp <= 0 then
       -- drop
-      for j = 1, math.random(0, enemy_info[v.type].score) do
-        local chance = math.random(1, 100)
-        if chance <= 10 then
-          drop.new(2, v.p, math.random(4, 8)) -- ammo
-        elseif chance <= 20 then
-          drop.new(1, v.p, 1) -- hp
-        else
-          drop.new(3, v.p, 1) -- money
+      if not enemy_info[v.type].boss then -- bosses dont drop loot
+        for j = 1, math.random(0, enemy_info[v.type].score) do
+          local chance = math.random(1, 100)
+          if chance <= 10 then
+            drop.new(2, v.p, math.random(4, 8)) -- ammo
+          elseif chance <= 20 then
+            drop.new(1, v.p, 1) -- hp
+          else
+            drop.new(3, v.p, 1) -- money
+          end
         end
       end
 
       enemy.explosion(v)
 
       stats.kills = stats.kills + 1 -- increase 'kills' stat
-      enemies[i] = nil
+      enemy.kill(i, v)
     end
 
     -- delete enemy if off screen
     if v.p.x+v.r < 0 or v.p.x-v.r > screen.w or v.p.y+v.r < 0 or v.p.y-v.r > screen.h then
-      enemies[i] = nil
+      enemy.kill(i, v)
     end
 
     ai.attack[enemy_info[v.type].ai[3]](i, v, dt) -- call attack AI
@@ -84,14 +84,9 @@ enemy.draw = function()
   end
 end
 
-enemy.new = function(type, tier, boss) -- add enemy to open space in list
+enemy.new = function(type, tier) -- add enemy to open space in list
   local spot = opening(enemies)
-  local info = nil
-  if boss then
-    info = boss_info[type]
-  else
-    info = enemy_info[type]
-  end
+  local info = enemy_info[type]
   enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp*tier, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])
@@ -113,6 +108,13 @@ enemy.dmg_particle = function(p, d, a, hp, max)
   end
   if hp < max/2 then
     particle.new("spark", p, vector.scale(-12+math.random(-4, 4), a), vector.scale(-1, a)) -- character trail
+  end
+end
+
+enemy.kill = function(i, v)
+  enemies[i] = nil
+  if enemy_info[v.type].boss and bossfight.active then
+    bossfight.active = false
   end
 end
 

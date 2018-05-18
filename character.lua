@@ -9,7 +9,7 @@ end
 
 character.update = function(dt)
   -- movement
-  if level.scroll.pos < level.scroll.goal then -- no movement in intro/outro
+  if level.scroll.pos < level.scroll.goal or bossfight.active then -- no movement in intro/outro
     if love.keyboard.isDown("right") then
       char.d.x = char.d.x + char_info.speed
     end
