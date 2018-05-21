@@ -48,7 +48,7 @@ level.update = function(dt)
           end
           for tier = max, 1, -1 do -- find maximum tier that still fits difficulty score
             if enemy_info[choice].score * tier <= price then
-              enemy.new(choice, tier) -- spawn enemy
+              enemy.new(choice, math.random(1, tier)) -- spawn enemy
               spawn_delay = spawn_time
               break
             end
