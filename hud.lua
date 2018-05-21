@@ -4,9 +4,9 @@ local hud_pos = -184
 
 hud.update = function(dt)
   if state ~= "pause" then
-    hud_pos = graphics.zoom(state ~= "main", hud_pos, -184, 4, dt * 12)
+    hud_pos = graphics.zoom(state ~= "main", hud_pos, -184, 4+screen.ox, dt * 12)
   else
-    hud_pos = graphics.zoom(oldstate ~= "main", hud_pos, -184, 4, dt * 12)
+    hud_pos = graphics.zoom(oldstate ~= "main", hud_pos, -184, 4+screen.ox, dt * 12)
   end
 end
 
@@ -24,11 +24,17 @@ hud.draw = function()
   else
     love.graphics.print("000", hud_pos+157, 11)
   end
+
+  if bossfight.active and bossfight.pause <= 0 then
+    hud.healthbar(bossfight.boss.hp, enemy_info[bossfight.boss.type].hp_max)
+  end
 end
 
 hud.num_to_str = function(num)
   if num > 999 then
     return "999"
+  elseif num < 0 then
+    return "000"
   else
     local str = tostring(num)
     for i = 1, 3-string.len(str) do
@@ -36,6 +42,18 @@ hud.num_to_str = function(num)
     end
     return str
   end
+end
+
+hud.healthbar = function(hp, hp_max)
+  local cell_width = math.floor(200/hp_max)
+  love.graphics.setColor(palette.red)
+  love.graphics.rectangle("fill", screen.ox+200, screen.oy+screen.h-36, 200, 32)
+  love.graphics.setColor(125, 125, 125)
+  love.graphics.rectangle("fill", screen.ox+200, screen.oy+screen.h-36, cell_width*(hp_max-hp), 32)
+  for i = 1, hp do
+    love.graphics.rectangle("fill", screen.ox+200+cell_width*i, screen.oy+screen.h-36, 2, 32)
+  end
+  love.graphics.setColor(255, 255, 255)
 end
 
 return hud

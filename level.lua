@@ -9,7 +9,7 @@ local cut_dist = 3
 local spawn_delay = 0
 local spawn_time = 4
 
-bossfight = {active = false, boss = 0}
+bossfight = {active = false, boss = 0, pause = 0}
 
 level.scroll = {goal = 0, pos = 0, v = 0}
 
@@ -64,21 +64,25 @@ level.update = function(dt)
   if level.scroll.pos >= level.scroll.goal+cut_dist then
     state = "reward"
     reward.start(level_reward, stats)
-  elseif level.scroll.pos >= level.scroll.goal and clear == false then
-    for i, v in pairs(enemies) do
-      enemy.explosion(v)
-    end
-    level.clear()
-    if math.random(1, 4) == 1 then
-      bossfight.active = true
+  elseif bossfight.pause > 0 then
+    bossfight.pause = bossfight.pause - dt
+    if bossfight.pause <= 0 and bossfight.active == true then
       local boss_options = {}
       for i, v in pairs(enemy_info) do
         if v.boss then
           boss_options[#boss_options+1] = i
         end
       end
-      bossfight.boss = boss_options[math.random(1, #boss_options)]
-      enemy.new(bossfight.boss, 1+math.floor((#map.path-1)/tier_score))
+      bossfight.boss = enemy.new(boss_options[math.random(1, #boss_options)], 1+math.floor((#map.path-1)/tier_score))
+    end
+  elseif level.scroll.pos >= level.scroll.goal and clear == false then
+    for i, v in pairs(enemies) do
+      enemy.explosion(v)
+    end
+    level.clear()
+    if true then
+      bossfight.pause = 2
+      bossfight.active = true
     end
   elseif not bossfight.active then
     level.scroll.v = level.scroll.v + dt * 60 * 0.002
@@ -123,7 +127,9 @@ end
 
 level.draw = function()
   --  ending ship
-  level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos-level.scroll.goal-cut_dist)*100)
+  if not bossfight.active and bossfight.pause <= 0 then
+    level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos-level.scroll.goal-cut_dist)*100)
+  end
 
   -- starting ship
   level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos+cut_dist)*100)

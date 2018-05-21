@@ -8,9 +8,7 @@ drop.update = function(dt)
   for i, v in pairs(drops) do
     v.p = vector.sum(v.p, vector.scale(8 * dt * 60, v.d))
     v.d = vector.scale(0.8, v.d)
-    if not bossfight.active then
-      v.p.y = v.p.y + dt * 18
-    end
+    v.p.y = v.p.y + dt * 18
     if v.p.y > screen.h+16 then
       drops[i] = nil -- remove drop
     end

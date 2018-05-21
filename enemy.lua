@@ -11,7 +11,7 @@ enemy.load = function()
   enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider"}
   enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout"}
   enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 24, hp = 4, score = 5, img = "galleon"}
-  enemy_info.boss_crosser = {boss = true, ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane"}
+  enemy_info.boss_crosser = {boss = true, ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 6, score = 2, img = "biplane", name = "El Gorious"}
 
 
   ship_width = {}
@@ -32,16 +32,14 @@ enemy.update = function(dt)
     -- delete enemy if it has no health
     if v.hp <= 0 then
       -- drop
-      if not enemy_info[v.type].boss then -- bosses dont drop loot
-        for j = 1, math.random(0, enemy_info[v.type].score) do
-          local chance = math.random(1, 100)
-          if chance <= 10 then
-            drop.new(2, v.p, math.random(4, 8)) -- ammo
-          elseif chance <= 20 then
-            drop.new(1, v.p, 1) -- hp
-          else
-            drop.new(3, v.p, 1) -- money
-          end
+      for j = 1, math.random(0, enemy_info[v.type].score) do
+        local chance = math.random(1, 100)
+        if chance <= 10 then
+          drop.new(2, v.p, math.random(4, 8)) -- ammo
+        elseif chance <= 20 then
+          drop.new(1, v.p, 1) -- hp
+        else
+          drop.new(3, v.p, 1) -- money
         end
       end
 
@@ -90,6 +88,7 @@ enemy.new = function(type, tier) -- add enemy to open space in list
   enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp*tier, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])
+  return enemies[spot]
 end
 
 enemy.explosion = function(v)
@@ -114,6 +113,7 @@ end
 enemy.kill = function(i, v)
   enemies[i] = nil
   if enemy_info[v.type].boss and bossfight.active then
+    bossfight.pause = 2
     bossfight.active = false
   end
 end

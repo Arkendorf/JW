@@ -258,9 +258,10 @@ map.get_node_difficulty_text = function(x, y)
 end
 
 map.get_node_distance  = function(x1, y1, x2, y2)
-  x1, y1 = map.get_node_coords(x1, y1)
-  x2, y2 = map.get_node_coords(x2, y2)
-  return math.floor(math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)))
+  -- x1, y1 = map.get_node_coords(x1, y1)
+  -- x2, y2 = map.get_node_coords(x2, y2)
+  -- return math.floor(math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)))
+  return 1
 end
 
 map.find_options = function()
