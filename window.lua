@@ -76,6 +76,9 @@ window.draw = function()
     level.draw_background()
   end
 
+  love.graphics.setCanvas(canvas.menu)
+  hud.draw()
+
   love.graphics.setCanvas(canvas.window)
   love.graphics.clear()
 
@@ -100,9 +103,8 @@ window.draw = function()
   love.graphics.draw(canvas.game, screen.ox, screen.oy)
 
   -- draw menus
-  if state ~= "game" then
-    love.graphics.draw(canvas.menu, screen.ox, screen.oy)
-  end
+  love.graphics.draw(canvas.menu, screen.ox, screen.oy)
+
 
   -- draw verticle borders
   for i = -math.ceil(screen.h/400/2), math.ceil(screen.h/400/2) do
@@ -118,8 +120,6 @@ window.draw = function()
 
   -- draw id
   love.graphics.print("Flioneer Pre-Alpha Release", 34+screen.ox, screen.h-font:getHeight()-2+screen.oy)
-
-  hud.draw()
 
   love.graphics.setCanvas()
 

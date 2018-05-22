@@ -5,11 +5,12 @@ reward = require "reward"
 mainmenu = require "mainmenu"
 pause = require "pause"
 over = require "over"
-local window = require "window"
+window = require "window"
 
 function love.load()
   graphics.load()
   window.load()
+  level.load()
 
   map.load()
   game.load()
@@ -22,7 +23,7 @@ function love.load()
   oldstate = "main"
   freeze = false
 
-  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}}
+  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}, brown = {102, 70, 24}}
 end
 
 function love.update(dt)

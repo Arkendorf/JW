@@ -9,11 +9,12 @@ local cut_dist = 3
 local spawn_delay = 0
 local spawn_time = 4
 
-bossfight = {active = false, boss = 0, pause = 0}
+bossfight = {active = false, boss = 0, pause = 0, bar_w = 200, c_bar_w = 0, hud_pos = 0}
 
 level.scroll = {goal = 0, pos = 0, v = 0}
 
 level.load = function()
+  canvas.healthbar = love.graphics.newCanvas(200, 32)
 end
 
 level.update = function(dt)
@@ -33,7 +34,7 @@ level.update = function(dt)
         local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
         local choices = {} -- list of enemies that can be added
         for i, v in pairs(enemy_info) do -- pick an enemy
-          if v.score <= level_score.each and v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
+          if not v.boss and v.score <= level_score.each and v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
             choices[#choices + 1] = i -- add to list of options
           end
         end
