@@ -70,7 +70,7 @@ window.draw = function()
     love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x), math.floor(v.y), 0, 1, 1, 128, 48)
   end
 
-  if state ~= "game" and oldstate ~= "game" then -- basic background if not game
+  if state ~= "game" and not (state == "pause" and oldstate == "game") then -- basic background if not game
     love.graphics.setCanvas(canvas.game)
     love.graphics.clear()
     level.draw_background()
@@ -119,7 +119,7 @@ window.draw = function()
   love.graphics.setColor(255, 255, 255)
 
   -- draw id
-  love.graphics.print("Flioneer Pre-Alpha Release", 34+screen.ox, screen.h-font:getHeight()-2+screen.oy)
+  love.graphics.print("Flioneer Pre Alpha Release", 34+screen.ox, screen.h-font:getHeight()-2+screen.oy)
 
   love.graphics.setCanvas()
 

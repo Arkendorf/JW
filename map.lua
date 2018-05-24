@@ -48,13 +48,6 @@ map.update = function(dt)
     x_pos = x_pos - 1
   end
 
-  -- limit target y pos
-  if target.y < 1 then
-    target.y = 1
-  elseif target.y > grid.h then
-    target.y = grid.h
-  end
-
   -- make the nice scrolling effect
   scroll = math.floor(scroll + (x_pos * grid.t - scroll) * dt * 12)
 
@@ -195,13 +188,12 @@ map.keypressed = function(key)
   if on == true then
     if key == "right" then
       target.x = target.x + 1
-    elseif key == "left" then
+    elseif key == "left" and target.x > 1 then
       target.x = target.x - 1
-    elseif key == "down" then
+    elseif key == "down" and target.y < grid.h then
       target.y = target.y + 1
-    elseif key == "up" then
+    elseif key == "up" and target.y > 1 then
       target.y = target.y - 1
-
     elseif key == "x" then
       target.x = map.path[#map.path].x
       target.y = map.path[#map.path].y

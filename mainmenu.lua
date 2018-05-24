@@ -142,6 +142,7 @@ end
 mainmenu.game_over = function()
   love.filesystem.remove("save.lua")
   money = 0
+  bossfight.active = false
 end
 
 return mainmenu

@@ -67,26 +67,26 @@ level.update = function(dt)
     reward.start(level_reward, stats)
   elseif bossfight.pause > 0 then
     bossfight.pause = bossfight.pause - dt
-    if bossfight.pause <= 0 and bossfight.active == true then
+    if bossfight.pause <= 0 and bossfight.active == true then -- wait before spawning boss
       local boss_options = {}
-      for i, v in pairs(enemy_info) do
-        if v.boss then
+      for i, v in pairs(enemy_info) do -- find possible bosses
+        if v.boss and v.score < level_score.max then
           boss_options[#boss_options+1] = i
         end
       end
-      bossfight.boss = enemy.new(boss_options[math.random(1, #boss_options)], 1+math.floor((#map.path-1)/tier_score))
+      bossfight.boss = enemy.new(boss_options[math.random(1, #boss_options)], math.random(1, 1+math.floor((#map.path-1)/tier_score))) -- spawn random valid boss with random valid tier
     end
   elseif level.scroll.pos >= level.scroll.goal and clear == false then
-    for i, v in pairs(enemies) do
+    for i, v in pairs(enemies) do -- remove enemies (with a bang)
       enemy.explosion(v)
     end
-    level.clear()
-    if true then
+    level.clear(true) -- clear level, except for drops
+    if math.random(0, 3) == 0 then -- randomly decide to spawn boss
       bossfight.pause = 2
       bossfight.active = true
     end
   elseif not bossfight.active then
-    level.scroll.v = level.scroll.v + dt * 60 * 0.002
+    level.scroll.v = level.scroll.v + dt * 60 * 0.002 -- move through level
   end
   level.scroll.pos = level.scroll.pos + level.scroll.v
   b_offset = b_offset + level.scroll.v -- background offset
@@ -136,10 +136,12 @@ level.draw = function()
   level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos+cut_dist)*100)
 end
 
-level.clear = function()
+level.clear = function(keep_drops)
   enemies = {}
   bullets = {}
-  drops = {}
+  if not keep_drops then
+    drops = {}
+  end
   clear = true
 end
 
