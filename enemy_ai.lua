@@ -60,7 +60,9 @@ end
 ai.move[4] = function(i, v, dt) -- "follower"
   local turn_speed = math.rad(dt * 60)*enemy_info[v.type].turn_speed
   local goal_angle = math.atan2(char.p.y-v.p.y, char.p.x-v.p.x)
-  if v.info.angle > goal_angle then
+  local diff = (v.info.angle - goal_angle + math.pi/2) % (math.pi) - math.pi/2
+  local right = diff > 0
+  if right  then
     if goal_angle - v.info.angle > turn_speed then
       v.info.angle = goal_angle
     else
