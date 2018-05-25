@@ -29,6 +29,20 @@ ai.load[3] = function(i, v) -- "siner"
   v.a.x = v.info.dir
 end
 
+ai.load[4] = function(i, v) -- "circler"
+  v.p.x = screen.w/2
+  v.p.y = -v.r
+  v.a = {x = 0, y = 1}
+
+  v.info.angle = -math.pi/2
+  v.info.r = 160
+
+  v.info.shots = 0
+
+  v.info.alt = true
+end
+
+
 ai.move = {}
 
 ai.move[1] = function(i, v, dt) -- "crosser"
@@ -91,6 +105,18 @@ ai.move[5] = function(i, v, dt) -- "back and forth"
   v.d.x = v.d.x + v.info.dir * dt * 6 * enemy_info[v.type].speed
 end
 
+ai.move[6] = function(i, v, dt) -- "circler"
+  if v.p.y < screen.h/2 - v.info.r then
+    v.d.y = dt * 60 * enemy_info[v.type].speed
+  else
+    v.info.angle = v.info.angle + math.rad(dt * 60) * enemy_info[v.type].speed
+    v.p.x = screen.w/2 + v.info.r * math.cos(v.info.angle)
+    v.p.y = screen.h/2 + v.info.r * math.sin(v.info.angle)
+  end
+
+  v.a = vector.norm(vector.sub(char.p, v.p))
+end
+
 ai.attack = {}
 
 ai.attack[1] = function(i, v, dt) -- fire ASAP
@@ -108,6 +134,21 @@ ai.attack[2] = function(i, v, dt) -- don't attack
   v.atk = 1
 end
 
+ai.attack[3] = function(i, v, dt) -- fire ASAP\
+  if v.info.shots > 4 then
+    v.atk = enemy_info[v.type].atk_delay * 8
+    v.info.shots = 0
+  elseif v.atk <= 0 then
+    -- fire bullet
+    ai.bullet[enemy_info[v.type].ai[4]](i, v, dt)
+    v.atk = enemy_info[v.type].atk_delay
+    v.info.shots = v.info.shots + 1
+  else
+    -- decrease wait till next bullet
+    v.atk = v.atk - dt
+  end
+end
+
 ai.bullet = {}
 
 ai.bullet[1] = function(i, v, dt) -- "forward"
@@ -119,7 +160,7 @@ ai.bullet[2] = function(i, v, dt) -- "aimer"
 end
 
 ai.bullet[3] = function(i, v, dt) -- "double forward"
-  local angle = math.atan2(v.a.y, v.p.y)
+  local angle = math.atan2(v.a.y, v.a.x)
   local bullet_d = {}
   bullet_d[1] = {x = 8*math.cos(angle+math.pi/2), y = 8*math.sin(angle+math.pi/2)}
   bullet_d[2] = {x = 8*math.cos(angle-math.pi/2), y = 8*math.sin(angle-math.pi/2)}
@@ -129,7 +170,7 @@ ai.bullet[3] = function(i, v, dt) -- "double forward"
 end
 
 ai.bullet[4] = function(i, v, dt) -- "side cannons"
-  local angle = math.atan2(v.a.y, v.p.y)
+  local angle = math.atan2(v.a.y, v.a.x)
   local bullet_a = {}
   bullet_a[1] = {x = math.cos(angle+math.pi/2), y = math.sin(angle+math.pi/2)}
   bullet_a[2] = {x = math.cos(angle-math.pi/2), y = math.sin(angle-math.pi/2)}
@@ -139,6 +180,23 @@ ai.bullet[4] = function(i, v, dt) -- "side cannons"
   for j, w in ipairs(bullet_d) do
     bullet.new("basic", vector.sum(v.p, w), bullet_a[1], 2, v.tier)
     bullet.new("basic", vector.sum(v.p, w), bullet_a[2], 2, v.tier)
+  end
+end
+
+ai.bullet[5] = function(i, v, dt) -- "el gorious"
+  local angle = math.atan2(v.a.y, v.a.x)
+  local bullet_d = {}
+  local r = 18
+  if v.info.alt == true then
+    r = 24
+    v.info.alt = false
+  else
+    v.info.alt = true
+  end
+  bullet_d[1] = {x = r*math.cos(angle+math.pi/2), y = r*math.sin(angle+math.pi/2)}
+  bullet_d[2] = {x = r*math.cos(angle-math.pi/2), y = r*math.sin(angle-math.pi/2)}
+  for j, w in ipairs(bullet_d) do
+    bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier) -- direction is combo of char's direction and movement
   end
 end
 

@@ -45,7 +45,7 @@ end
 hud.num_to_str = function(num)
   if num > 999 then
     return "999"
-  elseif num < 0 then
+  elseif num <= 0 then
     return "000"
   else
     local str = tostring(num)
@@ -68,7 +68,7 @@ hud.healthbar = function(hp, hp_max, name)
   for i = 1, hp_max-1 do
     love.graphics.draw(img.hpdash, cell_width*i+5-2, 10)
   end
-  love.graphics.print(name, (bar_length-font:getWidth(name))/2, 4)
+  love.graphics.print(name, math.floor((bar_length-font:getWidth(name))/2), 4)
 end
 
 return hud

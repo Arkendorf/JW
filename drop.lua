@@ -9,9 +9,9 @@ drop.update = function(dt)
     v.p = vector.sum(v.p, vector.scale(8 * dt * 60, v.d))
     v.d = vector.scale(0.8, v.d)
     if bossfight.active == true or bossfight.pause > 0 then
-      v.p.y = v.p.y + dt * 12
+      v.p.y = v.p.y + dt * 16
     else
-      v.p.y = v.p.y + dt * 24
+      v.p.y = v.p.y + dt * 32
     end
     if v.p.y > screen.h+16 then
       drops[i] = nil -- remove drop
