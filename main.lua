@@ -6,6 +6,7 @@ mainmenu = require "mainmenu"
 pause = require "pause"
 over = require "over"
 window = require "window"
+textbox = require "textbox"
 
 function love.load()
   graphics.load()
@@ -18,6 +19,7 @@ function love.load()
   mainmenu.load()
   pause.load()
   over.load()
+  textbox.load()
 
   state = "main"
   oldstate = "main"
@@ -39,6 +41,8 @@ function love.update(dt)
     pause.update(dt)
   elseif state == "over" then
     over.update(dt)
+  elseif state == "textbox" then
+    textbox.update(dt)
   end
   window.update(dt)
 end
@@ -68,6 +72,8 @@ function draw(state)
     pause.draw()
   elseif state == "over" then
     over.draw()
+  elseif state == "textbox" then
+    textbox.draw()
   end
 end
 
@@ -82,6 +88,8 @@ function love.keypressed(key)
     pause.keypressed(key)
   elseif state == "over" then
     over.keypressed(key)
+  elseif state == "textbox" then
+    textbox.keypressed(key)
   end
   if key == "escape" and state ~= "pause" and state ~= "main" and state ~= "over" then
     oldstate = state
