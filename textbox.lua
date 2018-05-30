@@ -12,6 +12,7 @@ textbox.load = function()
 end
 
 textbox.start = function(table)
+  oldstate = state
   state = "textbox"
   freeze = true
   on = true
@@ -31,6 +32,7 @@ textbox.update = function(dt)
   if on == false and math.ceil(pos.y) >= screen.h then
     state = oldstate
     oldstate = ""
+    freeze = false
   end
 end
 
@@ -38,7 +40,7 @@ textbox.draw = function()
   love.graphics.setCanvas(canvas.textbox)
   love.graphics.draw(img.textbox)
   love.graphics.draw(img.charicons, quad.charicons[boxes[current_box].image])
-  love.graphics.printf(string.sub(boxes[current_box].text, 1, math.floor(str_len)), 66, 2, 136)
+  love.graphics.printf(string.sub(boxes[current_box].text, 1, math.floor(str_len)), 68, 2, 130)
 
   love.graphics.setCanvas(canvas.menu)
   love.graphics.draw(canvas.textbox, pos.x, pos.y)

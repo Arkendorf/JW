@@ -33,7 +33,7 @@ end
 window.update = function(dt)
   hud.update(dt)
 
-  if #clouds < 6 and math.random(0, 60) == 0 then -- create new clouds
+  if #clouds < 6 and math.random(0, 60) == 0 and not freeze then -- create new clouds
    if level.scroll.v > 0 and math.random(0, 1) == 0 then
      clouds[opening(clouds)] = {x = math.random(0, screen.h), y = 0, oy = -screen.h-48, v = (math.random(0, 1)-.5)*math.random(0, 2), img = math.random(1, 4), start = b_offset}
     else
@@ -43,7 +43,7 @@ window.update = function(dt)
   end
 
   for i, v in pairs(clouds) do -- update clouds
-    if freeze == false then
+    if not freeze then
       v.x = v.x + dt * 12 * v.v
       v.y = (b_offset-v.start)*50 + v.oy
       if v.x < -128 or v.x > screen.w+128 or v.y > screen.h+48 then
@@ -70,7 +70,7 @@ window.draw = function()
     love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x), math.floor(v.y), 0, 1, 1, 128, 48)
   end
 
-  if state ~= "game" and not (state == "pause" and oldstate == "game") then -- basic background if not game
+  if state ~= "game" and not (state == "pause" and oldstate == "game") and not freeze then -- basic background if not game
     love.graphics.setCanvas(canvas.game)
     love.graphics.clear()
     level.draw_background()

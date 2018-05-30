@@ -4,6 +4,7 @@ local table_to_string = require "tabletostring"
 local button = 1
 local buttons = {{txt = "New Game", color = {64, 51, 102}, pos = 0, img = 1},
                  {txt = "Load Game", color = {64, 51, 102}, pos = 0, img = 2},
+                 {txt = "Tutorial", color = {64, 51, 102}, pos = 0, img = 6},
                  {txt = "Quit", color = {204, 40, 40}, pos = 0, img = 3}}
 local pos = 400
 local on = true
@@ -47,6 +48,9 @@ mainmenu.update = function(dt)
       mainmenu.load_file()
       map.start()
       state = "map"
+    elseif button == 3 then
+      tutorial.start()
+      state = "game"
     end
   end
 end
@@ -66,8 +70,8 @@ mainmenu.draw = function()
     else
       love.graphics.setColor(v.color)
     end
-    love.graphics.draw(img.mainicons, quad.mainicons[v.img], 48+math.floor(v.pos), 89+i * 32)
-    love.graphics.print(v.txt, 80+math.floor(v.pos), 101+i * 32)
+    love.graphics.draw(img.mainicons, quad.mainicons[v.img], 48+math.floor(v.pos), 70+i * 32)
+    love.graphics.print(v.txt, 80+math.floor(v.pos), 82+i * 32)
   end
 
   love.graphics.setColor(palette.navy)
@@ -92,14 +96,14 @@ mainmenu.keypressed = function(key)
   if on == true then
     if key == "up" and button > 1 then
       button = button - 1
-    elseif key == "down" and button < 3 then
+    elseif key == "down" and button < #buttons then
       button = button + 1
     elseif key == "z" then
-      if button == 1 then
+      if button == 1 or button == 3 then
         on = false
       elseif button == 2 and love.filesystem.exists("save.lua") then
         on = false
-      elseif button == 3 then
+      elseif button == 4 then
         love.event.quit()
       end
     end

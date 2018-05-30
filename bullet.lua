@@ -35,9 +35,9 @@ bullet.update = function(dt)
     else -- check for collision with player
       if collision.overlap(v, char) then
         if char.inv <= 0 then
-        --  if math.random(0, 1) == 0 then
+         if math.random(0, 1) == 0 then
             enemies[v.parent].bubble = {phrase = shot_phrase[math.random(1, #dmg_phrase)], t = 2}
-      --    end
+         end
           char.hp = char.hp - bullet_info[v.type].dmg*v.tier
           char.inv = char_info.inv_time
           stats.dmg = stats.dmg + 1 -- increase 'dmg' stat

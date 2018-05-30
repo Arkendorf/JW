@@ -91,7 +91,7 @@ enemy.draw = function()
     love.graphics.setColor(255, 255, 255)
 
     if v.bubble then
-      enemy.draw_bubble(v.p.x, v.p.y, v.bubble.phrase)
+      enemy.draw_bubble(math.floor(v.p.x), math.floor(v.p.y), v.bubble.phrase)
     end
   end
 end
