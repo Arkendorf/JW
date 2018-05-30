@@ -99,6 +99,13 @@ character.update = function(dt)
   else
     char.trail = char.trail - dt
   end
+
+  if char.bubble then -- reduce bubble time
+    char.bubble.t  = char.bubble.t - dt
+    if char.bubble.t < 0 then
+      char.bubble = false
+    end
+  end
 end
 
 character.draw = function()
@@ -111,6 +118,10 @@ character.draw = function()
 
   -- reset shader
   love.graphics.setShader()
+
+  if char.bubble then
+    enemy.draw_bubble(math.floor(char.p.x), math.floor(char.p.y), char.bubble.phrase)
+  end
 end
 
 character.max_speed = function()

@@ -24,8 +24,11 @@ bullet.update = function(dt)
     if v.side == 1 then -- check for collision with enemies
       for j, w in pairs(enemies) do
         if collision.overlap(v, w) then
-          if math.random(0, 1) == 0 then
+          if math.random(0, 1) == 0 then -- enemy
             w.bubble = {phrase = dmg_phrase[math.random(1, #dmg_phrase)], t = 2}
+          end
+          if math.random(0, 1) == 0 then -- char
+            char.bubble = {phrase = shot_phrase[math.random(1, #shot_phrase)], t = 2}
           end
           w.hp = w.hp - bullet_info[v.type].dmg*v.tier
           stats.hits = stats.hits + 1 -- increase 'hits' stat
@@ -35,8 +38,11 @@ bullet.update = function(dt)
     else -- check for collision with player
       if collision.overlap(v, char) then
         if char.inv <= 0 then
-         if math.random(0, 1) == 0 then
+         if math.random(0, 1) == 0 then -- enemy
             enemies[v.parent].bubble = {phrase = shot_phrase[math.random(1, #dmg_phrase)], t = 2}
+         end
+         if math.random(0, 1) == 0 then -- char
+           char.bubble = {phrase = dmg_phrase[math.random(1, #dmg_phrase)], t = 2}
          end
           char.hp = char.hp - bullet_info[v.type].dmg*v.tier
           char.inv = char_info.inv_time

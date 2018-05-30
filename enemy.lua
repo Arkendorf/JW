@@ -19,7 +19,7 @@ enemy.load = function()
     ship_width[i] = v:getHeight()
   end
 
-  shot_phrase = {"Got a shot in!", "Hit 'em!", "Direct hit!", "Landed a shot!", "Scratched 'em!", "Shot 'em!"}
+  shot_phrase = {"Got a shot in!", "Hit 'em!", "Direct hit!", "Landed a shot!", "Bullseye!", "Shot 'em!"}
   dmg_phrase = {"Under fire!", "I'm hit!", "Taking damage!", "I'm damaged!", "Taking shots!", "Under attack!"}
 end
 
@@ -73,7 +73,7 @@ enemy.update = function(dt)
       v.trail = v.trail - dt
     end
 
-    if v.bubble then
+    if v.bubble then -- reduce bubble time
       v.bubble.t  = v.bubble.t - dt
       if v.bubble.t < 0 then
         v.bubble = false

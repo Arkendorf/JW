@@ -70,7 +70,7 @@ window.draw = function()
     love.graphics.draw(img.clouds, quad.clouds[v.img], math.floor(v.x), math.floor(v.y), 0, 1, 1, 128, 48)
   end
 
-  if state ~= "game" and not (state == "pause" and oldstate == "game") and not freeze then -- basic background if not game
+  if state ~= "game" and not (freeze and oldstate == "game") then -- basic background if not game
     love.graphics.setCanvas(canvas.game)
     love.graphics.clear()
     level.draw_background()
