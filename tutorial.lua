@@ -14,8 +14,9 @@ local type_text = {"Sometimes, you'll get nothing. This is indicated by a circle
 tutorial.start = function()
   tutorial.active = true
   type = math.random(1, 7)
-  level.start(0, 16, type)
-  wait = 2
+  level.start(0, 16, 2)
+  wait = 3
+  step = 1
 end
 
 tutorial.update = function(dt)
@@ -55,7 +56,8 @@ tutorial.update = function(dt)
     textbox.start({{text = "Here, you can choose your next destination. Pay attention to the difficulty, reward, and length of the trip.", image = 2},
                    {text = "Use the arrow keys to choose a destination, then press 'z' to start. 'x' returns you to your current location.", image = 2},
                    {text = "Got all that?", image = 2},
-                   {text = "Yes, sir!", image = 1}})
+                   {text = "Yes, sir!", image = 1},
+                   {text = "I must leave you now. Good luck!", image = 2}})
     step = 9
   elseif step == 9 then
     tutorial.active = false
