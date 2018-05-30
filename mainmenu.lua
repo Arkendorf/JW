@@ -70,17 +70,17 @@ mainmenu.draw = function()
     else
       love.graphics.setColor(v.color)
     end
-    love.graphics.draw(img.mainicons, quad.mainicons[v.img], 48+math.floor(v.pos), 70+i * 32)
-    love.graphics.print(v.txt, 80+math.floor(v.pos), 82+i * 32)
+    love.graphics.draw(img.mainicons, quad.mainicons[v.img], 48+math.floor(v.pos), 86+i * 32)
+    love.graphics.print(v.txt, 80+math.floor(v.pos), 98+i * 32)
   end
 
   love.graphics.setColor(palette.navy)
-  love.graphics.print("Highscores", 129-math.floor(font:getWidth("Highscores")/2), 229) -- label box
-  love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
+  love.graphics.print("Highscores", 129-math.floor(font:getWidth("Highscores")/2), 249) -- label box
+  love.graphics.rectangle("line", 48, 262, 164, 16) -- draw high score box
 
   love.graphics.setColor(palette.blue) -- first high score is color differently
   for i, v in ipairs(highscores) do -- draw highscores
-    love.graphics.print(v, 66 + (i-1)*32 - math.floor(font:getHeight(tostring(v))/2), 257)
+    love.graphics.print(v, 66 + (i-1)*32 - math.floor(font:getHeight(tostring(v))/2), 266)
     love.graphics.setColor(palette.navy)
   end
 

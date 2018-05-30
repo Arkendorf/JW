@@ -57,9 +57,9 @@ over.draw = function()
 
   -- score
   love.graphics.setColor(palette.navy)
-  love.graphics.print("Final Score", 129-math.floor(font:getWidth("Final Score")/2), 229)
-  love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
-  love.graphics.print(#map.path-2, 129-math.floor(font:getWidth(tostring(#map.path-2))/2), 257)
+  love.graphics.print("Final Score", 129-math.floor(font:getWidth("Final Score")/2), 249)
+  love.graphics.rectangle("line", 48, 262, 164, 16) -- draw high score box
+  love.graphics.print(#map.path-2, 129-math.floor(font:getWidth(tostring(#map.path-2))/2), 266)
 
   -- buttons
   for i, v in ipairs(buttons) do

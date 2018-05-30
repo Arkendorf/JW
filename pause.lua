@@ -51,12 +51,12 @@ pause.draw = function()
 
   -- score
   love.graphics.setColor(palette.navy)
-  love.graphics.print("Current Score", 129-math.floor(font:getWidth("Current Score")/2), 229)
-  love.graphics.rectangle("line", 48, 245, 164, 32) -- draw high score box
+  love.graphics.print("Current Score", 129-math.floor(font:getWidth("Current Score")/2), 249)
+  love.graphics.rectangle("line", 48, 262, 164, 16) -- draw high score box
   if #map.path > 1 then
-    love.graphics.print(#map.path-2, 129-math.floor(font:getWidth(tostring(#map.path-2))/2), 257)
+    love.graphics.print(#map.path-2, 129-math.floor(font:getWidth(tostring(#map.path-2))/2), 266)
   else
-    love.graphics.print(0, 129-math.floor(font:getWidth("0")/2), 257)
+    love.graphics.print(0, 129-math.floor(font:getWidth("0")/2), 266)
   end
 
   -- buttons
