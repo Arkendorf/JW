@@ -18,6 +18,9 @@ enemy.load = function()
   for i, v in pairs(shipimg) do
     ship_width[i] = v:getHeight()
   end
+
+  shot_phrase = {"Got a shot in!", "Hit 'em!", "Direct hit!", "Landed a shot!", "Scratched 'em!", "Shot 'em!"}
+  dmg_phrase = {"Under fire!", "I'm hit!", "Taking damage!", "I'm damaged!", "Taking shots!", "Under attack!"}
 end
 
 enemy.update = function(dt)
@@ -69,6 +72,13 @@ enemy.update = function(dt)
     else
       v.trail = v.trail - dt
     end
+
+    if v.bubble then
+      v.bubble.t  = v.bubble.t - dt
+      if v.bubble.t < 0 then
+        v.bubble = false
+      end
+    end
   end
 end
 
@@ -79,6 +89,10 @@ enemy.draw = function()
     love.graphics.setColor(tiers[v.tier].color)
     love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
     love.graphics.setColor(255, 255, 255)
+
+    if v.bubble then
+      enemy.draw_bubble(v.p.x, v.p.y, v.bubble.phrase)
+    end
   end
 end
 
@@ -116,6 +130,18 @@ enemy.kill = function(i, v)
     bossfight.pause = 2
     bossfight.active = false
   end
+end
+
+enemy.draw_bubble = function(x, y, text)
+  love.graphics.draw(img.bubble, quad.bubble[1], x, y-16)
+  local tile_num = math.ceil((font:getWidth(text)-24)/16)
+  for i = 1, tile_num do
+    love.graphics.draw(img.bubble, quad.bubble[2], x+i*16, y-16)
+  end
+  love.graphics.draw(img.bubble, quad.bubble[3], x+(tile_num+1)*16, y-16)
+  love.graphics.setColor(palette.grey)
+  love.graphics.print(text, x+4, y-12)
+  love.graphics.setColor(255, 255, 255)
 end
 
 return enemy

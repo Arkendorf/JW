@@ -152,11 +152,11 @@ end
 ai.bullet = {}
 
 ai.bullet[1] = function(i, v, dt) -- "forward"
-  bullet.new("basic", v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier) -- direction is combo of char's direction and movement
+  bullet.new("basic", v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
 end
 
 ai.bullet[2] = function(i, v, dt) -- "aimer"
-  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2, v.tier)
+  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2, v.tier, i)
 end
 
 ai.bullet[3] = function(i, v, dt) -- "double forward"
@@ -165,7 +165,7 @@ ai.bullet[3] = function(i, v, dt) -- "double forward"
   bullet_d[1] = {x = 8*math.cos(angle+math.pi/2), y = 8*math.sin(angle+math.pi/2)}
   bullet_d[2] = {x = 8*math.cos(angle-math.pi/2), y = 8*math.sin(angle-math.pi/2)}
   for j, w in ipairs(bullet_d) do
-    bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier) -- direction is combo of char's direction and movement
+    bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
   end
 end
 
@@ -178,8 +178,8 @@ ai.bullet[4] = function(i, v, dt) -- "side cannons"
   bullet_d[1] = {x = v.a.x*6, y = v.a.y*6}
   bullet_d[2] = {x = v.a.x*-6, y = v.a.y*-6}
   for j, w in ipairs(bullet_d) do
-    bullet.new("basic", vector.sum(v.p, w), bullet_a[1], 2, v.tier)
-    bullet.new("basic", vector.sum(v.p, w), bullet_a[2], 2, v.tier)
+    bullet.new("basic", vector.sum(v.p, w), bullet_a[1], 2, v.tier, i)
+    bullet.new("basic", vector.sum(v.p, w), bullet_a[2], 2, v.tier, i)
   end
 end
 
@@ -196,7 +196,7 @@ ai.bullet[5] = function(i, v, dt) -- "el gorious"
   bullet_d[1] = {x = r*math.cos(angle+math.pi/2), y = r*math.sin(angle+math.pi/2)}
   bullet_d[2] = {x = r*math.cos(angle-math.pi/2), y = r*math.sin(angle-math.pi/2)}
   for j, w in ipairs(bullet_d) do
-    bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier) -- direction is combo of char's direction and movement
+    bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
   end
 end
 

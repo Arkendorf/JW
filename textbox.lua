@@ -37,6 +37,7 @@ end
 textbox.draw = function()
   love.graphics.setCanvas(canvas.textbox)
   love.graphics.draw(img.textbox)
+  love.graphics.draw(img.charicons, quad.charicons[boxes[current_box].image])
   love.graphics.printf(string.sub(boxes[current_box].text, 1, math.floor(str_len)), 66, 2, 136)
 
   love.graphics.setCanvas(canvas.menu)

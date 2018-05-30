@@ -25,7 +25,9 @@ function love.load()
   oldstate = "main"
   freeze = false
 
-  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}, brown = {102, 70, 24}}
+  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}, brown = {102, 70, 24}, grey = {138, 144, 153}}
+
+  textbox.start({{text = "Hello? This is Flioneer, reporting for duty... And testing textboxes", image = 1}, {text = "Well what are you waiting for, good sir? Get going!", image = 2}})
 end
 
 function love.update(dt)
