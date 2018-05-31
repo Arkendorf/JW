@@ -8,19 +8,12 @@ local clouds = {}
 window.load = function()
   -- set up window
   screen = {w = 600, h = 400}
-  local w, h = love.window.getDesktopDimensions()
-  if screen.w/screen.h < w/h then
-    screen.scale = h/screen.h
-  else
-    screen.scale = w/screen.w
-  end
-  screen.ox = math.floor((w/screen.scale - screen.w) / 2)
-  screen.oy = math.floor((h/screen.scale - screen.h) / 2)
+
   love.window.setFullscreen(true)
+  window.scale_screen()
 
   canvas.game = love.graphics.newCanvas(screen.w, screen.h)
   canvas.menu = love.graphics.newCanvas(screen.w, screen.h)
-  canvas.window = love.graphics.newCanvas(w/screen.scale, h/screen.scale)
   canvas.clouds = love.graphics.newCanvas(screen.w, screen.h)
   canvas.background = love.graphics.newCanvas(screen.w, screen.h)
 
@@ -28,6 +21,19 @@ window.load = function()
 
   shader.shadow:send("offset", {screen.ox, screen.oy})
   shader.shadow:send("screen", {screen.w, screen.h})
+end
+
+window.scale_screen = function()
+  screen.tw, screen.th = love.graphics.getDimensions()
+  if screen.w/screen.h < screen.tw/screen.th then
+    screen.scale = screen.th/screen.h
+  else
+    screen.scale = screen.tw/screen.w
+  end
+  screen.ox = math.floor((screen.tw/screen.scale - screen.w) / 2)
+  screen.oy = math.floor((screen.th/screen.scale - screen.h) / 2)
+
+  canvas.window = love.graphics.newCanvas(screen.tw/screen.scale, screen.th/screen.scale)
 end
 
 window.update = function(dt)
@@ -50,6 +56,10 @@ window.update = function(dt)
         clouds[i] = nil
       end
     end
+  end
+
+  if love.graphics.getWidth() ~= screen.tw or love.graphics.getHeight() ~= screen.th then
+    window.scale_screen()
   end
 end
 
@@ -108,8 +118,8 @@ window.draw = function()
 
   -- draw verticle borders
   for i = -math.ceil(screen.h/400/2), math.ceil(screen.h/400/2) do
-    love.graphics.draw(img.border, math.floor(screen.ox-600), math.floor(b_offset*100 % 400) + i*400)
-    love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor((b_offset-2)*100 % 400) + i*400, 0, -1, 1)
+    love.graphics.draw(img.border, math.floor(screen.ox-600), math.floor(screen.oy+b_offset*100 % 400) + i*400)
+    love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor(screen.oy+(b_offset-2)*100 % 400) + i*400, 0, -1, 1)
   end
 
   -- draw horizontal borders

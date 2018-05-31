@@ -37,4 +37,20 @@ button_func.main_menu = function()
   menu.start_main()
 end
 
+button_func.back = function()
+  menu.pop()
+end
+
+button_func.toggle_fullscreen = function()
+  love.window.setMode(600, 400,{fullscreen = not love.window.getFullscreen(), resizable = true})
+  window.scale_screen()
+end
+
+button_func.settings = function()
+  menu.push({{txt = "Fullscreen", color = "dark_blue", img = 4, insta_func = "toggle_fullscreen"},
+             {txt = "Resolution", color = "dark_blue", img = 5, insta_func = "main_menu"},
+             {txt = "Back", color = "red", img = 7, insta_func = "back"}},
+             {name = "Settings", color = "blue"}, false)
+end
+
 return button_func
