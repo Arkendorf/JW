@@ -82,8 +82,8 @@ character.update = function(dt)
 
   -- game over if char has no health
   if char.hp <= 0 then
-    state = "over"
-    over.start()
+    state = "menu"
+    menu.start_over()
   end
 
   -- update animation

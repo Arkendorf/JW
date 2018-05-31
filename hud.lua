@@ -3,7 +3,7 @@ local hud = {}
 local hud_pos = -184
 
 hud.update = function(dt)
-  if state ~= "pause" then
+  if not freeze then
     hud_pos = graphics.zoom(state ~= "main", hud_pos, -184, 4+screen.ox, dt * 12)
   else
     hud_pos = graphics.zoom(oldstate ~= "main", hud_pos, -184, 4+screen.ox, dt * 12)
@@ -26,13 +26,13 @@ hud.draw = function()
   end
   love.graphics.print(hud.num_to_str(char.ammo), hud_pos+65, 11)
   love.graphics.print(hud.num_to_str(money), hud_pos+111, 11)
-  if state == "game" or state == "pause" or state == "over" then
+  if state == "game" or state == "menu" then
     love.graphics.print(hud.num_to_str(math.ceil(level.scroll.goal-level.scroll.pos)), hud_pos+157, 11)
   else
     love.graphics.print("000", hud_pos+157, 11)
   end
 
-  if (state == "game" or state == "pause" or state == "over") and (bossfight.active and bossfight.pause <= 0) then
+  if (state == "game" or state == "menu") and (bossfight.active and bossfight.pause <= 0) then
     love.graphics.setCanvas(canvas.healthbar)
     love.graphics.clear()
     local info = enemy_info[bossfight.boss.type]

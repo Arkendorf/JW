@@ -2,14 +2,19 @@ graphics = require "graphics"
 map = require "map"
 game = require "game"
 reward = require "reward"
-mainmenu = require "mainmenu"
-pause = require "pause"
-over = require "over"
+manage = require "manage"
 window = require "window"
 textbox = require "textbox"
 tutorial = require "tutorial"
+menu = require "menu"
 
 function love.load()
+  state = "menu"
+  oldstate = "menu"
+  freeze = false
+
+  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}, brown = {102, 70, 24}, grey = {138, 144, 153}, dark_blue = {64, 51, 102}}
+
   graphics.load()
   window.load()
   level.load()
@@ -17,16 +22,11 @@ function love.load()
   map.load()
   game.load()
   reward.load()
-  mainmenu.load()
-  pause.load()
-  over.load()
+  manage.load()
   textbox.load()
+  menu.load()
 
-  state = "main"
-  oldstate = "main"
-  freeze = false
-
-  palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}, brown = {102, 70, 24}, grey = {138, 144, 153}}
+  menu.start_main()
 end
 
 function love.update(dt)
@@ -36,12 +36,8 @@ function love.update(dt)
     game.update(dt)
   elseif state == "reward" then
     reward.update(dt)
-  elseif state == "main" then
-    mainmenu.update(dt)
-  elseif state == "pause" then
-    pause.update(dt)
-  elseif state == "over" then
-    over.update(dt)
+  elseif state == "menu" then
+    menu.update(dt)
   elseif state == "textbox" then
     textbox.update(dt)
   end
@@ -70,12 +66,8 @@ function draw(state)
     game.draw()
   elseif state == "reward" then
     reward.draw()
-  elseif state == "main" then
-    mainmenu.draw()
-  elseif state == "pause" then
-    pause.draw()
-  elseif state == "over" then
-    over.draw()
+  elseif state == "menu" then
+    menu.draw()
   elseif state == "textbox" then
     textbox.draw()
   end
@@ -86,26 +78,23 @@ function love.keypressed(key)
     map.keypressed(key)
   elseif state == "reward" then
     reward.keypressed(key)
-  elseif state == "main" then
-    mainmenu.keypressed(key)
-  elseif state == "pause" then
-    pause.keypressed(key)
-  elseif state == "over" then
-    over.keypressed(key)
+  elseif state == "menu" then
+    menu.keypressed(key)
   elseif state == "textbox" then
     textbox.keypressed(key)
   end
-  if key == "escape" and state ~= "pause" and state ~= "main" and state ~= "over" then
+  if key == "escape" and state ~= "menu" then
     oldstate = state
-    state = "pause"
-    pause.start()
+    menu.start_pause()
+  elseif key == "escape" and state == "menu" and freeze then
+    menu.end_pause()
   end
 end
 
 function love.quit()
-  mainmenu.save_game()
-  mainmenu.score()
+  manage.save_game()
+  manage.score()
   if char.hp <= 0 then
-    mainmenu.game_over()
+    manage.game_over()
   end
 end

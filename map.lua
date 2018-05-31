@@ -27,6 +27,8 @@ map.start = function()
   target.x = map.path[#map.path].x
   target.y = map.path[#map.path].y
   map.find_options()
+
+  map_pos.y = -320
 end
 
 map.new = function()
