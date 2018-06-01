@@ -11,6 +11,10 @@ local on = true
 
 local button_y = 40
 
+menu.off = function()
+  on = false
+end
+
 menu.format_buttons = function(table)
   local buttons = {}
   for i, v in ipairs(table) do -- format buttons
@@ -26,25 +30,30 @@ menu.start = function(table1, table2, score)
   state = "menu"
   on = true
   pos = 400
-  button = 1
 
   menus = {}
   menu.push(table1, table2, score)
-
-  if menus[1].title.name == "Flioneer" then
-    button_y = 86
-  else
-    button_y = 36
-  end
 end
 
 menu.push = function(table1, table2, score)
   local buttons = menu.format_buttons(table1)
   table.insert(menus, 1, {buttons = buttons, title = table2, highscore = score})
+  if menus[1].title.name == "Flioneer" then
+    button_y = 86
+  else
+    button_y = 36
+  end
+  button = 1
 end
 
 menu.pop = function()
   table.remove(menus, 1)
+  if menus[1].title.name == "Flioneer" then
+    button_y = 86
+  else
+    button_y = 36
+  end
+  button = 1
 end
 
 menu.load = function()
@@ -136,9 +145,9 @@ menu.keypressed = function(key)
 end
 
 menu.start_main = function()
-  menu.start({{txt = "New Game", color = "dark_blue", img = 1, func = "new_game"},
-              {txt = "Load Game", color = "dark_blue", img = 2, func = "load_game", insta_func = "check_save"},
-              {txt = "Tutorial", color = "dark_blue", img = 6, func = "tutorial"},
+  menu.start({{txt = "New Game", color = "dark_blue", img = 1, insta_func = "overwrite", func = "new_game"},
+              {txt = "Load Game", color = "dark_blue", img = 2, insta_func = "check_save", func = "load_game"},
+              {txt = "Tutorial", color = "dark_blue", img = 6, insta_func = "overwrite", func = "tutorial"},
               {txt = "Quit", color = "red", img = 3, insta_func = "quit_game"}},
               {name = "Flioneer", color = "blue"}, true)
 end
