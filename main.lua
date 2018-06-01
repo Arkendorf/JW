@@ -48,7 +48,7 @@ function love.update(dt)
 end
 
 function love.draw()
-  if freeze == true then
+  if freeze then
     draw(oldstate)
   end
   draw(state)

@@ -85,7 +85,11 @@ menu.draw = function()
       love.graphics.setColor(v.color)
     end
     love.graphics.draw(img.mainicons, quad.mainicons[v.img], 48+math.floor(v.pos), button_y + i * 32)
-    love.graphics.print(v.txt, 80+math.floor(v.pos), button_y+12 + i * 32)
+    if type(v.txt) == "string" then
+      love.graphics.print(v.txt, 80+math.floor(v.pos), button_y+12 + i * 32)
+    else
+      love.graphics.print(tostring(v.txt.table[v.txt.index]), 80+math.floor(v.pos), button_y+12 + i * 32)
+    end
   end
 
   love.graphics.setColor(palette.navy)
@@ -150,7 +154,7 @@ menu.start_pause = function()
   freeze = true
   menu.start({{txt = "Resume", color = "dark_blue", img = 4, func = "resume"},
               {txt = "Save to Menu", color = "dark_blue", img = 5, func = "main_menu"},
-              {txt = "Settings", color = "dark_blue", img = 5, insta_func = "settings"},
+              {txt = "Settings", color = "dark_blue", img = 8, insta_func = "settings"},
               {txt = "Save and Quit", color = "red", img = 3, insta_func = "quit_game"}},
               {name = "Paused", color = "blue"}, false)
 end

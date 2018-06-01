@@ -84,6 +84,11 @@ graphics.dotted_line = function(x1, y1, x2, y2, gap)
 end
 
 graphics.zoom = function(bool, num, min, max, scalar)
+  if max-num <= 1 then
+    num = max
+  elseif num-min <= 1 then
+    num = min
+  end
   if bool and num < max then
     if num + (max-num) * scalar > max then
       return max

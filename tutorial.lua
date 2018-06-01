@@ -62,6 +62,10 @@ tutorial.update = function(dt)
   elseif step == 9 then
     tutorial.active = false
   end
+
+  if state ~= "tutorial" then
+    tutorial.active = false
+  end
 end
 
 return tutorial

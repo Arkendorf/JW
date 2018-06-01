@@ -7,7 +7,7 @@ local clouds = {}
 
 window.load = function()
   -- set up window
-  screen = {w = 600, h = 400}
+  screen = {w = 600, h = 400, type = "Fullscreen", res = 1}
 
   love.window.setFullscreen(true)
   window.scale_screen()
@@ -18,9 +18,6 @@ window.load = function()
   canvas.background = love.graphics.newCanvas(screen.w, screen.h)
 
   b_offset = 0
-
-  shader.shadow:send("offset", {screen.ox, screen.oy})
-  shader.shadow:send("screen", {screen.w, screen.h})
 end
 
 window.scale_screen = function()
@@ -34,6 +31,11 @@ window.scale_screen = function()
   screen.oy = math.floor((screen.th/screen.scale - screen.h) / 2)
 
   canvas.window = love.graphics.newCanvas(screen.tw/screen.scale, screen.th/screen.scale)
+
+  screen.res_txt = tostring(screen.tw).."x"..tostring(screen.th)
+
+  shader.shadow:send("offset", {screen.ox, screen.oy})
+  shader.shadow:send("screen", {screen.w, screen.h})
 end
 
 window.update = function(dt)
@@ -129,7 +131,7 @@ window.draw = function()
   love.graphics.setColor(255, 255, 255)
 
   -- draw id
-  love.graphics.print("Flioneer Pre Alpha Release", 34+screen.ox, screen.h-font:getHeight()-2+screen.oy)
+  love.graphics.print("Flioneer Pre Alpha", 34+screen.ox, screen.h-font:getHeight()-2+screen.oy)
 
   love.graphics.setCanvas()
 
