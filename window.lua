@@ -114,15 +114,14 @@ window.draw = function()
   -- draw game
   love.graphics.draw(canvas.game, screen.ox, screen.oy)
 
-  -- draw menus
-  love.graphics.draw(canvas.menu, screen.ox, screen.oy)
-
-
   -- draw verticle borders
   for i = -math.ceil(screen.h/400/2), math.ceil(screen.h/400/2) do
     love.graphics.draw(img.border, math.floor(screen.ox-600), math.floor(screen.oy+b_offset*100 % 400) + i*400)
     love.graphics.draw(img.border, math.floor(screen.ox+screen.w+600), math.floor(screen.oy+(b_offset-2)*100 % 400) + i*400, 0, -1, 1)
   end
+
+  -- draw menus
+  love.graphics.draw(canvas.menu, screen.ox, screen.oy)
 
   -- draw horizontal borders
   love.graphics.setColor(0, 0, 0)

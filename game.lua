@@ -18,6 +18,7 @@ tiers[5] = {color = {255, 235, 235}}
 tiers[6] = {color = {75, 75, 75}}
 
 game.load = function()
+  save = true
 
   character.load()
 

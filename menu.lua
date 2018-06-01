@@ -15,6 +15,10 @@ menu.off = function()
   on = false
 end
 
+menu.get_button = function()
+  return menus[1].buttons[button]
+end
+
 menu.format_buttons = function(table)
   local buttons = {}
   for i, v in ipairs(table) do -- format buttons

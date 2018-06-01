@@ -12,6 +12,7 @@ function love.load()
   state = "menu"
   oldstate = "menu"
   freeze = false
+  save = false
 
   palette = {red = {204, 40, 40}, navy = {64, 51, 102}, blue = {0, 132, 204}, green = {122, 204, 40}, colorbase = {190, 183, 204}, brown = {102, 70, 24}, grey = {138, 144, 153}, dark_blue = {64, 51, 102}}
 
@@ -92,7 +93,9 @@ function love.keypressed(key)
 end
 
 function love.quit()
-  manage.save_game()
+  if save then
+    manage.save_game()
+  end
   manage.score()
   if char.hp <= 0 then
     manage.game_over()

@@ -2,15 +2,15 @@ local button_func = {}
 
 button_func.overwrite = function()
   if love.filesystem.exists("save.lua") then
-    menu.push({{txt = "Yes", color = "dark_blue", img = 11, insta_func = "ok"},
+    menu.push({{txt = "Yes", color = "dark_blue", img = 11, func = menu.get_button().func},
                {txt = "No", color = "red", img = 7, insta_func = "back"}},
                {name = "Overwrite Current Save?", color = "red"}, true)
   else
-    button_func.ok()
+    button_func.off()
   end
 end
 
-button_func.ok = function()
+button_func.off = function()
   menu.off()
 end
 
@@ -47,6 +47,9 @@ button_func.resume = function()
 end
 
 button_func.main_menu = function()
+  if save then
+    manage.save_game()
+  end
   freeze = false
   state = "main"
   menu.start_main()
