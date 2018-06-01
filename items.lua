@@ -4,9 +4,9 @@ items[4] = {name = "Ammo", disc = "Useful when firing weapons", price = .2}
 items[5] = {name = "Money", disc = "Currency for shops", price = 0}
 
 items[1] = {}
-items[1][1] = {name = "Mounted Cannon", disc = "Standard issue weapon that fires projectiles", price = 2}
-items[1][2] = {name = "Automatic Gun", disc = "Rapid-fire weapon that deals mild damage", price = 3}
-items[1][3] = {name = "Piercing Blaster", disc = "A powerful gun that deals heavy damage", price = 4}
+items[1][1] = {name = "Mounted Cannon", disc = "Standard issue weapon that fires projectiles", price = 2, img = 1}
+items[1][2] = {name = "Automatic Gun", disc = "Rapid-fire weapon that deals mild damage", price = 3, img = 2}
+items[1][3] = {name = "Piercing Blaster", disc = "A powerful gun that deals heavy damage", price = 4, img = 3}
 
 items[2] = {}
 items[2][1] = {name = "Max HP", disc = "Increase your plane's max HP by 1", price = 6, stat = "hp_max", num = 1}

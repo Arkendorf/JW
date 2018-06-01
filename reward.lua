@@ -176,16 +176,6 @@ rewardscreen.draw = function()
 
 
   love.graphics.setColor(255, 255, 255)
-  -- draw bottom instructions
-  if weaponscreen.on then
-    love.graphics.print("[z] Replace   [x] Exit", 300 - math.floor(font:getWidth("[z] Replace   [x] Exit")/2), 350)
-  elseif reward_type == "shop" then
-    love.graphics.print("[z] Buy   [x] Continue", 300 - math.floor(font:getWidth("[z] Buy   [x] Continue")/2), 350)
-  elseif reward_type == "none" then
-    love.graphics.print("[x] Continue", 300 - math.floor(font:getWidth("[x] Continue")/2), 350)
-  else
-    love.graphics.print("[z] Take   [x] Continue", 300 - math.floor(font:getWidth("[z] Take   [x] Continue")/2), 350)
-  end
 end
 
 rewardscreen.keypressed = function(key)
@@ -307,7 +297,11 @@ rewardscreen.draw_card = function(type, item, amount)
     love.graphics.draw(img.card)
     love.graphics.draw(img.cardicons, quad.cardicons[type], 4, 4)
     love.graphics.draw(img.cardicons, quad.cardicons[type], 60, 92, math.pi)
-    love.graphics.draw(img.cardimgs, quad.cardimgs[type], 8, 24)
+    if type == 1 then
+      love.graphics.draw(img.weaponimgs, quad.weaponimgs[item_info[type][item].img], 8, 24)
+    else
+      love.graphics.draw(img.cardimgs, quad.cardimgs[type], 8, 24)
+    end
     if type > 2 and amount > 1 then
       love.graphics.setColor(palette.navy)
       love.graphics.print("x"..tostring(amount), 20, 9)
