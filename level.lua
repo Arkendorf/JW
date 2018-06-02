@@ -9,12 +9,12 @@ local cut_dist = 3
 local spawn_delay = 0
 local spawn_time = 4
 
-bossfight = {active = false, boss = 0, pause = 0, bar_w = 200, c_bar_w = 0, hud_pos = 0}
+bossfight = {active = false, boss = 0, pause = 0, bar_w = 136, c_bar_w = 0, hud_pos = 0}
 
 level.scroll = {goal = 0, pos = 0, v = 0}
 
 level.load = function()
-  canvas.healthbar = love.graphics.newCanvas(200, 32)
+  canvas.healthbar = love.graphics.newCanvas(200, 64)
 end
 
 level.update = function(dt)

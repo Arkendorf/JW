@@ -85,7 +85,9 @@ function love.keypressed(key)
     textbox.keypressed(key)
   end
   if key == "escape" and state ~= "menu" then
-    oldstate = state
+    if state ~= "textbox" then
+      oldstate = state
+    end
     menu.start_pause()
   elseif key == "escape" and state == "menu" and freeze then
     menu.end_pause()

@@ -11,10 +11,10 @@ hud.update = function(dt)
 
   if bossfight.active and bossfight.pause <= 0 then
     local hp_max = enemy_info[bossfight.boss.type].hp*bossfight.boss.tier
-    bossfight.c_bar_w = bossfight.c_bar_w + (((bossfight.bar_w-10)/hp_max*bossfight.boss.hp) - bossfight.c_bar_w) * 0.2
+    bossfight.c_bar_w = bossfight.c_bar_w + (((bossfight.bar_w-5)/hp_max*bossfight.boss.hp) - bossfight.c_bar_w) * 0.2
   end
 
-  bossfight.hud_pos = graphics.zoom(not (bossfight.active and bossfight.pause <= 0), bossfight.hud_pos, screen.h - 36, screen.h, dt * 12)
+  bossfight.hud_pos = graphics.zoom(not (bossfight.active and bossfight.pause <= 0), bossfight.hud_pos, screen.h - 68, screen.h, dt * 12)
 end
 
 hud.draw = function()
@@ -36,7 +36,7 @@ hud.draw = function()
     love.graphics.setCanvas(canvas.healthbar)
     love.graphics.clear()
     local info = enemy_info[bossfight.boss.type]
-    hud.healthbar(bossfight.boss.hp*bossfight.boss.tier, info.hp*bossfight.boss.tier, info.name)
+    hud.healthbar(bossfight.boss.hp*bossfight.boss.tier, info.hp*bossfight.boss.tier, info.icon)
     love.graphics.setCanvas(canvas.menu)
   end
   love.graphics.draw(canvas.healthbar, (screen.w-bossfight.bar_w)/2, bossfight.hud_pos)
@@ -56,19 +56,16 @@ hud.num_to_str = function(num)
   end
 end
 
-hud.healthbar = function(hp, hp_max, name)
+hud.healthbar = function(hp, hp_max, icon)
   local bar_length = bossfight.bar_w
-  local cell_width = (bar_length-10)/hp_max
+  local cell_width = (bar_length-5)/hp_max
   love.graphics.setColor(palette.brown)
-  love.graphics.rectangle("fill", 0, 10, bar_length, 22)
+  love.graphics.rectangle("fill", 64, 21, bar_length, 22)
   love.graphics.setColor(palette.red)
-  love.graphics.rectangle("fill", 5, 10, bossfight.c_bar_w, 22)
+  love.graphics.rectangle("fill", 64, 21, bossfight.c_bar_w, 22)
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(img.hpbox, 0, 0)
-  for i = 1, hp_max-1 do
-    love.graphics.draw(img.hpdash, cell_width*i+5-2, 10)
-  end
-  love.graphics.print(name, math.floor((bar_length-font:getWidth(name))/2), 4)
+  love.graphics.draw(img.charicons, quad.charicons[icon])
 end
 
 return hud

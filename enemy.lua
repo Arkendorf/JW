@@ -11,7 +11,7 @@ enemy.load = function()
   enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider"}
   enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout"}
   enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon"}
-  enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 1, img = "gorious", name = "Kevin"}
+  enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 1, img = "gorious", icon = 3}
 
 
   ship_width = {}
