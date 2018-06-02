@@ -99,7 +99,7 @@ end
 enemy.new = function(type, tier) -- add enemy to open space in list
   local spot = opening(enemies)
   local info = enemy_info[type]
-  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp*tier, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0}
+  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp*tier, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0, immune = {}}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])
   return enemies[spot]

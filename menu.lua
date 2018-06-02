@@ -174,7 +174,9 @@ menu.start_pause = function()
 end
 
 menu.end_pause = function()
-  button = 1
+  while #menus > 1 do
+    menu.pop()
+  end
   on = false
 end
 

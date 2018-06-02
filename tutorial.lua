@@ -14,7 +14,7 @@ local type_text = {"Sometimes, you'll get nothing. This is indicated by a circle
 tutorial.start = function()
   tutorial.active = true
   type = math.random(1, 7)
-  level.start(0, 16, type)
+  level.start(0, 16, 2)
   wait = 3
   step = 1
 end

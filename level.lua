@@ -81,7 +81,7 @@ level.update = function(dt)
       enemy.explosion(v)
     end
     level.clear(true) -- clear level, except for drops
-    if math.random(0, 3) == 0 then -- randomly decide to spawn boss
+    if math.random(0, 3) == 0 and not tutorial.active then -- randomly decide to spawn boss
       bossfight.pause = 2
       bossfight.active = true
     end

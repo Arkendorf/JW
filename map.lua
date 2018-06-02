@@ -22,8 +22,6 @@ map.load = function()
 end
 
 map.start = function()
-  character.load()
-
   target.x = map.path[#map.path].x
   target.y = map.path[#map.path].y
   map.find_options()
