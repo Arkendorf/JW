@@ -5,13 +5,19 @@ local enemy = {}
 enemy.load = function()
   enemies = {}
   enemy_info = {}
+
+  -- enemies
   enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane"}
   enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "fly"}
   enemy_info.bigcrosser = {ai = {3, 3, 1, 3}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "bigplane"}
   enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider"}
   enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout"}
   enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon"}
-  enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 1, img = "gorious", icon = 3}
+
+  -- bosses
+  enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 1, img = "gorious", icon = 3,
+         text = {{text = "You're not gonna get out of here that easily!", image = 3},
+                 {text = "If you insist.", image = 1}}}
 
 
   ship_width = {}

@@ -68,22 +68,32 @@ level.update = function(dt)
   elseif bossfight.pause > 0 then
     bossfight.pause = bossfight.pause - dt
     if bossfight.pause <= 0 and bossfight.active == true then -- wait before spawning boss
-      local boss_options = {}
-      for i, v in pairs(enemy_info) do -- find possible bosses
-        if v.boss and v.score < level_score.max then
-          boss_options[#boss_options+1] = i
-        end
+      if bossfight.convo == false then -- dialogue
+        textbox.start(enemy_info[bossfight.type].text)
+        bossfight.pause = .5
+        bossfight.convo = true
+      else
+        bossfight.boss = enemy.new(bossfight.type, math.random(1, 1+math.floor((#map.path-1)/tier_score))) -- spawn random valid boss with random valid tier
       end
-      bossfight.boss = enemy.new(boss_options[math.random(1, #boss_options)], math.random(1, 1+math.floor((#map.path-1)/tier_score))) -- spawn random valid boss with random valid tier
     end
   elseif level.scroll.pos >= level.scroll.goal and clear == false then
     for i, v in pairs(enemies) do -- remove enemies (with a bang)
       enemy.explosion(v)
     end
     level.clear(true) -- clear level, except for drops
-    if math.random(0, 3) == 0 and not tutorial.active then -- randomly decide to spawn boss
-      bossfight.pause = 2
+    if true then -- randomly decide to spawn boss
+      bossfight.pause = 1
       bossfight.active = true
+      bossfight.convo = false
+
+      local boss_options = {}
+      for i, v in pairs(enemy_info) do -- find possible bosses
+        if v.boss and v.score < level_score.max then
+          boss_options[#boss_options+1] = i
+        end
+      end
+      bossfight.type = boss_options[math.random(1, #boss_options)]
+      bossfight.c_bar_w = bossfight.bar_w
     end
   elseif not bossfight.active then
     level.scroll.v = level.scroll.v + dt * 60 * 0.002 -- move through level
@@ -111,7 +121,7 @@ level.start = function(dif, dist, reward)
   -- set up level
   level_score.max = dif * 10
   level_score.each = 2+math.floor((#map.path-1) / 2)
-  level.scroll = {goal = dist, pos = -cut_dist, v = 0}
+  level.scroll = {goal =1, pos = -cut_dist, v = 0}
 
   -- reset stuff
   level.clear()

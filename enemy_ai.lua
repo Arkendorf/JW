@@ -36,8 +36,10 @@ ai.load[4] = function(i, v) -- "circler"
 
   v.info.angle = -math.pi/2
   v.info.r = 160
+  v.info.dir = 1
 
   v.info.shots = 0
+  v.info.hp = v.hp
 
   v.info.alt = true
 end
@@ -106,10 +108,14 @@ ai.move[5] = function(i, v, dt) -- "back and forth"
 end
 
 ai.move[6] = function(i, v, dt) -- "circler"
+  if v.hp < v.info.hp then
+    v.info.hp = v.hp
+    v.info.dir = v.info.dir * -1
+  end
   if v.p.y < screen.h/2 - v.info.r then
     v.d.y = dt * 60 * enemy_info[v.type].speed
   else
-    v.info.angle = v.info.angle + math.rad(dt * 60) * enemy_info[v.type].speed
+    v.info.angle = v.info.angle + math.rad(dt * 60) * enemy_info[v.type].speed * v.info.dir
     v.p.x = screen.w/2 + v.info.r * math.cos(v.info.angle)
     v.p.y = screen.h/2 + v.info.r * math.sin(v.info.angle)
   end

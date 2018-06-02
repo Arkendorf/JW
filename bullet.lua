@@ -42,7 +42,7 @@ bullet.update = function(dt)
     else -- check for collision with player
       if collision.overlap(v, char) and not char.immune[i] then
         if char.inv <= 0 then
-         if math.random(0, 1) == 0 and not enemies[v.parent].bubble then -- enemy
+         if math.random(0, 1) == 0 and enemies[v.parent] and not enemies[v.parent].bubble then -- enemy
             enemies[v.parent].bubble = {phrase = shot_phrase[math.random(1, #dmg_phrase)], t = 2}
          end
          if math.random(0, 1) == 0 and not char.bubble then -- char
