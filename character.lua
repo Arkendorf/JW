@@ -84,6 +84,7 @@ character.update = function(dt)
   if char.hp <= 0 then
     save = false
     state = "menu"
+    manage.game_over()
     menu.start_over()
   end
 

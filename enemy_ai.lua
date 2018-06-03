@@ -76,18 +76,29 @@ end
 ai.move[4] = function(i, v, dt) -- "follower"
   local turn_speed = math.rad(dt * 60)*enemy_info[v.type].turn_speed
   local goal_angle = math.atan2(char.p.y-v.p.y, char.p.x-v.p.x)
-  if v.info.angle > goal_angle then
-    if goal_angle - v.info.angle > turn_speed then
+  if goal_angle < 0 then
+    goal_angle = goal_angle + math.pi*2
+  end
+  local dif = goal_angle-v.info.angle
+  if dif > (math.pi*2-math.abs(dif))*dif/math.abs(dif) then -- don't even try to understand this nonsense
+    if math.abs(dif) < turn_speed or math.pi*2-math.abs(dif) < turn_speed then
       v.info.angle = goal_angle
     else
       v.info.angle = v.info.angle - turn_speed
     end
   else
-    if v.info.angle - goal_angle > turn_speed then
+    if math.abs(dif) < turn_speed or math.pi*2-math.abs(dif) < turn_speed then
       v.info.angle = goal_angle
     else
       v.info.angle = v.info.angle + turn_speed
     end
+  end
+
+  -- make angle within range
+  if v.info.angle > math.pi*2 then
+    v.info.angle = v.info.angle - math.pi*2
+  elseif v.info.angle < 0 then
+    v.info.angle = v.info.angle + math.pi*2
   end
 
   v.d.x = math.cos(v.info.angle)
@@ -158,11 +169,11 @@ end
 ai.bullet = {}
 
 ai.bullet[1] = function(i, v, dt) -- "forward"
-  bullet.new("basic", v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
+  bullet.new(enemy_info[v.type].bullet, v.p, vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
 end
 
 ai.bullet[2] = function(i, v, dt) -- "aimer"
-  bullet.new("basic", v.p, vector.norm(vector.sub(char.p, v.p)), 2, v.tier, i)
+  bullet.new(enemy_info[v.type].bullet, v.p, vector.norm(vector.sub(char.p, v.p)), 2, v.tier, i)
 end
 
 ai.bullet[3] = function(i, v, dt) -- "double forward"
@@ -171,7 +182,7 @@ ai.bullet[3] = function(i, v, dt) -- "double forward"
   bullet_d[1] = {x = 8*math.cos(angle+math.pi/2), y = 8*math.sin(angle+math.pi/2)}
   bullet_d[2] = {x = 8*math.cos(angle-math.pi/2), y = 8*math.sin(angle-math.pi/2)}
   for j, w in ipairs(bullet_d) do
-    bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
+    bullet.new(enemy_info[v.type].bullet, vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
   end
 end
 
@@ -184,8 +195,8 @@ ai.bullet[4] = function(i, v, dt) -- "side cannons"
   bullet_d[1] = {x = v.a.x*6, y = v.a.y*6}
   bullet_d[2] = {x = v.a.x*-6, y = v.a.y*-6}
   for j, w in ipairs(bullet_d) do
-    bullet.new("basic", vector.sum(v.p, w), bullet_a[1], 2, v.tier, i)
-    bullet.new("basic", vector.sum(v.p, w), bullet_a[2], 2, v.tier, i)
+    bullet.new(enemy_info[v.type].bullet, vector.sum(v.p, w), bullet_a[1], 2, v.tier, i)
+    bullet.new(enemy_info[v.type].bullet, vector.sum(v.p, w), bullet_a[2], 2, v.tier, i)
   end
 end
 
@@ -202,7 +213,7 @@ ai.bullet[5] = function(i, v, dt) -- "el gorious"
   bullet_d[1] = {x = r*math.cos(angle+math.pi/2), y = r*math.sin(angle+math.pi/2)}
   bullet_d[2] = {x = r*math.cos(angle-math.pi/2), y = r*math.sin(angle-math.pi/2)}
   for j, w in ipairs(bullet_d) do
-    bullet.new("basic", vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
+    bullet.new(enemy_info[v.type].bullet, vector.sum(v.p, w), vector.sum(v.a, vector.scale(0.1, v.d)), 2, v.tier, i) -- direction is combo of char's direction and movement
   end
 end
 

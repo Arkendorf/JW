@@ -7,17 +7,22 @@ enemy.load = function()
   enemy_info = {}
 
   -- enemies
-  enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane"}
-  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "fly"}
-  enemy_info.bigcrosser = {ai = {3, 3, 1, 3}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "bigplane"}
-  enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider"}
-  enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout"}
-  enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon"}
+  enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane", bullet = "basic"}
+  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "fly", bullet = "basic"}
+  enemy_info.bigcrosser = {ai = {3, 3, 1, 3}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "bigplane", bullet = "basic"}
+  enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider", bullet = "basic"}
+  enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout", bullet = "basic"}
+  enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
 
   -- bosses
-  enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 1, img = "gorious", icon = 3,
+  enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
          text = {{text = "You're not gonna get out of here that easily!", image = 3},
                  {text = "If you insist.", image = 1}}}
+  enemy_info.beetle = {boss = true, ai = {2, 4, 1, 1}, atk_delay = .5, speed = 4, turn_speed = 3, stop = 0.9, r = 24, hp = 8, score = 4, img = "beetle", bullet = "mine", icon = 4,
+         text = {{text = "Get outta my way!", image = 4},
+                 {text = "Not happening.", image = 1},
+                 {text = "I'll just have to run you over then!", image = 4}}}
+
 
 
   ship_width = {}
@@ -37,6 +42,22 @@ enemy.update = function(dt)
     -- adjust position and velocity
     v.p = vector.sum(v.p, v.d)
     v.d = vector.scale(enemy_info[v.type].stop, v.d)
+
+    -- collide with edges (if boss)
+    if enemy_info[v.type].boss then
+      if v.p.x+v.r < 0 then
+        v.p.x = -v.r
+      end
+      if v.p.x-v.r > screen.w then
+        v.p.x = screen.w+v.r
+      end
+      if v.p.y+v.r < 0 then
+        v.p.y = -v.r
+      end
+      if v.p.y-v.r > screen.h then
+        v.p.y = screen.h+v.r
+      end
+    end
 
     -- delete enemy if it has no health
     if v.hp <= 0 then
@@ -126,7 +147,7 @@ enemy.dmg_particle = function(p, d, a, hp, max)
     particle.new("smoke", p, vector.scale(-6+math.random(-4, 4), d), {x = math.random(-1, 1), y = math.random(-1, 1)}, {100, 100, 100}) -- character trail
   end
   if hp < max/2 then
-    particle.new("spark", p, vector.scale(-12+math.random(-4, 4), a), vector.scale(-1, a)) -- character trail
+    particle.new("spark", p, vector.scale(-12+math.random(-4, 4), d), vector.scale(-1, a)) -- character trail
   end
 end
 

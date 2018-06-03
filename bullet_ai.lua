@@ -19,11 +19,11 @@ end
 ai.update[2] = function(i, v, dt) -- "bomb"
   v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60 / v.info.t, v.d))
   v.info.t = v.info.t + dt * 3
-  if v.info.t > bullet_info[v.type].speed+0.4 then
+  if v.info.t > bullet_info[v.type].t+0.4 then
     bullet.delete(i)
-  elseif v.info.t > bullet_info[v.type].speed then
+  elseif v.info.t > bullet_info[v.type].t then
     v.frame = 2
-    v.r = 16
+    v.r = 24
     particle.new("explosion", {x = v.p.x+math.random(-1600, 1600)/100, y = v.p.y+math.random(-1600, 1600)/100}, {x = 0, y = 0}, {x = math.random(-1, 1), y = math.random(-1, 1)})
   end
 end

@@ -6,8 +6,9 @@ bullet.load = function()
   bullets = {}
   bullet_info = {}
   bullet_info.basic = {ai = {1, 1}, speed = 6, dmg = 1, r = 4, img = "bullet"}
-  bullet_info.bomb = {ai = {2, 2}, speed = 4, dmg = 1, r = 6, img = "bomb", pierce = true}
+  bullet_info.bomb = {ai = {2, 2}, speed = 4, t = 4, dmg = 1, r = 6, img = "bomb", pierce = true}
   bullet_info.arrow = {ai = {1, 1}, speed = 8, dmg = 1, r = 2, img = "arrow", pierce = true}
+  bullet_info.mine = {ai = {2, 2}, speed = -2, t= 4, dmg = 1, r = 6, img = "mine", pierce = true}
 
   weapon_info = {}
   weapon_info[1] = {bullet = "basic", ammo = 1, delay = .2}

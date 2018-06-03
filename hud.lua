@@ -10,7 +10,7 @@ hud.update = function(dt)
   end
 
   if bossfight.active and bossfight.pause <= 0 then
-    local hp_max = enemy_info[bossfight.boss.type].hp*bossfight.boss.tier
+    local hp_max = enemy_info[bossfight.type].hp*bossfight.boss.tier
     bossfight.c_bar_w = bossfight.c_bar_w + (((bossfight.bar_w-5)/hp_max*bossfight.boss.hp) - bossfight.c_bar_w) * 0.2
   end
 
@@ -35,7 +35,7 @@ hud.draw = function()
   if (state == "game" or state == "menu") and (bossfight.active and bossfight.pause <= 0) then
     love.graphics.setCanvas(canvas.healthbar)
     love.graphics.clear()
-    local info = enemy_info[bossfight.boss.type]
+    local info = enemy_info[bossfight.type]
     hud.healthbar(bossfight.boss.hp*bossfight.boss.tier, info.hp*bossfight.boss.tier, info.icon)
     love.graphics.setCanvas(canvas.menu)
   end

@@ -150,6 +150,7 @@ end
 
 menu.start_main = function()
   tutorial.active = false
+  bossfight.active = false
   menu.start({{txt = "New Game", color = "dark_blue", img = 1, insta_func = "overwrite", func = "new_game"},
               {txt = "Load Game", color = "dark_blue", img = 2, insta_func = "check_save", func = "load_game"},
               {txt = "Tutorial", color = "dark_blue", img = 6, insta_func = "overwrite", func = "tutorial"},

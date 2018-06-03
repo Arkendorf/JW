@@ -17,6 +17,7 @@ end
 button_func.new_game = function()
   map.new()
   state = "map"
+  character.load()
 end
 
 button_func.load_game = function()

@@ -41,13 +41,7 @@ level.update = function(dt)
 
         if #choices > 0 then -- make sure an enemy can be spawned
           local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
-          local max = 1+math.floor((#map.path-1) / tier_score) -- find maximum enemy tier
-          if max < 1 then
-            max = 1
-          elseif max > #tiers then
-            max = #tiers
-          end
-          for tier = max, 1, -1 do -- find maximum tier that still fits difficulty score
+          for tier = tier_max, 1, -1 do -- find maximum tier that still fits difficulty score
             if enemy_info[choice].score * tier <= price then
               enemy.new(choice, math.random(1, tier)) -- spawn enemy
               spawn_delay = spawn_time
@@ -73,7 +67,7 @@ level.update = function(dt)
         bossfight.pause = .5
         bossfight.convo = true
       else
-        bossfight.boss = enemy.new(bossfight.type, math.random(1, 1+math.floor((#map.path-1)/tier_score))) -- spawn random valid boss with random valid tier
+        bossfight.boss = enemy.new(bossfight.type, math.random(1, tier_max)) -- spawn random valid boss with random valid tier
       end
     end
   elseif level.scroll.pos >= level.scroll.goal and clear == false then
@@ -81,7 +75,7 @@ level.update = function(dt)
       enemy.explosion(v)
     end
     level.clear(true) -- clear level, except for drops
-    if true then -- randomly decide to spawn boss
+    if math.random(0, 3) == 0 and not tutorial.active then -- randomly decide to spawn boss
       bossfight.pause = 1
       bossfight.active = true
       bossfight.convo = false
@@ -121,7 +115,14 @@ level.start = function(dif, dist, reward)
   -- set up level
   level_score.max = dif * 10
   level_score.each = 2+math.floor((#map.path-1) / 2)
-  level.scroll = {goal =1, pos = -cut_dist, v = 0}
+  level.scroll = {goal = dist, pos = -cut_dist, v = 0}
+
+  tier_max = 1+math.floor((#map.path-1)/tier_score) -- find max tier for weapons/enemies
+  if tier_max < 1 then
+    tier_max = 1
+  elseif tier_max > #tiers then
+    tier_max = #tiers
+  end
 
   -- reset stuff
   level.clear()
