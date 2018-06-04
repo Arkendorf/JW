@@ -151,8 +151,12 @@ end
 menu.start_main = function()
   tutorial.active = false
   bossfight.active = false
+  local color = "dark_blue"
+  if not love.filesystem.exists("save.lua") then
+    color = "grey"
+  end
   menu.start({{txt = "New Game", color = "dark_blue", img = 1, insta_func = "overwrite", func = "new_game"},
-              {txt = "Load Game", color = "dark_blue", img = 2, insta_func = "check_save", func = "load_game"},
+              {txt = "Load Game", color = color, img = 2, insta_func = "check_save", func = "load_game"},
               {txt = "Tutorial", color = "dark_blue", img = 6, insta_func = "overwrite", func = "tutorial"},
               {txt = "Quit", color = "red", img = 3, insta_func = "quit_game"}},
               {name = "Flioneer", color = "blue"}, true)

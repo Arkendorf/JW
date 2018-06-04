@@ -47,10 +47,11 @@ drop.update = function(dt)
 
   -- random drops
   if math.random(0, 1200) == 0 then
-    if math.random(0, 1) == 0 then
-      drop.new(2, {x = math.random(32, screen.w-64), y = -8}, math.random(4, 8), false) -- ammo
+    local chance = math.random(1, 10)
+    if chance <= 6 then
+      drop.new(2, {x = math.random(32, screen.w-64), y = -8}, math.random(4, 8)*tier_max/char_info.weapons[1].tier, false) -- ammo
     else
-      drop.new(1, {x = math.random(32, screen.w-64), y = -8}, 1, false) -- hp
+      drop.new(1, {x = math.random(32, screen.w-64), y = -8}, tier_max, false) -- hp
     end
   end
 end

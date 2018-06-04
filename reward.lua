@@ -264,9 +264,9 @@ rewardscreen.create = function(type)
       amount = tier_max
     end
   elseif type == 3 then
-    amount = math.random(1, 3)
+    amount = math.random(1, char_info.hp_max-char.hp)
   elseif type == 4 then
-    amount = math.random(5, 25)
+    amount = math.random(4, 24)*tier_max/char_info.weapons[1].tier
   else
     amount = math.random(2, 10)
   end

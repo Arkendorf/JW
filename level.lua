@@ -123,6 +123,7 @@ level.start = function(dif, dist, reward)
   elseif tier_max > #tiers then
     tier_max = #tiers
   end
+  tier_max = 6
 
   -- reset stuff
   level.clear()

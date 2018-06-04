@@ -1,6 +1,8 @@
 local graphics = {}
 
 graphics.load = function()
+  love.mouse.setVisible(false)
+
   love.graphics.setDefaultFilter("nearest", "nearest")
 
   font = love.graphics.newImageFont("font.png",

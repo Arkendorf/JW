@@ -33,7 +33,7 @@ end
 
 button_func.check_save = function()
   if love.filesystem.exists("save.lua") then
-    on = false
+    button_func.off()
   end
 end
 

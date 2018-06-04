@@ -68,11 +68,11 @@ enemy.update = function(dt)
     if v.hp <= 0 then
       -- drop
       for j = 1, math.random(0, enemy_info[v.type].score) do
-        local chance = math.random(1, 100)
-        if chance <= 10 then
-          drop.new(2, v.p, math.random(4, 8)) -- ammo
-        elseif chance <= 20 then
-          drop.new(1, v.p, 1) -- hp
+        local chance = math.random(1, 10)
+        if chance <= 2 then
+          drop.new(2, v.p, math.random(4, 8)*v.tier/char_info.weapons[1].tier) -- ammo
+        elseif chance <= 3 then
+          drop.new(1, v.p, v.tier) -- hp
         else
           drop.new(3, v.p, 1) -- money
         end
