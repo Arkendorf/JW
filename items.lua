@@ -9,8 +9,8 @@ items[1][2] = {name = "Bomb Cannon", disc = "A powerful cannon that fires short 
 items[1][3] = {name = "Piercing Hwacha", disc = "An accurate weapon that fires piercing shots", price = 4, img = 3}
 
 items[2] = {}
-items[2][1] = {name = "Max HP", disc = "Increase your plane's max HP by 1", price = 6, stat = "hp_max", num = 1}
-items[2][2] = {name = "Max Ammo", disc = "Increase your plane's max ammo by 6", price = 5, stat = "ammo_max", num = 6}
+items[2][1] = {name = "Max HP", disc = "Increase your plane's max HP by 1", price = 6, stat = "hp_max", bonus_stat = "hp", num = 1}
+items[2][2] = {name = "Max Ammo", disc = "Increase your plane's max ammo by 6", price = 5, stat = "ammo_max", bonus_stat = "ammo", num = 6}
 items[2][3] = {name = "Speed", disc = "Increase your plane's speed", price = 4, stat = "speed", num = .2}
 items[2][4] = {name = "Recover Time", disc = "Increase invulnerability time after taking damage", price = 4, stat = "inv_time", num = .4}
 

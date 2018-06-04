@@ -225,6 +225,9 @@ end
 rewardscreen.collect = function(item)
   if item.type == 2 then -- increase upgrade's stat for player
     char_info[item_info[2][item.item].stat] = char_info[item_info[2][item.item].stat] + item_info[2][item.item].num
+    if item_info[2][item.item].bonus_stat then
+      char[item_info[2][item.item].bonus_stat] = char[item_info[2][item.item].bonus_stat] + item_info[2][item.item].num
+    end
   elseif item.type == 3 then -- add health
     char.hp = char.hp + item.amount
     if char.hp > char_info.hp_max then -- cap at hp max
