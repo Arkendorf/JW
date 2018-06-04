@@ -25,14 +25,19 @@ bullet.update = function(dt)
     if v.side == 1 then -- check for collision with enemies
       for j, w in pairs(enemies) do
         if collision.overlap(v, w) and not w.immune[i] then
-          if math.random(0, 1) == 0 and not w.bubble then -- enemy
-            w.bubble = {phrase = dmg_phrase[math.random(1, #dmg_phrase)], t = 2}
+          if w.inv <= 0 then
+            if math.random(0, 1) == 0 and not w.bubble then -- enemy
+              w.bubble = {phrase = dmg_phrase[math.random(1, #dmg_phrase)], t = 2}
+            end
+            if math.random(0, 1) == 0 and not char.bubble then -- char
+              char.bubble = {phrase = shot_phrase[math.random(1, #shot_phrase)], t = 2}
+            end
+            w.hp = w.hp - bullet_info[v.type].dmg*v.tier
+            stats.hits = stats.hits + 1 -- increase 'hits' stat
+            if enemy_info[w.type].boss then
+              w.inv = 1
+            end
           end
-          if math.random(0, 1) == 0 and not char.bubble then -- char
-            char.bubble = {phrase = shot_phrase[math.random(1, #shot_phrase)], t = 2}
-          end
-          w.hp = w.hp - bullet_info[v.type].dmg*v.tier
-          stats.hits = stats.hits + 1 -- increase 'hits' stat
           if not bullet_info[v.type].pierce then
             bullet.delete(i)
           else

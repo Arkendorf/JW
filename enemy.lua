@@ -1,4 +1,5 @@
 local ai = require "enemy_ai"
+local shader = require "shader"
 
 local enemy = {}
 
@@ -59,6 +60,10 @@ enemy.update = function(dt)
       end
     end
 
+    if v.inv > 0 then-- lower invincibility
+      v.inv = v.inv - dt
+    end
+
     -- delete enemy if it has no health
     if v.hp <= 0 then
       -- drop
@@ -112,10 +117,18 @@ end
 enemy.draw = function()
   for i, v in pairs(enemies) do
     local img = enemy_info[v.type].img
-    love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
-    love.graphics.setColor(tiers[v.tier].color)
-    love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
-    love.graphics.setColor(255, 255, 255)
+    -- flash if invincibile
+    if v.inv > 0 and math.floor(math.sin(v.inv*8)+0.5) == 0 then
+      love.graphics.setShader(shader.fill)
+      love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
+      love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
+      love.graphics.setShader()
+    else
+      love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
+      love.graphics.setColor(tiers[v.tier].color)
+      love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
+      love.graphics.setColor(255, 255, 255)
+    end
 
     if v.bubble then
       enemy.draw_bubble(math.floor(v.p.x), math.floor(v.p.y), v.bubble.phrase)
@@ -126,7 +139,7 @@ end
 enemy.new = function(type, tier) -- add enemy to open space in list
   local spot = opening(enemies)
   local info = enemy_info[type]
-  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp*tier, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0, immune = {}}
+  enemies[spot] = {p = {x = 0, y = 0}, d = {x = 0, y = 0}, a = {x = 1, y = 0}, r = info.r, hp = info.hp*tier, atk = 0, type = type, info = {}, frame = 1, tier = tier, trail = 0, immune = {}, inv = 0}
   -- do first-time setup for enemy
   ai.load[info.ai[1]](spot, enemies[spot])
   return enemies[spot]
