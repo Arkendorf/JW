@@ -7,7 +7,7 @@ local clear = false
 
 local cut_dist = 3
 local spawn_delay = 0
-local spawn_time = 4
+local spawn_time = 1
 
 bossfight = {active = false, boss = 0, pause = 0, bar_w = 136, c_bar_w = 0, hud_pos = 0}
 
