@@ -26,6 +26,9 @@ rewardscreen.start = function(node, game_stats)
     weaponscreen.on = false
 
     reward = node
+    if tutorial.active then
+      tutorial.reward = node
+    end
     reward_type = rewardscreen.get_type(reward)
 
     math.randomseed(os.time())

@@ -2,7 +2,6 @@ local tutorial = {}
 
 local wait = 0
 local step = 1
-local type = 1
 local type_text = {"Sometimes, you'll get nothing. This is indicated by a circle on the map. Press 'x' to continue.",
                    "Sometimes, you'll get a new weapon. Press 'z' to take it, then use the arrow keys and 'z' to put it in a slot. Press 'x' to continue.",
                    "Sometimes, you'll get an upgrade. Press 'z' to collect it, and 'x' to continue.",
@@ -13,7 +12,7 @@ local type_text = {"Sometimes, you'll get nothing. This is indicated by a circle
 
 tutorial.start = function()
   tutorial.active = true
-  type = math.random(1, 7)
+  tutorial.reward = 0
   level.start(0, 16, 2)
   wait = 3
   step = 1
@@ -46,7 +45,7 @@ tutorial.update = function(dt)
   elseif step == 6 then
     textbox.start({{text = "Once you're on the airship, you'll receive a monetary bonus depending on how well you did.", image = 2},
                    {text = "You'll also receive a random reward.", image = 2},
-                   {text = type_text[type], image = 2}})
+                   {text = type_text[tutorial.reward], image = 2}})
     step = 7
   elseif step == 7 and state == "map" then
     map.start() -- set up map
