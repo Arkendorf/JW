@@ -5,15 +5,17 @@ local bullet = {}
 bullet.load = function()
   bullets = {}
   bullet_info = {}
-  bullet_info.basic = {ai = {1, 1}, speed = 6, dmg = 1, r = 4, img = "bullet"}
-  bullet_info.bomb = {ai = {2, 2}, speed = 4, t = 4, dmg = 1, r = 6, img = "bomb", pierce = true}
-  bullet_info.arrow = {ai = {1, 1}, speed = 8, dmg = 1, r = 2, img = "arrow", pierce = true}
-  bullet_info.mine = {ai = {2, 2}, speed = -2, t= 4, dmg = 1, r = 6, img = "mine", pierce = true}
+  bullet_info.basic = {ai = {1, 1, 1}, speed = 6, dmg = 1, r = 4, img = "bullet"}
+  bullet_info.bomb = {ai = {2, 2, 2}, speed = 4, t = 1, dmg = 1, r = 6, img = "bomb"}
+  bullet_info.arrow = {ai = {1, 1, 1}, speed = 8, dmg = 1, r = 3, img = "arrow", pierce = true}
+  bullet_info.mine = {ai = {2, 2, 2}, speed = -2, t = 1, dmg = 1, r = 6, img = "mine"}
+  bullet_info.missile = {ai = {2, 3, 2}, speed = 3, t = 1, dmg = 1, r = 6, img = "missile"}
 
   weapon_info = {}
   weapon_info[1] = {bullet = "basic", ammo = 1, delay = .2}
-  weapon_info[2] = {bullet = "bomb", ammo = 4, delay = .4}
-  weapon_info[3] = {bullet = "arrow", ammo = 1, delay = .3}
+  weapon_info[2] = {bullet = "bomb", ammo = 3, delay = .4}
+  weapon_info[3] = {bullet = "arrow", ammo = 1, delay = .4}
+  weapon_info[4] = {bullet = "missile", ammo = 4, delay = .6}
 end
 
 bullet.update = function(dt)
@@ -38,9 +40,10 @@ bullet.update = function(dt)
               w.inv = 1
             end
           end
-          if not bullet_info[v.type].pierce then
-            bullet.delete(i)
-          else
+          if not bullet_info[v.type].pierce and not v.active then -- activate bullet if not piercing
+            v.active = true
+            ai.activate[bullet_info[v.type].ai[3]](i, v, dt)
+          elseif bullet_info[v.type].pierce then -- don't activate bullet when it hits
             w.immune[i] = true
           end
         end
@@ -58,9 +61,10 @@ bullet.update = function(dt)
           char.inv = char_info.inv_time
           stats.dmg = stats.dmg + 1 -- increase 'dmg' stat
         end
-        if not bullet_info[v.type].pierce then
-          bullet.delete(i)
-        else
+        if not bullet_info[v.type].pierce and not v.active then
+          v.active = true
+          ai.activate[bullet_info[v.type].ai[3]](i, v, dt)
+        elseif bullet_info[v.type].pierce then
           char.immune[i] = true
         end
       end

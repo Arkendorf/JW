@@ -8,11 +8,11 @@ enemy.load = function()
   enemy_info = {}
 
   -- enemies
-  enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "biplane", bullet = "basic"}
-  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 2, img = "fly", bullet = "basic"}
+  enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane", bullet = "basic"}
+  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "fly", bullet = "basic"}
   enemy_info.bigcrosser = {ai = {3, 3, 1, 3}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "bigplane", bullet = "basic"}
   enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider", bullet = "basic"}
-  enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 1, img = "scout", bullet = "basic"}
+  enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "scout", bullet = "basic"}
   enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
 
   -- bosses
