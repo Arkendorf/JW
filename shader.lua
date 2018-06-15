@@ -32,14 +32,14 @@ shader.shadow = love.graphics.newShader[[
       vec4 pixel = Texel(texture, texture_coords);
       if(pixel.a == 1.0){
         vec4 back_pixel = Texel(background, vec2((screen_coords.x-offset.x)/screen.x, (screen_coords.y-offset.y)/screen.y));
-        if(back_pixel.g > back_pixel.b && back_pixel.g > 0.7){
-          return vec4(62.0/255.0, 153.0/255.0, 29.0/255.0, 1.0);
-        }
-        else if(back_pixel.g > back_pixel.b && back_pixel.g < 0.7){
-          return vec4(0.0, 102.0/255.0, 47.0/255.0, 1.0);
+        if(back_pixel.r > back_pixel.g){
+          return vec4(0.0, 0.0, 0.0, 0.0);
         }
         else if(back_pixel.g < back_pixel.b){
-          return vec4(0.0, 68.0/255.0, 153.0/255.0, 1.0);
+          return vec4(0.0, 132.0/255.0, 204.0/255.0, 1.0);
+        }
+        else {
+          return vec4(0.0, 127.0/255.0, 33.0/255.0, 1.0);
         }
       }
       return vec4(0.0, 0.0, 0.0, 0.0);
