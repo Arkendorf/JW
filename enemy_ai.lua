@@ -44,6 +44,19 @@ ai.load[4] = function(i, v) -- "circler"
   v.info.alt = true
 end
 
+ai.load[5] = function(i, v) -- pick-a-point
+  v.p.x = math.random(v.r, screen.w-v.r)
+  v.p.y = screen.h+v.r
+
+  v.info.x = math.random(screen.w*.1+v.r, screen.w*.9-v.r)
+  v.info.y = math.random(screen.h*.1+v.r, screen.h*.9-v.r)
+
+  v.a.x = 0
+  v.a.y = 1
+
+  v.info.angle = math.atan2(v.info.y-v.p.y, v.info.x-v.p.x)
+end
+
 
 ai.move = {}
 
@@ -134,6 +147,13 @@ ai.move[6] = function(i, v, dt) -- "circler"
   v.a = vector.norm(vector.sub(char.p, v.p))
 end
 
+ai.move[7] = function(i, v, dt) -- pick-a-point
+  if math.abs(enemy.stop_dist(v).y) <= v.p.y-v.info.y then
+    v.d.x = enemy_info[v.type].speed * math.cos(v.info.angle)
+    v.d.y = enemy_info[v.type].speed * math.sin(v.info.angle)
+  end
+end
+
 ai.attack = {}
 
 ai.attack[1] = function(i, v, dt) -- fire ASAP
@@ -151,7 +171,7 @@ ai.attack[2] = function(i, v, dt) -- don't attack
   v.atk = 1
 end
 
-ai.attack[3] = function(i, v, dt) -- fire ASAP\
+ai.attack[3] = function(i, v, dt) -- fire ASAP with delay
   if v.info.shots > 4 then
     v.atk = enemy_info[v.type].atk_delay * 8
     v.info.shots = 0

@@ -14,6 +14,7 @@ enemy.load = function()
   enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider", bullet = "basic"}
   enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "scout", bullet = "basic"}
   enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
+  enemy_info.balloon = {ai = {5, 7, 1, 2}, atk_delay = 4, speed = 1, stop = 0.9, r = 12, hp = 1, score = 3, img = "balloon", bullet = "basic"}
 
   -- bosses
   enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
@@ -170,6 +171,10 @@ enemy.kill = function(i, v)
     bossfight.pause = 2
     bossfight.active = false
   end
+end
+
+enemy.stop_dist = function(v)
+  return vector.scale(1/(1-enemy_info[v.type].stop), v.d)
 end
 
 enemy.draw_bubble = function(x, y, text)
