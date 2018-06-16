@@ -7,7 +7,7 @@ local clear = false
 
 local cut_dist = 3
 local spawn_delay = 0
-local spawn_time = 1
+local wave_time = 6
 
 bossfight = {active = false, boss = 0, pause = 0, bar_w = 136, c_bar_w = 0, hud_pos = 0}
 
@@ -20,36 +20,34 @@ end
 level.update = function(dt)
   -- recalculate level difficulty score
   if level.scroll.pos > 0 and level.scroll.pos < level.scroll.goal then -- no enemies in intro/outro
-    if spawn_delay <= 0 then -- pause between spawns
-      level_score.current = 0
-      local enemy_num = 0
-      for i, v in pairs(enemies) do
-        level_score.current = level_score.current + enemy_info[v.type].score * v.tier
-        enemy_num = enemy_num + 1
-      end
-      level_score.current = level_score.current * enemy_num -- the more enemies, the more difficult
-
-      -- add new enemy if necessary
-      if level_score.current < level_score.max then
-        local price = level_score.max - level_score.current -- find max spendable points to reach difficulty
+    if spawn_delay <= 0 then -- pause between waves
+      local num = 1
+      local score = 0
+      local done = false
+      while score < level_score.max and not done do
+        local price = level_score.max - score -- find max spendable points to reach difficulty
         local choices = {} -- list of enemies that can be added
         for i, v in pairs(enemy_info) do -- pick an enemy
-          if not v.boss and v.score <= level_score.each and v.score * enemy_num <= price then -- see if enemy difficulty fits needed difficulty
+          if not v.boss and v.score <= level_score.each and v.score * num <= price then -- see if enemy difficulty fits needed difficulty
             choices[#choices + 1] = i -- add to list of options
           end
         end
 
-        if #choices > 0 then -- make sure an enemy can be spawned
+        if #choices > 0 then
           local choice = choices[math.random(1, #choices)] -- randomly pick suitable enemy
           for tier = tier_max, 1, -1 do -- find maximum tier that still fits difficulty score
-            if enemy_info[choice].score * tier <= price then
+            if enemy_info[choice].score * num * tier <= price then
               enemy.new(choice, math.random(1, tier)) -- spawn enemy
-              spawn_delay = spawn_time
+              score = score + enemy_info[choice].score * num * tier
+              num = num + 1
               break
             end
           end
+        else
+          done = true
         end
       end
+      spawn_delay = wave_time
     else
       spawn_delay = spawn_delay - dt
     end
