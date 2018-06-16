@@ -8,19 +8,19 @@ enemy.load = function()
   enemy_info = {}
 
   -- enemies
-  enemy_info.crosser = {ai = {1, 1, 1, 1}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane", bullet = "basic"}
-  enemy_info.fly = {ai = {2, 2, 1, 1}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "fly", bullet = "basic"}
-  enemy_info.bigcrosser = {ai = {3, 3, 1, 3}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "bigplane", bullet = "basic"}
-  enemy_info.glider = {ai = {2, 4, 1, 1}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider", bullet = "basic"}
-  enemy_info.scout = {ai = {2, 4, 2, 1}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "scout", bullet = "basic"}
-  enemy_info.galleon = {ai = {1, 5, 1, 4}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
-  enemy_info.balloon = {ai = {5, 7, 1, 2}, atk_delay = 4, speed = 1, stop = 0.9, r = 12, hp = 1, score = 3, img = "balloon", bullet = "basic"}
+  enemy_info.crosser = {ai = {"cross", "cross", "default", "straight"}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane", bullet = "basic"}
+  enemy_info.fly = {ai = {"turn", "weave", "default", "straight"}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "fly", bullet = "basic"}
+  enemy_info.siner = {ai = {"sine", "sine", "default", "double"}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "bigplane", bullet = "basic"}
+  enemy_info.glider = {ai = {"turn", "follow", "default", "straight"}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider", bullet = "basic"}
+  enemy_info.scout = {ai = {"turn", "follow", "passive", "straight"}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "scout", bullet = "basic"}
+  enemy_info.galleon = {ai = {"cross", "bounce", "default", "side"}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
+  enemy_info.balloon = {ai = {"point", "point", "default", "aim"}, atk_delay = 5, speed = 1, stop = 0.9, r = 12, hp = 1, score = 3, img = "balloon", bullet = "basic"}
 
   -- bosses
-  enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
+  enemy_info.gorious = {boss = true, ai = {"circle", "circle", "volley", "quad"}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
          text = {{text = "You're not gonna get out of here that easily!", image = 3},
                  {text = "If you insist.", image = 1}}}
-  enemy_info.beetle = {boss = true, ai = {2, 4, 1, 1}, atk_delay = .5, speed = 4, turn_speed = 3, stop = 0.9, r = 24, hp = 8, score = 4, img = "beetle", bullet = "mine", icon = 4,
+  enemy_info.beetle = {boss = true, ai = {"turn", "follow", "default", "straight"}, atk_delay = .5, speed = 4, turn_speed = 3, stop = 0.9, r = 24, hp = 8, score = 4, img = "beetle", bullet = "mine", icon = 4,
          text = {{text = "Get outta my way!", image = 4},
                  {text = "Not happening.", image = 1},
                  {text = "I'll just have to run you over then!", image = 4}}}

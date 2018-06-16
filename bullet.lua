@@ -5,11 +5,11 @@ local bullet = {}
 bullet.load = function()
   bullets = {}
   bullet_info = {}
-  bullet_info.basic = {ai = {1, 1, 1}, speed = 6, dmg = 1, r = 4, img = "bullet"}
-  bullet_info.bomb = {ai = {2, 2, 2}, speed = 4, t = 1, dmg = 1, r = 6, img = "bomb"}
-  bullet_info.arrow = {ai = {1, 1, 1}, speed = 8, dmg = 1, r = 3, img = "arrow", pierce = true}
-  bullet_info.mine = {ai = {2, 2, 2}, speed = -2, t = 1, dmg = 1, r = 6, img = "mine"}
-  bullet_info.missile = {ai = {2, 3, 2}, speed = 3, t = 1, dmg = 1, r = 6, img = "missile"}
+  bullet_info.basic = {ai = {"default", "default", "default"}, speed = 6, dmg = 1, r = 4, img = "bullet"}
+  bullet_info.bomb = {ai = {"explosive", "bomb", "explode"}, speed = 4, t = 1, dmg = 1, r = 6, img = "bomb"}
+  bullet_info.arrow = {ai = {"default", "default", "default"}, speed = 8, dmg = 1, r = 3, img = "arrow", pierce = true}
+  bullet_info.mine = {ai = {"explosive", "bomb", "explode"}, speed = -2, t = 1, dmg = 1, r = 6, img = "mine"}
+  bullet_info.missile = {ai = {"explosive", "missile", "explode"}, speed = 3, t = 1, dmg = 1, r = 6, img = "missile"}
 
   weapon_info = {}
   weapon_info[1] = {bullet = "basic", ammo = 1, delay = .2}

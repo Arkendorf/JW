@@ -2,22 +2,22 @@ local ai = {}
 
 ai.load = {}
 
-ai.load[1] = function(i, v) -- "basic"
+ai.load.default = function(i, v) -- "basic"
 end
 
-ai.load[2] = function(i, v) -- "bomb"
+ai.load.explosive = function(i, v) -- "bomb"
   v.info.t = 0
   v.info.pt = 0
 end
 
 ai.update = {}
 
-ai.update[1] = function(i, v, dt) -- "basic"
+ai.update.default = function(i, v, dt) -- "basic"
   particle.new("trail", v.p, {x = 0, y = 0}, v.d, tiers[v.tier].color) -- bullet trail
   v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
 end
 
-ai.update[2] = function(i, v, dt) -- "bomb"
+ai.update.bomb = function(i, v, dt) -- "bomb"
   v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60 * (1 - v.info.t/bullet_info[v.type].t), v.d))
   v.info.t = v.info.t + dt
   if v.info.t > bullet_info[v.type].t+0.4 then
@@ -29,7 +29,7 @@ ai.update[2] = function(i, v, dt) -- "bomb"
   end
 end
 
-ai.update[3] = function(i, v, dt) -- "missile"
+ai.update.missile = function(i, v, dt) -- "missile"
   v.info.t = v.info.t + dt
   if v.info.t > bullet_info[v.type].t+0.4 then
     bullet.delete(i)
@@ -50,11 +50,11 @@ end
 
 ai.activate = {}
 
-ai.activate[1] = function(i, v, dt)
+ai.activate.default = function(i, v, dt)
   bullet.delete(i)
 end
 
-ai.activate[2] = function(i, v, dt)
+ai.activate.explode = function(i, v, dt)
   v.info.t = bullet_info[v.type].t
 end
 
