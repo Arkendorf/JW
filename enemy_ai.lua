@@ -9,6 +9,7 @@ ai.load.cross = function(i, v)
   v.p.y = math.random(v.r, screen.h-v.r)
 
   v.a.x = v.info.dir
+  v.info.angle = math.pi * (v.info.dir-1)/-2
 end
 
 ai.load.turn = function(i, v)
@@ -17,16 +18,6 @@ ai.load.turn = function(i, v)
 
   v.info.angle = math.pi*.5
   v.info.dir = math.random(0, 1)*2-1
-end
-
-ai.load.sine = function(i, v)
-  -- set position and direction
-  v.info.dir = math.random(0, 1)*2-1
-  v.p.x = screen.w/2-screen.w/2*v.info.dir
-  v.info.t = 0
-  v.info.y = math.random(v.r, screen.h-v.r)
-
-  v.a.x = v.info.dir
 end
 
 ai.load.circle = function(i, v) -- "circler"
@@ -80,10 +71,25 @@ ai.move.weave = function(i, v, dt) -- "fly"
   v.d = vector.scale(enemy_info[v.type].speed, v.d)
 end
 
-ai.move.sine = function(i, v, dt) -- "siner"
-  v.info.t = v.info.t + dt
-  v.d.x = v.info.dir * dt * 60 * enemy_info[v.type].speed
-  v.p.y = v.info.y + math.sin(v.info.t * 2) * 32
+ai.move.patrol = function(i, v, dt) -- "siner"
+  local turn_speed = math.rad(dt * 60)*enemy_info[v.type].speed
+  if ((v.p.x < screen.w*.2 and v.info.dir == -1) or (v.p.x > screen.w*.8 and v.info.dir == 1)) and not v.info.turning then
+    v.info.turning = true
+  end
+  if v.info.turning then
+    v.info.angle = v.info.angle + turn_speed
+    if v.info.angle >= math.pi*(1+(v.info.dir-1)/-2) then
+      v.info.angle = math.pi * (v.info.dir+1)/2
+      v.info.dir = v.info.dir * -1
+      v.info.turning = false
+    end
+  end
+  v.d.x = math.cos(v.info.angle)
+  v.d.y = math.sin(v.info.angle)
+
+  v.a = v.d
+
+  v.d = vector.scale(enemy_info[v.type].speed, v.d)
 end
 
 ai.move.follow = function(i, v, dt) -- "follower"

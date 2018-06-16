@@ -10,7 +10,7 @@ enemy.load = function()
   -- enemies
   enemy_info.crosser = {ai = {"cross", "cross", "default", "straight"}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "biplane", bullet = "basic"}
   enemy_info.fly = {ai = {"turn", "weave", "default", "straight"}, atk_delay = 2, speed = 1.5, turn_speed = 1, stop = 0.9, r = 16, hp = 1, score = 1, img = "fly", bullet = "basic"}
-  enemy_info.siner = {ai = {"sine", "sine", "default", "double"}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "bigplane", bullet = "basic"}
+  enemy_info.double = {ai = {"cross", "patrol", "default", "double"}, atk_delay = 2, speed = 1, stop = 0.9, r = 24, hp = 3, score = 4, img = "double", bullet = "basic"}
   enemy_info.glider = {ai = {"turn", "follow", "default", "straight"}, atk_delay = 3, speed = 1, turn_speed = 1.5, stop = 0.9, r = 16, hp = 1, score = 3, img = "glider", bullet = "basic"}
   enemy_info.scout = {ai = {"turn", "follow", "passive", "straight"}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "scout", bullet = "basic"}
   enemy_info.galleon = {ai = {"cross", "bounce", "default", "side"}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
