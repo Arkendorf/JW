@@ -113,7 +113,7 @@ level.start = function(dif, dist, reward)
   stats = {kills = 0, shots = 0, hits = 0, dmg = 0}
 
   -- set up level
-  level_score.max = dif 
+  level_score.max = dif
   level_score.each = 2+math.floor((#map.path-1) / 2)
   level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
@@ -127,6 +127,7 @@ level.start = function(dif, dist, reward)
   -- reset stuff
   level.clear()
   particles = {}
+  spawn_delay = 0
 
   clear = false
   bossfight.active = false

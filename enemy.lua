@@ -15,6 +15,8 @@ enemy.load = function()
   enemy_info.scout = {ai = {"turn", "follow", "passive", "straight"}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "scout", bullet = "basic"}
   enemy_info.galleon = {ai = {"cross", "bounce", "default", "side"}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
   enemy_info.balloon = {ai = {"point", "point", "default", "aim"}, atk_delay = 5, speed = 1, stop = 0.9, r = 12, hp = 1, score = 3, img = "balloon", bullet = "basic"}
+  enemy_info.bigplane = {ai = {"cross", "patrol", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 24, hp = 3, score = 6, img = "bigplane", bullet = "basic", turrets = {{img = "turret", x = 24, y = 24}}}
+  enemy_info.trapazoid = {ai = {"cross", "cross", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 4, img = "trapazoid", bullet = "basic", turrets = {{img = "turret", x = 16, y = 16}}}
 
   -- bosses
   enemy_info.gorious = {boss = true, ai = {"circle", "circle", "volley", "quad"}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
@@ -117,21 +119,33 @@ end
 
 enemy.draw = function()
   for i, v in pairs(enemies) do
+    -- draw enemy
     local img = enemy_info[v.type].img
-    -- flash if invincibile
+    local ship_angle = math.atan2(v.a.y, v.a.x)
+    local inv = false -- flash if invincible
     if v.inv > 0 and math.floor(math.sin(v.inv*8)+0.5) == 0 then
       love.graphics.setShader(shader.fill)
-      love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
-      love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
-      love.graphics.setShader()
-    else
-      love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
-      love.graphics.setColor(tiers[v.tier].color)
-      love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), math.atan2(v.a.y, v.a.x), 1, 1, ship_width[img]/2, ship_width[img]/2)
-      love.graphics.setColor(255, 255, 255)
+      inv = true
     end
-
-    if v.bubble then
+    love.graphics.draw(shipimg[img], shipquad[img][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), ship_angle, 1, 1, ship_width[img]/2, ship_width[img]/2)
+    if not inv then
+      love.graphics.setColor(tiers[v.tier].color)
+    end
+    love.graphics.draw(shipimg[img.."_overlay"], shipquad[img.."_overlay"][math.floor(v.frame)], math.floor(v.p.x), math.floor(v.p.y), ship_angle, 1, 1, ship_width[img]/2, ship_width[img]/2)
+    if not inv then
+      love.graphics.setColor(255, 255, 255)
+    else
+      love.graphics.setShader()
+    end
+    if enemy_info[v.type].turrets then -- draw turrets
+      local char_angle = math.atan2(char.p.y-v.p.y, char.p.x-v.p.x)
+      for j, w in ipairs(enemy_info[v.type].turrets) do
+        local x_offset = ((-ship_width[img])/2+w.x)*math.cos(ship_angle)
+        local y_offset = ((-ship_width[img])/2+w.y)*math.sin(ship_angle)
+        love.graphics.draw(shipimg[w.img], math.floor(v.p.x+x_offset), math.floor(v.p.y+y_offset), char_angle, 1, 1, ship_width[w.img]/2, ship_width[w.img]/2)
+      end
+    end
+    if v.bubble then -- draw text bubble
       enemy.draw_bubble(math.floor(v.p.x), math.floor(v.p.y), v.bubble.phrase)
     end
   end
