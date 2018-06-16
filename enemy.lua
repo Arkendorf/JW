@@ -19,7 +19,7 @@ enemy.load = function()
   enemy_info.gorious = {boss = true, ai = {4, 6, 3, 5}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
          text = {{text = "You're not gonna get out of here that easily!", image = 3},
                  {text = "If you insist.", image = 1}}}
-  enemy_info.beetle = {boss = true, ai = {2, 4, 1, 1}, atk_delay = .5, speed = 4, turn_speed = 3, stop = 0.9, r = 24, hp = 8, score = 1, img = "beetle", bullet = "mine", icon = 4,
+  enemy_info.beetle = {boss = true, ai = {2, 4, 1, 1}, atk_delay = .5, speed = 4, turn_speed = 3, stop = 0.9, r = 24, hp = 8, score = 4, img = "beetle", bullet = "mine", icon = 4,
          text = {{text = "Get outta my way!", image = 4},
                  {text = "Not happening.", image = 1},
                  {text = "I'll just have to run you over then!", image = 4}}}

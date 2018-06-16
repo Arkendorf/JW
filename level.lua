@@ -76,18 +76,20 @@ level.update = function(dt)
     end
     level.clear(true) -- clear level, except for drops
     if math.random(0, 3) == 0 and not tutorial.active then -- randomly decide to spawn boss
-      bossfight.pause = 1
-      bossfight.active = true
-      bossfight.convo = false
-
       local boss_options = {}
       for i, v in pairs(enemy_info) do -- find possible bosses
         if v.boss and v.score < level_score.max then
           boss_options[#boss_options+1] = i
         end
       end
-      bossfight.type = boss_options[math.random(1, #boss_options)]
-      bossfight.c_bar_w = bossfight.bar_w
+      if #boss_options > 0 then -- make sure there is an option
+        bossfight.pause = 1
+        bossfight.active = true
+        bossfight.convo = false
+
+        bossfight.type = boss_options[math.random(1, #boss_options)]
+        bossfight.c_bar_w = bossfight.bar_w
+      end
     end
   elseif not bossfight.active then
     level.scroll.v = level.scroll.v + dt * 60 * 0.002 -- move through level
