@@ -9,7 +9,7 @@ tutorial = require "tutorial"
 menu = require "menu"
 
 function love.load()
-  state = "menu"
+  state = "reward"
   oldstate = "menu"
   freeze = false
   save = false
@@ -26,6 +26,8 @@ function love.load()
   manage.load()
   textbox.load()
   menu.load()
+
+  manage.load_settings()
 
   menu.start_main()
 end
@@ -98,6 +100,7 @@ function love.quit()
   if save then
     manage.save_game()
   end
+  manage.save_settings()
   manage.score()
   if char.hp <= 0 then
     manage.game_over()

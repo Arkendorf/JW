@@ -22,8 +22,6 @@ end
 
 button_func.load_game = function()
   manage.load_file()
-  map.start()
-  state = "map"
 end
 
 button_func.tutorial = function()

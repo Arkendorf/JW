@@ -1,12 +1,14 @@
 local level = {}
 
-local level_score = {max = 0, current = 0}
-local level_reward = 0
+local tier_score = 4
+
+level_score = {max = 0, current = 0}
+level_reward = 0
 local airship = {frame = 1}
 local clear = false
 
 local cut_dist = 3
-local spawn_delay = 0
+spawn_delay = 0
 local wave_time = 6
 
 bossfight = {active = false, boss = 0, pause = 0, bar_w = 136, c_bar_w = 0, hud_pos = 0}
@@ -117,13 +119,7 @@ level.start = function(dif, dist, reward)
   level_score.each = 2+math.floor((#map.path-1) / 2)
   level.scroll = {goal = dist, pos = -cut_dist, v = 0}
 
-  tier_max = 1+math.floor((#map.path-1)/tier_score) -- find max tier for weapons/enemies
-  if tier_max < 1 then
-    tier_max = 1
-  elseif tier_max > #tiers then
-    tier_max = #tiers
-  end
-
+  tier_max = level.get_tier_max()
   -- reset stuff
   level.clear()
   particles = {}
@@ -146,6 +142,16 @@ level.draw = function()
 
   -- starting ship
   level.draw_airship(screen.w/2, screen.h/2+(level.scroll.pos+cut_dist)*100)
+end
+
+level.get_tier_max = function()
+  local tier_max = 1+math.floor((#map.path-1)/tier_score) -- find max tier for weapons/enemies
+  if tier_max < 1 then
+    tier_max = 1
+  elseif tier_max > #tiers then
+    tier_max = #tiers
+  end
+  return tier_max
 end
 
 level.clear = function(keep_drops)

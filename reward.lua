@@ -2,12 +2,12 @@ local item_info = require "items"
 
 local rewardscreen = {}
 
-local reward = 0
-local reward_type = ""
-local items = {}
-local item_target = 0
-local stats = {}
-local total_score = 0
+reward_num = 0
+reward_type = ""
+items = {}
+local item_target = 1
+stats = {}
+total_score = 0
 local weaponscreen = {on = false, pos = -176, itempos = {200, 200}, target = 1, itemcanvas = {love.graphics.newCanvas(), love.graphics.newCanvas(), love.graphics.newCanvas()}, choice = 0, canvas = love.graphics.newCanvas(220, 176)}
 local report_pos = -220
 local info_pos = 600
@@ -16,49 +16,53 @@ local item_pos = {600, 600, 600}
 local on = true
 
 local numerals = {{1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"}, {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"}, {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}}
-tier_score = 4
 
 rewardscreen.load = function()
 end
 
 rewardscreen.start = function(node, game_stats)
-    on = true
-    weaponscreen.on = false
+  on = true
+  weaponscreen.on = false
 
-    reward = node
-    if tutorial.active then
-      tutorial.reward = node
-    end
-    reward_type = rewardscreen.get_type(reward)
-
-    math.randomseed(os.time())
-    items = {}
-    if reward_type == "shop" then
-      for i = 1, 3 do
-        items[i] = rewardscreen.create(math.random(1, 4))
-      end
-    elseif reward_type ~= "none" then
-      items[1] = rewardscreen.create(reward - 1)
-    end
-    for i, v in ipairs(items) do
-      v.canvas = rewardscreen.draw_card(v.type, v.item, v.amount)
-    end
-
-    item_target = 1
-
-    stats = {{str = "Kills:", num = game_stats.kills}, {str = "Shots:", num = game_stats.shots}, {str = "Accuracy:", num = math.floor(game_stats.hits/game_stats.shots*100), per = true}, {str = "Damage Taken:", num = game_stats.dmg}}
-    total_score = math.ceil((stats[1].num*10-stats[4].num)/stats[2].num)
-    if stats[2].num < 1 then -- prevents bugged bonus and NaN accuracy
-      stats[3].num = 0
-      total_score = 1
-    elseif total_score < 1 then -- prevents negative score and bugged bonus
-      total_score = 1
-    end
-
-    canvas.reward = rewardscreen.draw_card(5, 1, total_score)
-
-    money = money + total_score
+  reward_num = node
+  if tutorial.active then
+    tutorial.reward = node
   end
+  reward_type = rewardscreen.get_type(reward_num)
+
+  tier_max = level.get_tier_max()
+
+  math.randomseed(os.time())
+  items = {}
+  if reward_type == "shop" then
+    for i = 1, 3 do
+      items[i] = rewardscreen.create(math.random(1, 4))
+    end
+  elseif reward_type ~= "none" then
+    items[1] = rewardscreen.create(reward_num - 1)
+  end
+
+  item_target = 1
+
+  stats = {{str = "Kills:", num = game_stats.kills}, {str = "Shots:", num = game_stats.shots}, {str = "Accuracy:", num = math.floor(game_stats.hits/game_stats.shots*100), per = true}, {str = "Damage Taken:", num = game_stats.dmg}}
+  total_score = math.ceil((stats[1].num*10-stats[4].num)/stats[2].num)
+  if stats[2].num < 1 then -- prevents bugged bonus and NaN accuracy
+    stats[3].num = 0
+    total_score = 1
+  elseif total_score < 1 then -- prevents negative score and bugged bonus
+    total_score = 1
+  end
+  money = money + total_score
+
+  rewardscreen.create_canvases()
+end
+
+rewardscreen.create_canvases = function()
+  for i, v in ipairs(items) do
+    v.canvas = rewardscreen.draw_card(v.type, v.item, v.amount)
+  end
+  canvas.reward = rewardscreen.draw_card(5, 1, total_score)
+end
 
 rewardscreen.update = function(dt)
   for i, v in ipairs(items) do
@@ -92,6 +96,7 @@ rewardscreen.update = function(dt)
   -- outro animation
   if math.floor(report_pos) <= -220 then
     state = "map"
+    map.start()
   end
 end
 
@@ -246,14 +251,14 @@ rewardscreen.collect = function(item)
   end
 end
 
-rewardscreen.get_type = function(reward)
-  if reward == 1 then
+rewardscreen.get_type = function(reward_num)
+  if reward_num == 1 then
     return "none"
-  elseif reward == 2 then
+  elseif reward_num == 2 then
     return "weapon"
-  elseif reward == 3 then
+  elseif reward_num == 3 then
     return "upgrade"
-  elseif reward == 7 then
+  elseif reward_num == 7 then
     return "shop"
   else
     return "resource"
