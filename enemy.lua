@@ -15,8 +15,8 @@ enemy.load = function()
   enemy_info.scout = {ai = {"turn", "follow", "passive", "straight"}, atk_delay = 3, speed = 2, turn_speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "scout", bullet = "basic"}
   enemy_info.galleon = {ai = {"cross", "bounce", "default", "side"}, atk_delay = 4, speed = .5, stop = 0.9, r = 20, hp = 4, score = 5, img = "galleon", bullet = "basic"}
   enemy_info.balloon = {ai = {"point", "point", "default", "aim"}, atk_delay = 5, speed = 1, stop = 0.9, r = 12, hp = 1, score = 3, img = "balloon", bullet = "basic"}
-  enemy_info.bigplane = {ai = {"cross", "patrol", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 24, hp = 3, score = 6, img = "bigplane", bullet = "basic", turrets = {{img = "turret", x = 24, y = 24}}}
-  enemy_info.trapazoid = {ai = {"cross", "cross", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 4, img = "trapazoid", bullet = "basic", turrets = {{img = "turret", x = 16, y = 16}}}
+  enemy_info.bigplane = {ai = {"cross", "patrol", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 24, hp = 3, score = 6, img = "bigplane", bullet = "basic", turrets = {{img = "turret", offset = 0}}}
+  enemy_info.trapazoid = {ai = {"cross", "cross", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 4, img = "trapazoid", bullet = "basic", turrets = {{img = "turret", offset = 0}}}
 
   -- bosses
   enemy_info.gorious = {boss = true, ai = {"circle", "circle", "volley", "quad"}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
@@ -26,6 +26,10 @@ enemy.load = function()
          text = {{text = "Get outta my way!", image = 4},
                  {text = "Not happening.", image = 1},
                  {text = "I'll just have to run you over then!", image = 4}}}
+  enemy_info.orca = {boss = true, ai = {"spawner", "spawner", "default", "aim"}, atk_delay = 3, speed = 1, turn_speed = 2, stop = 0.9, r = 24, hp = 8, score = 12, img = "orca", bullet = "missile", turrets = {{img = "cannon", offset = 8}}, icon = 5,
+        text = {{text = "Turn back, while you still can", image = 5},
+                {text = "I'm sorry, but I have a job to do.", image = 1},
+                {text = "You're making a mistake...", image = 5}}}
 
 
 
@@ -140,8 +144,8 @@ enemy.draw = function()
     if enemy_info[v.type].turrets then -- draw turrets
       local char_angle = math.atan2(char.p.y-v.p.y, char.p.x-v.p.x)
       for j, w in ipairs(enemy_info[v.type].turrets) do
-        local x_offset = ((-ship_width[img])/2+w.x)*math.cos(ship_angle)
-        local y_offset = ((-ship_width[img])/2+w.y)*math.sin(ship_angle)
+        local x_offset = w.offset*math.cos(ship_angle)
+        local y_offset = w.offset*math.sin(ship_angle)
         love.graphics.draw(shipimg[w.img], math.floor(v.p.x+x_offset), math.floor(v.p.y+y_offset), char_angle, 1, 1, ship_width[w.img]/2, ship_width[w.img]/2)
       end
     end

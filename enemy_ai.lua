@@ -20,6 +20,12 @@ ai.load.turn = function(i, v)
   v.info.dir = math.random(0, 1)*2-1
 end
 
+ai.load.spawner = function(i, v)
+  ai.load.turn(i, v)
+  v.info.t = 1
+end
+
+
 ai.load.circle = function(i, v) -- "circler"
   v.p.x = screen.w/2
   v.p.y = -v.r
@@ -126,6 +132,21 @@ ai.move.follow = function(i, v, dt) -- "follower"
   v.a = v.d
 
   v.d = vector.scale(enemy_info[v.type].speed, v.d)
+end
+
+ai.move.spawner = function(i, v, dt)
+  ai.move.follow(i, v, dt)
+
+  if v.info.t <= 0 then
+    local spawn = enemy.new("scout", v.tier)
+    spawn.p.x = v.p.x + 20 * math.cos(v.info.angle)
+    spawn.p.y = v.p.y + 20 * math.sin(v.info.angle)
+    spawn.a = v.a
+    spawn.info.angle = math.atan2(v.a.y, v.a.x)
+    v.info.t = 1
+  else
+    v.info.t = v.info.t - dt
+  end
 end
 
 ai.move.bounce = function(i, v, dt) -- "back and forth"
