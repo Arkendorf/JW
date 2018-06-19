@@ -9,7 +9,7 @@ tutorial = require "tutorial"
 menu = require "menu"
 
 function love.load()
-  state = "reward"
+  state = "menu"
   oldstate = "menu"
   freeze = false
   save = false

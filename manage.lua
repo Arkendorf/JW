@@ -24,10 +24,12 @@ manage.load_file = function()
 end
 
 manage.load_settings = function()
-  local file = love.filesystem.load("settings.lua")
-  local result = file()
-  love.window.setMode(screen.res*screen.w, screen.res*screen.h, {fullscreen = (screen.type == "Fullscreen"), resizable = true}) -- update screen size based on saved settings
-  window.scale_screen()
+  if love.filesystem.exists("settings.lua") then
+    local file = love.filesystem.load("settings.lua")
+    local result = file()
+    love.window.setMode(screen.res*screen.w, screen.res*screen.h, {fullscreen = (screen.type == "Fullscreen"), resizable = true}) -- update screen size based on saved settings
+    window.scale_screen()
+  end
 end
 
 manage.save_game = function()

@@ -35,6 +35,7 @@ graphics.load = function()
   quad.clouds = graphics.spritesheet(img.clouds, 256, 96)
   quad.bubble = graphics.spritesheet(img.bubble, 16, 16)
   quad.charicons = graphics.spritesheet(img.charicons, 64, 64)
+  quad.upgradeicons = graphics.spritesheet(img.upgradeicons, 24, 24)
 
   -- bullet images
   bulletimg, bulletquad = graphics.load_folder("bulletimgs")

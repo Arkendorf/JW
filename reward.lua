@@ -318,6 +318,8 @@ rewardscreen.draw_card = function(type, item, amount)
       love.graphics.setColor(graphics.mix_colors({palette.colorbase, tiers[amount].color}))
       love.graphics.print(str, 56-font:getWidth(str), 64)
       love.graphics.setColor(255, 255, 255)
+    elseif type == 2 then
+      love.graphics.draw(img.upgradeicons, quad.upgradeicons[item], 20, 36)
     end
   end
   love.graphics.setCanvas()
