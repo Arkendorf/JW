@@ -4,7 +4,7 @@ local shader = require "shader"
 
 character.load = function()
   char = {p = {x = 200, y = 300}, d = {x = 0, y = -1}, a = {x = 0, y = -1}, hp = 3, inv = 0, atk = 0, r = 8, ammo = 64, frame = 1, trail = 0, immune = {}}
-  char_info = {speed = 1, stop = .8, inv_time = 1, hp_max = 3, ammo_max = 64, weapons = {{type = 1, tier = 1}, {type = 0, tier = 1}}}
+  char_info = {speed = 1, stop = .8, inv_time = 1, hp_max = 3, ammo_max = 32, weapons = {{type = 1, tier = 1}, {type = 0, tier = 1}}}
 end
 
 character.update = function(dt)

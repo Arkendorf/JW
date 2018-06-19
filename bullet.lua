@@ -11,13 +11,13 @@ bullet.load = function()
   bullet_info.mine = {ai = {"explosive", "bomb", "explode"}, speed = -2, t = 1, dmg = 1, r = 6, img = "mine"}
   bullet_info.missile = {ai = {"explosive", "missile", "explode"}, speed = 3, t = 1, dmg = 1, r = 6, img = "missile"}
   bullet_info.boomerang = {ai = {"boomerang", "boomerang", "default"}, speed = 5, dmg = 1, r = 5, img = "boomerang"}
-  bullet_info.energy = {ai = {"vortex", "vortex", "default"}, speed = 2, dmg = 1, r = 3, img = "energy"}
+  bullet_info.energy = {ai = {"vortex", "vortex", "default"}, speed = 3, dmg = 1, r = 3, img = "energy"}
 
   weapon_info = {}
   weapon_info[1] = {bullet = "basic", ammo = 1, delay = .2}
-  weapon_info[2] = {bullet = "bomb", ammo = 3, delay = .4}
+  weapon_info[2] = {bullet = "bomb", ammo = 2, delay = .4}
   weapon_info[3] = {bullet = "arrow", ammo = 1, delay = .4}
-  weapon_info[4] = {bullet = "missile", ammo = 4, delay = .6}
+  weapon_info[4] = {bullet = "missile", ammo = 3, delay = .6}
   weapon_info[5] = {bullet = "boomerang", ammo = 1, delay = .3}
   weapon_info[6] = {bullet = "energy", ammo = 3, delay = .3}
 end
@@ -26,6 +26,7 @@ bullet.update = function(dt)
   for i, v in pairs(bullets) do
     -- update per bullet ai
     ai.update[bullet_info[v.type].ai[2]](i, v, dt)
+    v.p = vector.sum(v.p, vector.scale(dt*60, v.d))
 
     -- do damage
     if v.side == 1 then -- check for collision with enemies
@@ -81,7 +82,7 @@ bullet.update = function(dt)
 end
 
 bullet.collision = function(a, b)
-  return (collision.overlap(a, b) or collision.overlap({p = vector.sum(a.p, vector.scale(-.5, a.d), b), r = a.r}, b))
+  return (collision.overlap(a, b) or collision.overlap({p = vector.sum(a.p, vector.scale(-.5, a.d)), r = a.r}, b))
 end
 
 bullet.draw = function()
@@ -96,7 +97,7 @@ end
 bullet.new = function(type, p, d, side, tier, parent)
   local spot = opening(bullets)
   local info = bullet_info[type]
-  bullets[spot] = {type = type, p = p, d = d, r = info.r, side = side, angle = math.atan2(d.y, d.x), frame = 1, tier = tier, parent = parent, info = {}}
+  bullets[spot] = {type = type, p = p, d = d, a = d, r = info.r, side = side, angle = math.atan2(d.y, d.x), frame = 1, tier = tier, parent = parent, info = {}}
   -- perform first-time setup
   ai.load[info.ai[1]](spot, bullets[spot])
 end

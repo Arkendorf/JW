@@ -3,6 +3,7 @@ local ai = {}
 ai.load = {}
 
 ai.load.default = function(i, v) -- "basic"
+  v.d = vector.scale(bullet_info[v.type].speed, v.a)
 end
 
 ai.load.explosive = function(i, v) -- "bomb"
@@ -22,11 +23,10 @@ ai.update = {}
 
 ai.update.default = function(i, v, dt) -- "basic"
   particle.new("trail", v.p, {x = 0, y = 0}, v.d, tiers[v.tier].color) -- bullet trail
-  v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
 end
 
 ai.update.bomb = function(i, v, dt) -- "bomb"
-  v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60 * (1 - v.info.t/bullet_info[v.type].t), v.d))
+  v.d = vector.scale(bullet_info[v.type].speed * (1 - v.info.t/bullet_info[v.type].t), v.a)
   v.info.t = v.info.t + dt
   if v.info.t > bullet_info[v.type].t+0.4 then
     bullet.delete(i)
@@ -45,6 +45,8 @@ ai.update.missile = function(i, v, dt) -- "missile"
     v.frame = 2
     v.r = 24
     particle.new("explosion", {x = v.p.x+math.random(-1600, 1600)/100, y = v.p.y+math.random(-1600, 1600)/100}, {x = 0, y = 0}, {x = math.random(-1, 1), y = math.random(-1, 1)})
+    v.d.x = 0
+    v.d.y = 0
   else
     if v.info.pt <= 0 then
       particle.new("smoke", v.p, {x = 0, y = 0}, {x = math.random(-1, 1), y = math.random(-1, 1)})
@@ -52,13 +54,13 @@ ai.update.missile = function(i, v, dt) -- "missile"
     else
       v.info.pt = v.info.pt - dt
     end
-    v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
+    v.d = vector.scale(bullet_info[v.type].speed, v.a)
   end
 end
 
 ai.update.boomerang = function(i, v, dt) -- "boomerang"
   particle.new("trail", v.p, {x = 0, y = 0}, v.d, tiers[v.tier].color) -- bullet trail
-  v.p = vector.sum(v.p, vector.scale(v.info.v* dt * 60, v.d))
+  v.d = vector.scale(v.info.v, v.a)
   if v.info.v > - bullet_info[v.type].speed then
     v.info.v = v.info.v - 0.08
   end
@@ -67,8 +69,6 @@ end
 
 ai.update.vortex = function(i, v, dt) -- "boomerang"
   particle.new("trail", v.p, {x = 0, y = 0}, v.d, tiers[v.tier].color) -- bullet trail
-
-  v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
   if v.side == 1 then
     for j, w in pairs(enemies) do
       local angle = math.atan2(v.p.y-w.p.y, v.p.x-w.p.x)
@@ -84,7 +84,7 @@ ai.update.vortex = function(i, v, dt) -- "boomerang"
   if v.info.pt <= 0 then
     local angle = math.random(0, math.pi*200)/100
     local dir = {x = math.cos(angle), y = math.sin(angle)}
-    particle.new("energy", vector.sum(v.p, vector.scale(16, dir)), vector.scale(bullet_info[v.type].speed, v.d), dir, tiers[v.tier].color) -- effect
+    particle.new("energy", vector.sum(v.p, vector.scale(16, dir)), v.d, dir, tiers[v.tier].color) -- effect
     v.info.pt = math.random(1, 30)/100
   else
     v.info.pt = v.info.pt - dt
