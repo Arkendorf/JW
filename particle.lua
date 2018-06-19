@@ -5,12 +5,13 @@ local particle = {}
 particle.load = function()
   particles = {}
   particle_info = {}
-  particle_info.trail = {img = "trail", ai = {1, 1}, speed = 24}
-  particle_info.gas = {img = "gas", ai = {1, 1}, speed = 12}
-  particle_info.smoke = {img = "smoke", ai = {1, 1}, speed = 12}
-  particle_info.explosion = {img = "explosion", ai = {3, 2}, speed = 12}
-  particle_info.spark = {img = "spark", ai = {2, 1}, speed = 16}
-  particle_info.pop = {img = "pop", ai = {1, 1}, speed = 16}
+  particle_info.trail = {img = "trail", ai = {"default", "default"}, speed = 24}
+  particle_info.gas = {img = "gas", ai = {"default", "default"}, speed = 12}
+  particle_info.smoke = {img = "smoke", ai = {"default", "default"}, speed = 12}
+  particle_info.explosion = {img = "explosion", ai = {"explosion", "explosion"}, speed = 12}
+  particle_info.spark = {img = "spark", ai = {"spark", "default"}, speed = 16}
+  particle_info.pop = {img = "pop", ai = {"default", "default"}, speed = 16}
+  particle_info.energy = {img = "energy", ai = {"energy", "energy"}, speed = 16}
 end
 
 particle.update = function(dt)

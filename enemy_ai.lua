@@ -52,6 +52,7 @@ ai.load.point = function(i, v) -- pick-a-point
   v.a.y = 1
 
   v.info.angle = math.atan2(v.info.y-v.p.y, v.info.x-v.p.x)
+  v.info.stop = false
 end
 
 
@@ -175,9 +176,13 @@ ai.move.circle = function(i, v, dt) -- "circler"
 end
 
 ai.move.point = function(i, v, dt) -- pick-a-point
-  if math.abs(enemy.stop_dist(v).y) <= v.p.y-v.info.y then
+  if not v.info.stop then
     v.d.x = enemy_info[v.type].speed * math.cos(v.info.angle)
     v.d.y = enemy_info[v.type].speed * math.sin(v.info.angle)
+  end
+
+  if math.abs(enemy.stop_dist(v).y) > v.p.y-v.info.y then
+    v.info.stop = true
   end
 end
 

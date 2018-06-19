@@ -10,12 +10,16 @@ bullet.load = function()
   bullet_info.arrow = {ai = {"default", "default", "default"}, speed = 8, dmg = 1, r = 3, img = "arrow", pierce = true}
   bullet_info.mine = {ai = {"explosive", "bomb", "explode"}, speed = -2, t = 1, dmg = 1, r = 6, img = "mine"}
   bullet_info.missile = {ai = {"explosive", "missile", "explode"}, speed = 3, t = 1, dmg = 1, r = 6, img = "missile"}
+  bullet_info.boomerang = {ai = {"boomerang", "boomerang", "default"}, speed = 5, dmg = 1, r = 5, img = "boomerang"}
+  bullet_info.energy = {ai = {"vortex", "vortex", "default"}, speed = 2, dmg = 1, r = 3, img = "energy"}
 
   weapon_info = {}
   weapon_info[1] = {bullet = "basic", ammo = 1, delay = .2}
   weapon_info[2] = {bullet = "bomb", ammo = 3, delay = .4}
   weapon_info[3] = {bullet = "arrow", ammo = 1, delay = .4}
   weapon_info[4] = {bullet = "missile", ammo = 4, delay = .6}
+  weapon_info[5] = {bullet = "boomerang", ammo = 1, delay = .3}
+  weapon_info[6] = {bullet = "energy", ammo = 3, delay = .3}
 end
 
 bullet.update = function(dt)
@@ -26,7 +30,7 @@ bullet.update = function(dt)
     -- do damage
     if v.side == 1 then -- check for collision with enemies
       for j, w in pairs(enemies) do
-        if (collision.overlap(v, w) or collision.overlap({p = vector.sum(v.p, vector.scale(-.5, v.d), w), r = v.r}, w)) and not w.immune[i] then
+        if bullet.collision(v, w) and not w.immune[i] then
           if w.inv <= 0 then
             if math.random(0, 1) == 0 and not w.bubble then -- enemy
               w.bubble = {phrase = dmg_phrase[math.random(1, #dmg_phrase)], t = 2}
@@ -49,7 +53,7 @@ bullet.update = function(dt)
         end
       end
     else -- check for collision with player
-      if (collision.overlap(v, char) or collision.overlap({p = vector.sum(v.p, vector.scale(-.5, v.d), w), r = v.r}, char)) and not char.immune[i] then
+      if bullet.collision(v, char) and not char.immune[i] then
         if char.inv <= 0 then
          if math.random(0, 1) == 0 and enemies[v.parent] and not enemies[v.parent].bubble then -- enemy
             enemies[v.parent].bubble = {phrase = shot_phrase[math.random(1, #dmg_phrase)], t = 2}
@@ -74,6 +78,10 @@ bullet.update = function(dt)
       bullet.delete(i)
     end
   end
+end
+
+bullet.collision = function(a, b)
+  return (collision.overlap(a, b) or collision.overlap({p = vector.sum(a.p, vector.scale(-.5, a.d), b), r = a.r}, b))
 end
 
 bullet.draw = function()

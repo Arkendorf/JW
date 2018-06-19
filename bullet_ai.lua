@@ -10,6 +10,14 @@ ai.load.explosive = function(i, v) -- "bomb"
   v.info.pt = 0
 end
 
+ai.load.boomerang = function(i, v) -- "boomerang"
+  v.info.v = bullet_info[v.type].speed
+end
+
+ai.load.vortex = function(i, v) -- "boomerang"
+  v.info.pt = 0
+end
+
 ai.update = {}
 
 ai.update.default = function(i, v, dt) -- "basic"
@@ -45,6 +53,41 @@ ai.update.missile = function(i, v, dt) -- "missile"
       v.info.pt = v.info.pt - dt
     end
     v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
+  end
+end
+
+ai.update.boomerang = function(i, v, dt) -- "boomerang"
+  particle.new("trail", v.p, {x = 0, y = 0}, v.d, tiers[v.tier].color) -- bullet trail
+  v.p = vector.sum(v.p, vector.scale(v.info.v* dt * 60, v.d))
+  if v.info.v > - bullet_info[v.type].speed then
+    v.info.v = v.info.v - 0.08
+  end
+  v.angle = v.angle + math.rad(dt * 60) * 12
+end
+
+ai.update.vortex = function(i, v, dt) -- "boomerang"
+  particle.new("trail", v.p, {x = 0, y = 0}, v.d, tiers[v.tier].color) -- bullet trail
+
+  v.p = vector.sum(v.p, vector.scale(bullet_info[v.type].speed * dt * 60, v.d))
+  if v.side == 1 then
+    for j, w in pairs(enemies) do
+      local angle = math.atan2(v.p.y-w.p.y, v.p.x-w.p.x)
+      local mag = 516/(math.sqrt((w.p.x-v.p.x)*(w.p.x-v.p.x)+(w.p.y-v.p.y)*(w.p.y-v.p.y))*w.r)
+      w.p = vector.sum(w.p, {x = mag*math.cos(angle), y = mag*math.sin(angle)})
+    end
+  else
+    local angle = math.atan2(v.p.y-char.p.y, v.p.x-char.p.x)
+    local mag = 516/(math.sqrt((char.p.x-v.p.x)*(char.p.x-v.p.x)+(char.p.y-v.p.y)*(char.p.y-v.p.y))*w.r)
+    char.p = vector.sum(char.p, {x = mag*math.cos(angle), y = mag*math.sin(angle)})
+  end
+
+  if v.info.pt <= 0 then
+    local angle = math.random(0, math.pi*200)/100
+    local dir = {x = math.cos(angle), y = math.sin(angle)}
+    particle.new("energy", vector.sum(v.p, vector.scale(16, dir)), vector.scale(bullet_info[v.type].speed, v.d), dir, tiers[v.tier].color) -- effect
+    v.info.pt = math.random(1, 30)/100
+  else
+    v.info.pt = v.info.pt - dt
   end
 end
 
