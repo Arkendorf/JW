@@ -269,4 +269,11 @@ ai.bullet.quad = function(i, v, dt) -- "el gorious"
   end
 end
 
+ai.bullet.plus = function(i, v, dt) -- "el gorious"
+  bullet.new(enemy_info[v.type].bullet, v.p, {x = 1, y = 0}, 2, v.tier, i)
+  bullet.new(enemy_info[v.type].bullet, v.p, {x = 0, y = 1}, 2, v.tier, i)
+  bullet.new(enemy_info[v.type].bullet, v.p, {x = -1, y = 0}, 2, v.tier, i)
+  bullet.new(enemy_info[v.type].bullet, v.p, {x = 0, y = -1}, 2, v.tier, i)
+end
+
 return ai

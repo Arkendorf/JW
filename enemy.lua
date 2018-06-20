@@ -17,6 +17,8 @@ enemy.load = function()
   enemy_info.balloon = {ai = {"point", "point", "default", "aim"}, atk_delay = 5, speed = 1, stop = 0.9, r = 12, hp = 1, score = 3, img = "balloon", bullet = "basic"}
   enemy_info.bigplane = {ai = {"cross", "patrol", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 24, hp = 3, score = 6, img = "bigplane", bullet = "basic", turrets = {{img = "turret", offset = 0}}}
   enemy_info.trapazoid = {ai = {"cross", "cross", "default", "aim"}, atk_delay = 3, speed = 1, stop = 0.9, r = 16, hp = 1, score = 4, img = "trapazoid", bullet = "basic", turrets = {{img = "turret", offset = 0}}}
+  enemy_info.drone = {ai = {"point", "point", "default", "plus"}, atk_delay = 4, speed = 1, stop = 0.9, r = 12, hp = 1, score = 2, img = "drone", bullet = "basic"}
+  enemy_info.wasp = {ai = {"turn", "weave", "default", "aim"}, atk_delay = 1, speed = 1, turn_speed = .5, stop = 0.9, r = 20, hp = 2, score = 4, img = "wasp", bullet = "basic", turrets = {{img = "gun", offset = 0}}}
 
   -- bosses
   enemy_info.gorious = {boss = true, ai = {"circle", "circle", "volley", "quad"}, atk_delay = .3, speed = 1, stop = 0.9, r = 24, hp = 5, score = 8, img = "gorious", bullet = "basic", icon = 3,
