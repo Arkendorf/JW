@@ -19,6 +19,13 @@ ai.load.vortex = function(i, v) -- "boomerang"
   v.info.pt = 0
 end
 
+ai.load.shotgun = function(i, v) -- "shotgun"
+  local mag = math.sqrt(vector.mag_sq(v.d))
+  bullet.new("pellet", v.p, {x = mag*math.cos(v.angle-.1*math.pi), y = mag*math.sin(v.angle-.1*math.pi)}, v.side, v.tier, v.parent)
+  bullet.new("pellet", v.p, {x = mag*math.cos(v.angle+.1*math.pi), y = mag*math.sin(v.angle+.1*math.pi)}, v.side, v.tier, v.parent)
+  ai.load.default(i, v)
+end
+
 ai.update = {}
 
 ai.update.default = function(i, v, dt) -- "basic"

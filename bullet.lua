@@ -12,6 +12,8 @@ bullet.load = function()
   bullet_info.missile = {ai = {"explosive", "missile", "explode"}, speed = 3, t = 1, dmg = 1, r = 6, img = "missile"}
   bullet_info.boomerang = {ai = {"boomerang", "boomerang", "default"}, speed = 5, dmg = 1, r = 5, img = "boomerang"}
   bullet_info.energy = {ai = {"vortex", "vortex", "default"}, speed = 3, dmg = 1, r = 3, img = "energy"}
+  bullet_info.shotgun = {ai = {"shotgun", "default", "default"}, speed = 3, dmg = 1, r = 3, img = "pellet"}
+  bullet_info.pellet = {ai = {"default", "default", "default"}, speed = 3, dmg = 1, r = 3, img = "pellet"}
 
   weapon_info = {}
   weapon_info[1] = {bullet = "basic", ammo = 1, delay = .2}
@@ -20,6 +22,7 @@ bullet.load = function()
   weapon_info[4] = {bullet = "missile", ammo = 3, delay = .6}
   weapon_info[5] = {bullet = "boomerang", ammo = 1, delay = .3}
   weapon_info[6] = {bullet = "energy", ammo = 3, delay = .3}
+  weapon_info[7] = {bullet = "shotgun", ammo = 3, delay = .5}
 end
 
 bullet.update = function(dt)
