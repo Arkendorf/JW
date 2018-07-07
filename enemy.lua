@@ -32,6 +32,9 @@ enemy.load = function()
         text = {{text = "Turn back, while you still can", image = 5},
                 {text = "I'm sorry, but I have a job to do.", image = 1},
                 {text = "You're making a mistake...", image = 5}}}
+  enemy_info.train_engine = {boss = true, ai = {"train", "follow", "default", "aim"}, atk_delay = 2, speed = 2, turn_speed = 2, stop = 0.9, r = 24, hp = 9, score = 16, img = "engine", bullet = "arrow", turrets = {{img = "gun", offset = 0}}, icon = 6,
+       text = {{text = "You don't know who you're messing with...", image = 6}}}
+  enemy_info.train_car = {nospawn = true, boss = true, ai = {"turn", "train", "default", "aim"}, atk_delay = 2, speed = 2, turn_speed = 2, stop = 0.9, r = 24, hp = 3, score = 2, img = "car", bullet = "arrow", turrets = {{img = "gun", offset = -8}}}
 
 
 
@@ -188,8 +191,17 @@ end
 enemy.kill = function(i, v)
   enemies[i] = nil
   if enemy_info[v.type].boss and bossfight.active then
-    bossfight.pause = 2
-    bossfight.active = false
+    local stop = true
+    for j, w in pairs(enemies) do
+      if j ~= i and enemy_info[w.type].boss then
+        stop = false
+        break
+      end
+    end
+    if stop then
+      bossfight.pause = 2
+      bossfight.active = false
+    end
   end
 end
 

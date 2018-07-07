@@ -25,6 +25,13 @@ ai.load.spawner = function(i, v)
   v.info.t = 1
 end
 
+ai.load.train = function(i, v)
+  ai.load.turn(i, v)
+  for i = 1, 5 do
+    enemy.new("train_car", v.tier)
+  end
+end
+
 
 ai.load.circle = function(i, v) -- "circler"
   v.p.x = screen.w/2
@@ -183,6 +190,54 @@ ai.move.point = function(i, v, dt) -- pick-a-point
 
   if math.abs(enemy.stop_dist(v).y) > v.p.y-v.info.y then
     v.info.stop = true
+  end
+end
+
+ai.move.train = function(i, v, dt) -- pick-a-point
+  local move = true
+  for j = 1, i do
+    if not enemies[j] then
+      move = false
+      break
+    end
+  end
+  if move then
+    local leader = enemies[i-1]
+    local angle = math.atan2(leader.a.y, leader.a.x)
+    local goal = {x = leader.p.x-(v.r+leader.r)*math.cos(angle), y = leader.p.y-(v.r+leader.r)*math.sin(angle)}
+
+    local turn_speed = math.rad(dt * 60)*enemy_info[v.type].turn_speed
+    local goal_angle = math.atan2(goal.y-v.p.y, goal.x-v.p.x)
+    if goal_angle < 0 then
+      goal_angle = goal_angle + math.pi*2
+    end
+    local dif = goal_angle-v.info.angle
+    if dif > (math.pi*2-math.abs(dif))*dif/math.abs(dif) then -- don't even try to understand this nonsense
+      if math.abs(dif) < turn_speed or math.pi*2-math.abs(dif) < turn_speed then
+        v.info.angle = goal_angle
+      else
+        v.info.angle = v.info.angle - turn_speed
+      end
+    else
+      if math.abs(dif) < turn_speed or math.pi*2-math.abs(dif) < turn_speed then
+        v.info.angle = goal_angle
+      else
+        v.info.angle = v.info.angle + turn_speed
+      end
+    end
+
+    -- make angle within range
+    if v.info.angle > math.pi*2 then
+      v.info.angle = v.info.angle - math.pi*2
+    elseif v.info.angle < 0 then
+      v.info.angle = v.info.angle + math.pi*2
+    end
+
+    v.a.x = math.cos(v.info.angle)
+    v.a.y = math.sin(v.info.angle)
+
+    v.d.x = goal.x-v.p.x
+    v.d.y = goal.y-v.p.y
   end
 end
 

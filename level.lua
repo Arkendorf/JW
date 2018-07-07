@@ -30,7 +30,7 @@ level.update = function(dt)
         local price = level_score.max - score -- find max spendable points to reach difficulty
         local choices = {} -- list of enemies that can be added
         for i, v in pairs(enemy_info) do -- pick an enemy
-          if not v.boss and v.score <= level_score.each and v.score * num <= price then -- see if enemy difficulty fits needed difficulty
+          if not v.boss and not v.nospawn and v.score <= level_score.each and v.score * num <= price then -- see if enemy difficulty fits needed difficulty
             choices[#choices + 1] = i -- add to list of options
           end
         end
@@ -78,7 +78,7 @@ level.update = function(dt)
     if math.random(0, 3) == 0 and not tutorial.active then -- randomly decide to spawn boss
       local boss_options = {}
       for i, v in pairs(enemy_info) do -- find possible bosses
-        if v.boss and v.score < level_score.max then
+        if v.boss and not v.nospawn and v.score < level_score.max then
           boss_options[#boss_options+1] = i
         end
       end
