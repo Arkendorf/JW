@@ -29,12 +29,12 @@ bullet.update = function(dt)
   for i, v in pairs(bullets) do
     -- update per bullet ai
     ai.update[bullet_info[v.type].ai[2]](i, v, dt)
-    v.p = vector.sum(v.p, vector.scale(dt*60, v.d))
+    local d = vector.scale(dt*60, v.d)
 
     -- do damage
     if v.side == 1 then -- check for collision with enemies
       for j, w in pairs(enemies) do
-        if bullet.collision(v, w) and not w.immune[i] then
+        if collision.bullet(v, w, d) and not w.immune[i] then
           if w.inv <= 0 then
             if math.random(0, 1) == 0 and not w.bubble then -- enemy
               w.bubble = {phrase = dmg_phrase[math.random(1, #dmg_phrase)], t = 2}
@@ -57,7 +57,7 @@ bullet.update = function(dt)
         end
       end
     else -- check for collision with player
-      if bullet.collision(v, char) and not char.immune[i] then
+      if collision.bullet(v, char, d) and not char.immune[i] then
         if char.inv <= 0 then
          if math.random(0, 1) == 0 and enemies[v.parent] and not enemies[v.parent].bubble then -- enemy
             enemies[v.parent].bubble = {phrase = shot_phrase[math.random(1, #dmg_phrase)], t = 2}
@@ -77,15 +77,15 @@ bullet.update = function(dt)
         end
       end
     end
+
+    -- update position
+    v.p = vector.sum(v.p, d)
+
     -- check if bullet is off screen
     if v.p.x < 0 or v.p.x > screen.w or v.p.y < 0 or v.p.y > screen.h then
       bullet.delete(i)
     end
   end
-end
-
-bullet.collision = function(a, b)
-  return (collision.overlap(a, b) or collision.overlap({p = vector.sum(a.p, vector.scale(-.5, a.d)), r = a.r}, b))
 end
 
 bullet.draw = function()
