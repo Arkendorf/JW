@@ -2,7 +2,7 @@
 Flioneer is a rogue-like arcade game, where you fly a plane as far as you can, making frequent rest stops.
 
 ## Running the Game
-Kingsbowl 2 uses the LÖVE engine, and the .zip file can be run using the LÖVE application.
+Flioneer uses the LÖVE engine, and the .zip file can be run using the LÖVE application.
 Alternatively, you can use the .exe or .app file to run the game, for Windows and MacOS respectively.
 
 ## Controls
